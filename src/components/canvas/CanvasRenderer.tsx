@@ -623,7 +623,7 @@ export const CanvasRenderer: React.FC<Props> = ({
   );
 
   const bgColor = resolveGrafanaColor(appearance.bgColor || '#111217');
-  const usedHostNames = useMemo(() => nodeConfigs.map((n) => n.hostName), [nodeConfigs]);
+  const usedHostNames = useMemo(() => nodeConfigs.map((n) => n.hostName), [nodeConfigs]); // TODO
 
   return (
     <div ref={containerRef} style={{ width, height, position: 'relative' }}>
@@ -800,7 +800,7 @@ export const CanvasRenderer: React.FC<Props> = ({
       )}
 
       {showNodeModal && (
-        <NodeFormModal
+        <NodeFormModal // TODO
           node={editingNode}
           hostNames={hostNames}
           usedHostNames={usedHostNames}

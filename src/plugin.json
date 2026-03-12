@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "NSW Topology",
-  "id": "gabrielnsw-nswtopology-panel",
+  "name": "NSW Topology Custom",
+  "id": "gabrielnsw-nswtopology-panel-custom",
   "info": {
     "description": "Interactive network topology visualization with real-time metrics, weathermap edges, and status monitoring.",
     "author": {

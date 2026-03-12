@@ -120,13 +120,17 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
     return defaults;
   });
 
-  const availableHosts = useMemo(() => {
-    return hostNames.filter((h) => !usedHostNames.includes(h) || h === node?.hostName);
-  }, [hostNames, usedHostNames, node]);
+  // const availableHosts = useMemo(() => { // TODO: é o que está impedindo hosts repetidos
+  //   return hostNames.filter((h) => !usedHostNames.includes(h) || h === node?.hostName);
+  // }, [hostNames, usedHostNames, node]);
 
+  // const hostOpts = useMemo( // TODO: em vez de usar availableHosts, vou usar hostNames direto
+  //   () => [{ value: '', label: 'Select...' }, ...availableHosts.map((h) => ({ value: h, label: h }))],
+  //   [availableHosts]
+  // );
   const hostOpts = useMemo(
-    () => [{ value: '', label: 'Select...' }, ...availableHosts.map((h) => ({ value: h, label: h }))],
-    [availableHosts]
+    () => [{ value: '', label: 'Select...' }, ...hostNames.map((h) => ({ value: h, label: h }))],
+    [hostNames]
   );
 
   const fieldOpts = useMemo(() => {
