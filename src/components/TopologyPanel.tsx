@@ -144,16 +144,18 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
         </div>
       )}
       <div style={{ position: 'relative', height: canvasHeight }}>
-        <TopologySidebar
-          onAddNode={() => setAddNodeTrigger((prev) => prev + 1)}
-          onCenterMap={handleCenterMap}
-          onToggleZoom={handleToggleZoom}
-          onToggleSearch={() => setSearchOpen((prev) => !prev)}
-          onBackup={() => setShowBackup(true)}
-          zoomEnabled={zoomEnabled}
-          searchOpen={searchOpen}
-          showDonateHeart={appearance.showDonateCard === false}
-        />
+        {appearance.showSidebar && (
+          <TopologySidebar
+            onAddNode={() => setAddNodeTrigger((prev) => prev + 1)}
+            onCenterMap={handleCenterMap}
+            onToggleZoom={handleToggleZoom}
+            onToggleSearch={() => setSearchOpen((prev) => !prev)}
+            onBackup={() => setShowBackup(true)}
+            zoomEnabled={zoomEnabled}
+            searchOpen={searchOpen}
+            showDonateHeart={appearance.showDonateCard === false}
+          />
+        )}
         <div style={{ marginLeft: 48, width: width - 48, height: canvasHeight }}>
           <CanvasRenderer
             nodes={nodes}

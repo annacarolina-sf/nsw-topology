@@ -8,6 +8,8 @@ import {
   DEFAULT_INTERACTION,
 } from './constants';
 
+console.log("CUSTOM TOPOLOGY PLUGIN LOADED 12345");
+
 export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
   .setNoPadding()
   .setPanelOptions((builder) => {
@@ -100,6 +102,13 @@ export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
         name: 'Show Donate Card',
         description: 'Show or hide the donate card in the topology view. If hidden, a donate icon will appear in the sidebar.',
         defaultValue: DEFAULT_APPEARANCE.showDonateCard,
+        category: ['Appearance'],
+      })
+      .addBooleanSwitch({
+        path: 'appearance.showSidebar',
+        name: 'Show Sidebar',
+        description: 'Show or hide the sidebar in the topology view.',
+        defaultValue: DEFAULT_APPEARANCE.showSidebar,
         category: ['Appearance'],
       });
 
