@@ -624,9 +624,6 @@ export const CanvasRenderer: React.FC<Props> = ({
 
   const bgColor = resolveGrafanaColor(appearance.bgColor || '#111217');
   const usedHostNames = useMemo(() => nodeConfigs.map((n) => n.hostName), [nodeConfigs]); // TODO
-
-  // TODO: TESTE
-  console.log('PLUGIN CARREGADO *****************************')
   
   return (
     <div ref={containerRef} style={{ width, height, position: 'relative' }}>

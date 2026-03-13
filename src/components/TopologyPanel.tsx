@@ -39,6 +39,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
 
   const title = options.general?.title || '';
   const titleSize = options.general?.titleSize || 18;
+  const sidebarWidth = appearance.showSidebar ? 48 : 0;
 
   const updateOptions = useCallback(
     (patch: Partial<TopologyOptions>) => {
@@ -156,7 +157,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
             showDonateHeart={appearance.showDonateCard === false}
           />
         )}
-        <div style={{ marginLeft: 48, width: width - 48, height: canvasHeight }}>
+        <div style={{ marginLeft: sidebarWidth, width: width - sidebarWidth, height: canvasHeight }}>
           <CanvasRenderer
             nodes={nodes}
             connections={connections}
@@ -166,7 +167,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
             hostNames={parsedData.hostNames}
             hostFieldMap={parsedData.hostFieldMap}
             dataSeries={data.series}
-            width={width - 48}
+            width={width - sidebarWidth}
             height={canvasHeight}
             enableZoom={zoomEnabled}
             enablePan={interaction.enablePan}
