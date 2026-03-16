@@ -85,10 +85,32 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
         </svg>
       </NodeResizeControl>
 
-      <Handle type="source" position={Position.Top} id="top" style={handleStyle} />
+      {/* <Handle type="source" position={Position.Top} id="top" style={handleStyle} />
       <Handle type="source" position={Position.Bottom} id="bottom" style={handleStyle} />
       <Handle type="source" position={Position.Left} id="left" style={handleStyle} />
-      <Handle type="source" position={Position.Right} id="right" style={handleStyle} />
+      <Handle type="source" position={Position.Right} id="right" style={handleStyle} /> */}
+
+      {/* NOTE: Adicionando mais pontos para conexões */}
+
+      {/* TOP */}
+      <Handle type="source" position={Position.Top} id="top-1" style={{ ...handleStyle, left: '25%' }} />
+      <Handle type="source" position={Position.Top} id="top-2" style={{ ...handleStyle, left: '50%' }} />
+      <Handle type="source" position={Position.Top} id="top-3" style={{ ...handleStyle, left: '75%' }} />
+
+      {/* BOTTOM */}
+      <Handle type="source" position={Position.Bottom} id="bottom-1" style={{ ...handleStyle, left: '25%' }} />
+      <Handle type="source" position={Position.Bottom} id="bottom-2" style={{ ...handleStyle, left: '50%' }} />
+      <Handle type="source" position={Position.Bottom} id="bottom-3" style={{ ...handleStyle, left: '75%' }} />
+
+      {/* LEFT */}
+      <Handle type="source" position={Position.Left} id="left-1" style={{ ...handleStyle, top: '25%' }} />
+      <Handle type="source" position={Position.Left} id="left-2" style={{ ...handleStyle, top: '50%' }} />
+      <Handle type="source" position={Position.Left} id="left-3" style={{ ...handleStyle, top: '75%' }} />
+
+      {/* RIGHT */}
+      <Handle type="source" position={Position.Right} id="right-1" style={{ ...handleStyle, top: '25%' }} />
+      <Handle type="source" position={Position.Right} id="right-2" style={{ ...handleStyle, top: '50%' }} />
+      <Handle type="source" position={Position.Right} id="right-3" style={{ ...handleStyle, top: '75%' }} />
 
       <div
         ref={nodeRef}

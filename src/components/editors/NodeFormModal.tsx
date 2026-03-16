@@ -119,15 +119,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
 
     return defaults;
   });
-
-  // const availableHosts = useMemo(() => { // TODO: é o que está impedindo hosts repetidos
-  //   return hostNames.filter((h) => !usedHostNames.includes(h) || h === node?.hostName);
-  // }, [hostNames, usedHostNames, node]);
-
-  // const hostOpts = useMemo( // TODO: em vez de usar availableHosts, vou usar hostNames direto
-  //   () => [{ value: '', label: 'Select...' }, ...availableHosts.map((h) => ({ value: h, label: h }))],
-  //   [availableHosts]
-  // );
+  
+  // NOTE: Removendo a limitação de um node por host
   const hostOpts = useMemo(
     () => [{ value: '', label: 'Select...' }, ...hostNames.map((h) => ({ value: h, label: h }))],
     [hostNames]
@@ -183,7 +176,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
       <Field label="Host">
         <Select options={hostOpts} value={hostName} onChange={(v) => handleHostChange(v.value || '')} />
       </Field>
-      {hostName && (
+      {/* {hostName && ( */}
         <>
           <Field label="Node Name">
             <Input value={name} onChange={(e) => setName(e.currentTarget.value)} />
@@ -276,12 +269,14 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
             </Field>
           </div>
         </>
-      )}
+      {/* )} */}
+      <p>Teste!!</p>
       <Modal.ButtonRow>
         <Button variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={save} disabled={!hostName}>
+        {/* <Button variant="primary" onClick={save} disabled={!hostName}> */}
+        <Button variant="primary" onClick={save}>
           Save
         </Button>
       </Modal.ButtonRow>
