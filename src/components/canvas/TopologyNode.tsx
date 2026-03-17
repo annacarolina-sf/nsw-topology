@@ -40,6 +40,7 @@ export type TopologyNodeData = {
   iconSize: number;
   width: number;
   height: number;
+  backgroundColor: string; // MODIF
 };
 
 type TopologyNodeType = Node<TopologyNodeData, 'topology'>;
@@ -56,7 +57,7 @@ const handleStyle: React.CSSProperties = {
 };
 
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
-  const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize } = data;
+  const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize, backgroundColor } = data; // MODIF
   const [hovered, setHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
@@ -112,7 +113,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           height: '100%',
           minWidth: 80,
           minHeight: 60,
-          background: statusColor,
+          background: backgroundColor ?? statusColor,
           borderRadius: 10,
           border: '2px solid rgba(255,255,255,0.2)',
           display: 'flex',
@@ -168,11 +169,13 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           <div style={tooltipBox}>
             <div style={tooltipTitle}>{label}</div>
             <div style={tooltipDivider} />
-            <div style={tooltipRow}>
-              <div style={statusDot(data.statusColor)} />
-              <span style={tooltipLabel}>Status:</span>
-              <span style={{ color: statusColor, fontWeight: 700 }}>{status === 'online' ? 'Online' : 'Offline'}</span>
-            </div>
+            {!backgroundColor && ( // MODIF
+              <div style={tooltipRow}>
+                <div style={statusDot(data.statusColor)} />
+                <span style={tooltipLabel}>Status:</span>
+                <span style={{ color: statusColor, fontWeight: 700 }}>{status === 'online' ? 'Online' : 'Offline'}</span>
+              </div>
+            )}
             {uptimeValue && (
               <div style={tooltipRow}>
                 <span style={{ width: 8 }} />

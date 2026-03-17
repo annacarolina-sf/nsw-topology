@@ -53,6 +53,7 @@ export interface NodeConfig {
   uptimeField: string;
   bgColor: string;
   iconColor: string;
+  backgroundColor: string;
   textColor: string;
   textSize: number;
   iconSize: number;
