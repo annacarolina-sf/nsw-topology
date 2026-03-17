@@ -104,6 +104,7 @@ export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
         defaultValue: DEFAULT_APPEARANCE.showDonateCard,
         category: ['Appearance'],
       })
+      // MODIF: Permite esconder a sidebar do painel (procurar por "showSidebar" para ver todas as modificações)
       .addBooleanSwitch({
         path: 'appearance.showSidebar',
         name: 'Show Sidebar',

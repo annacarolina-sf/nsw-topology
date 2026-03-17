@@ -120,7 +120,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
     return defaults;
   });
   
-  // NOTE: Removendo a limitação de um node por host
+  // MODIF: Permite a criação de vários nodes com o mesmo host
   const hostOpts = useMemo(
     () => [{ value: '', label: 'Select...' }, ...hostNames.map((h) => ({ value: h, label: h }))],
     [hostNames]
@@ -269,13 +269,11 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
             </Field>
           </div>
         </>
-      {/* )} */}
-      <p>Teste!!</p>
+      {/* MODIF: Permite criar nodes sem um host */}
       <Modal.ButtonRow>
         <Button variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
-        {/* <Button variant="primary" onClick={save} disabled={!hostName}> */}
         <Button variant="primary" onClick={save}>
           Save
         </Button>
