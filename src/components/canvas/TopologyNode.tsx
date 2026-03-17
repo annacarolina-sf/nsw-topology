@@ -60,6 +60,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const [hovered, setHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
+  const handleOpacity = hovered ? 0.6 : 0;
 
   return (
     <>
@@ -86,25 +87,21 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
       </NodeResizeControl>
 
       {/* MODIF: Adiciona mais pontos de conexão e só deixa visível quando passa o mouse */}
-      {hovered && (
-        <>
-          <Handle type="source" position={Position.Top} id="top-1" style={{ ...handleStyle, left: '25%' }} />
-          <Handle type="source" position={Position.Top} id="top-2" style={{ ...handleStyle, left: '50%' }} />
-          <Handle type="source" position={Position.Top} id="top-3" style={{ ...handleStyle, left: '75%' }} />
+      <Handle type="source" position={Position.Top} id="top-1" style={{ ...handleStyle, left: '25%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Top} id="top-2" style={{ ...handleStyle, left: '50%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Top} id="top-3" style={{ ...handleStyle, left: '75%', opacity: handleOpacity }} />
 
-          <Handle type="source" position={Position.Bottom} id="bottom-1" style={{ ...handleStyle, left: '25%' }} />
-          <Handle type="source" position={Position.Bottom} id="bottom-2" style={{ ...handleStyle, left: '50%' }} />
-          <Handle type="source" position={Position.Bottom} id="bottom-3" style={{ ...handleStyle, left: '75%' }} />
+      <Handle type="source" position={Position.Bottom} id="bottom-1" style={{ ...handleStyle, left: '25%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Bottom} id="bottom-2" style={{ ...handleStyle, left: '50%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Bottom} id="bottom-3" style={{ ...handleStyle, left: '75%', opacity: handleOpacity }} />
 
-          <Handle type="source" position={Position.Left} id="left-1" style={{ ...handleStyle, top: '25%' }} />
-          <Handle type="source" position={Position.Left} id="left-2" style={{ ...handleStyle, top: '50%' }} />
-          <Handle type="source" position={Position.Left} id="left-3" style={{ ...handleStyle, top: '75%' }} />
+      <Handle type="source" position={Position.Left} id="left-1" style={{ ...handleStyle, top: '25%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Left} id="left-2" style={{ ...handleStyle, top: '50%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Left} id="left-3" style={{ ...handleStyle, top: '75%', opacity: handleOpacity }} />
 
-          <Handle type="source" position={Position.Right} id="right-1" style={{ ...handleStyle, top: '25%' }} />
-          <Handle type="source" position={Position.Right} id="right-2" style={{ ...handleStyle, top: '50%' }} />
-          <Handle type="source" position={Position.Right} id="right-3" style={{ ...handleStyle, top: '75%' }} />
-        </>
-      )}
+      <Handle type="source" position={Position.Right} id="right-1" style={{ ...handleStyle, top: '25%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Right} id="right-2" style={{ ...handleStyle, top: '50%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Right} id="right-3" style={{ ...handleStyle, top: '75%', opacity: handleOpacity }} />
 
       <div
         ref={nodeRef}
