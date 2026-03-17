@@ -113,7 +113,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           height: '100%',
           minWidth: 80,
           minHeight: 60,
-          background: backgroundColor ?? statusColor,
+          background: backgroundColor || statusColor,
           borderRadius: 10,
           border: '2px solid rgba(255,255,255,0.2)',
           display: 'flex',
@@ -171,6 +171,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           <div style={tooltipBox}>
             <div style={tooltipTitle}>{label}</div>
             <div style={tooltipDivider} />
+            <p>Teste</p>
             {!backgroundColor && ( // MODIF
               <div style={tooltipRow}>
                 <div style={statusDot(data.statusColor)} />

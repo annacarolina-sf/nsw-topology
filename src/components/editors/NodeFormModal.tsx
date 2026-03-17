@@ -10,6 +10,7 @@ import {
   DEFAULT_NODE_BG,
   DEFAULT_ICON_COLOR,
   DEFAULT_TEXT_COLOR,
+  DEFAULT_FIXED_BACKGROUND_COLOR,
   DEFAULT_TEXT_SIZE,
   DEFAULT_ICON_SIZE,
   METRIC_PATTERNS,
@@ -42,7 +43,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   const [iconSize, setIconSize] = useState(String(node?.iconSize || DEFAULT_ICON_SIZE));
   const [iconColor, setIconColor] = useState(node?.iconColor || DEFAULT_ICON_COLOR);
   const [textSize, setTextSize] = useState(String(node?.textSize || DEFAULT_TEXT_SIZE));
-  const [backgroundColor, setBackgroundColor] = useState(node?.iconColor || DEFAULT_ICON_COLOR);
+  const [backgroundColor, setBackgroundColor] = useState(node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR); // MODIF
+  const [isBackgroundFixed, setIsBackgroundFixed] = useState(false); // MODIF
 
   const [customMetrics, setCustomMetrics] = useState(() => {
     if (node?.customMetrics && node.customMetrics.length > 0) {
@@ -162,7 +164,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
       bgColor: DEFAULT_NODE_BG,
       iconColor,
       textColor,
-      backgroundColor,
+      backgroundColor: isBackgroundFixed ? backgroundColor : '',
       textSize: Number(textSize) || DEFAULT_TEXT_SIZE,
       iconSize: Number(iconSize) || DEFAULT_ICON_SIZE,
       cpuMetric: { field: '', enabled: false, alertThreshold: 80, alertColor: COLORS.warning },
@@ -294,13 +296,37 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
         <Field label="Text Size">
           <Select options={TEXT_SIZE_OPTIONS} value={textSize} onChange={(v) => setTextSize(v.value || '12')} />
         </Field>
+
         {/* MODIF: Permitir escolher uma cor fixa para o node */}
-        <Field label="Fix Background Color">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <ColorPicker color={backgroundColor} onChange={(c) => setBackgroundColor(c)} />
-            <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{backgroundColor}</span>
-          </div>
-        </Field>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              cursor: 'pointer',
+              fontSize: FONT.label,
+              fontWeight: 600,
+              color: isBackgroundFixed ? COLORS.text : COLORS.textMuted,
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={isBackgroundFixed}
+              onChange={(e) => setIsBackgroundFixed(e.target.checked)}
+              style={{ accentColor: COLORS.accent }}
+            />
+            Fix Background Color
+          </label>
+        </div>
+        {isBackgroundFixed && (
+          <Field label="Fix Background Color">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ColorPicker color={backgroundColor} onChange={(c) => setBackgroundColor(c)} />
+              <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{backgroundColor}</span>
+            </div>
+          </Field>
+        )}
       </div>
 
       {/* MODIF: Permite criar nodes sem um host */}
