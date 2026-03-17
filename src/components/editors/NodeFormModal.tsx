@@ -121,7 +121,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
 
     return defaults;
   });
-  
+
   // MODIF: Permite a criação de vários nodes com o mesmo host
   const hostOpts = useMemo(
     () => [{ value: '', label: 'Select...' }, ...hostNames.map((h) => ({ value: h, label: h }))],
@@ -179,132 +179,130 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
       <Field label="Host">
         <Select options={hostOpts} value={hostName} onChange={(v) => handleHostChange(v.value || '')} />
       </Field>
-      {/* {hostName && ( */}
-        <>
-          <Field label="Node Name">
-            <Input value={name} onChange={(e) => setName(e.currentTarget.value)} />
-          </Field>
-          <Field label="IP Address">
-            <Input value={ip} onChange={(e) => setIp(e.currentTarget.value)} placeholder="192.168.0.1" />
-          </Field>
+      <Field label="Node Name">
+        <Input value={name} onChange={(e) => setName(e.currentTarget.value)} />
+      </Field>
+      <Field label="IP Address">
+        <Input value={ip} onChange={(e) => setIp(e.currentTarget.value)} placeholder="192.168.0.1" />
+      </Field>
 
-          <div style={SECTION_HEADER}>🖼️ Icon</div>
-          {/* MODIF: Permite retirar o ícone do node (procurar por "showIcon") */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <label
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                cursor: 'pointer',
-                fontSize: FONT.label,
-                fontWeight: 600,
-                color: showIcon ? COLORS.text : COLORS.textMuted,
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={showIcon}
-                onChange={(e) => setShowIcon(false)}
-                style={{ accentColor: COLORS.accent }}
-              />
-              Show icon
-            </label>
-          </div>
-          {showIcon && (
-            <>
-              <Field label="Search icon...">
-                <Input
-                  value={iconSearch}
-                  onChange={(e) => setIconSearch(e.currentTarget.value)}
-                  placeholder="Search icon..."
-                />
-              </Field>
+      <div style={SECTION_HEADER}>🖼️ Icon</div>
+      {/* MODIF: Permite retirar o ícone do node (procurar por "showIcon") */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            cursor: 'pointer',
+            fontSize: FONT.label,
+            fontWeight: 600,
+            color: showIcon ? COLORS.text : COLORS.textMuted,
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={showIcon}
+            onChange={(e) => setShowIcon(e.target.checked)}
+            style={{ accentColor: COLORS.accent }}
+          />
+          Show icon
+        </label>
+      </div>
+      {showIcon && (
+        <>
+          <Field label="Search icon...">
+            <Input
+              value={iconSearch}
+              onChange={(e) => setIconSearch(e.currentTarget.value)}
+              placeholder="Search icon..."
+            />
+          </Field>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(7, 1fr)',
+              gap: 4,
+              maxHeight: 170,
+              overflowY: 'auto' as const,
+              marginBottom: 12,
+            }}
+          >
+            {filteredIcons.map((k) => (
               <div
+                key={k}
+                onClick={() => setIcon(k)}
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(7, 1fr)',
-                  gap: 4,
-                  maxHeight: 170,
-                  overflowY: 'auto' as const,
-                  marginBottom: 12,
+                  padding: 7,
+                  textAlign: 'center' as const,
+                  cursor: 'pointer',
+                  borderRadius: 8,
+                  border: icon === k ? `2px solid ${COLORS.accent}` : `1px solid ${COLORS.border}`,
+                  background: icon === k ? COLORS.surfaceActive : 'transparent',
+                  display: 'flex',
+                  flexDirection: 'column' as const,
+                  alignItems: 'center',
+                  gap: 2,
+                  transition: 'all 0.12s',
                 }}
               >
-                {filteredIcons.map((k) => (
-                  <div
-                    key={k}
-                    onClick={() => setIcon(k)}
-                    style={{
-                      padding: 7,
-                      textAlign: 'center' as const,
-                      cursor: 'pointer',
-                      borderRadius: 8,
-                      border: icon === k ? `2px solid ${COLORS.accent}` : `1px solid ${COLORS.border}`,
-                      background: icon === k ? COLORS.surfaceActive : 'transparent',
-                      display: 'flex',
-                      flexDirection: 'column' as const,
-                      alignItems: 'center',
-                      gap: 2,
-                      transition: 'all 0.12s',
-                    }}
-                  >
-                    <img src={getIconDataUri(k)} alt={k} style={{ width: 22, height: 22 }} draggable={false} />
-                    <span style={{ fontSize: FONT.xs, color: COLORS.textMuted, lineHeight: 1 }}>{k}</span>
-                  </div>
-                ))}
+                <img src={getIconDataUri(k)} alt={k} style={{ width: 22, height: 22 }} draggable={false} />
+                <span style={{ fontSize: FONT.xs, color: COLORS.textMuted, lineHeight: 1 }}>{k}</span>
               </div>
-            </>
-          )}
-
-          <div style={SECTION_HEADER}>🔌 Monitoring</div>
-          <Field label="Ping Field">
-            <Select options={fieldOpts} value={pingField} onChange={(v) => setPingField(v.value || '')} />
-          </Field>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            <Field label="Online Value">
-              <Input
-                type="number"
-                value={pingOnlineValue}
-                onChange={(e) => setPingOnlineValue(e.currentTarget.value)}
-              />
-            </Field>
-            <Field label="Uptime">
-              <Select options={fieldOpts} value={uptimeField} onChange={(v) => setUptimeField(v.value || '')} />
-            </Field>
-          </div>
-
-          <div style={SECTION_HEADER}>📊 Custom Metrics</div>
-          <CustomMetricList metrics={customMetrics} onChange={setCustomMetrics} availableFields={fieldOpts} />
-
-          <div style={SECTION_HEADER}>🎨 Node Style</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            <Field label="Icon Color">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ColorPicker color={iconColor} onChange={(c) => setIconColor(c)} />
-                <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{iconColor}</span>
-              </div>
-            </Field>
-            <Field label="Text Color">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ColorPicker color={textColor} onChange={(c) => setTextColor(c)} />
-                <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{textColor}</span>
-              </div>
-            </Field>
-            <Field label="Icon Size">
-              <Select options={ICON_SIZE_OPTIONS} value={iconSize} onChange={(v) => setIconSize(v.value || '32')} />
-            </Field>
-            <Field label="Text Size">
-              <Select options={TEXT_SIZE_OPTIONS} value={textSize} onChange={(v) => setTextSize(v.value || '12')} />
-            </Field>
-            {/* MODIF: Permitir escolher uma cor fixa para o node */}
-            <Field label="Fix Background Color">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ColorPicker color={backgroundColor} onChange={(c) => setBackgroundColor(c)} />
-                <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{backgroundColor}</span>
-              </div>
-            </Field>
+            ))}
           </div>
         </>
+      )}
+
+      <div style={SECTION_HEADER}>🔌 Monitoring</div>
+      <Field label="Ping Field">
+        <Select options={fieldOpts} value={pingField} onChange={(v) => setPingField(v.value || '')} />
+      </Field>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <Field label="Online Value">
+          <Input
+            type="number"
+            value={pingOnlineValue}
+            onChange={(e) => setPingOnlineValue(e.currentTarget.value)}
+          />
+        </Field>
+        <Field label="Uptime">
+          <Select options={fieldOpts} value={uptimeField} onChange={(v) => setUptimeField(v.value || '')} />
+        </Field>
+      </div>
+
+      <div style={SECTION_HEADER}>📊 Custom Metrics</div>
+      <CustomMetricList metrics={customMetrics} onChange={setCustomMetrics} availableFields={fieldOpts} />
+
+      <div style={SECTION_HEADER}>🎨 Node Style</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <Field label="Icon Color">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ColorPicker color={iconColor} onChange={(c) => setIconColor(c)} />
+            <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{iconColor}</span>
+          </div>
+        </Field>
+        <Field label="Text Color">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ColorPicker color={textColor} onChange={(c) => setTextColor(c)} />
+            <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{textColor}</span>
+          </div>
+        </Field>
+        <Field label="Icon Size">
+          <Select options={ICON_SIZE_OPTIONS} value={iconSize} onChange={(v) => setIconSize(v.value || '32')} />
+        </Field>
+        <Field label="Text Size">
+          <Select options={TEXT_SIZE_OPTIONS} value={textSize} onChange={(v) => setTextSize(v.value || '12')} />
+        </Field>
+        {/* MODIF: Permitir escolher uma cor fixa para o node */}
+        <Field label="Fix Background Color">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ColorPicker color={backgroundColor} onChange={(c) => setBackgroundColor(c)} />
+            <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{backgroundColor}</span>
+          </div>
+        </Field>
+      </div>
+
       {/* MODIF: Permite criar nodes sem um host */}
       <Modal.ButtonRow>
         <Button variant="secondary" onClick={onCancel}>
