@@ -129,12 +129,14 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           cursor: 'grab',
         }}
       >
-        <img
-          src={iconUri}
-          alt={label}
-          style={{ width: iconSize || 32, height: iconSize || 32, objectFit: 'contain' }}
-          draggable={false}
-        />
+        {icon && (
+          <img
+            src={iconUri}
+            alt={label}
+            style={{ width: iconSize || 32, height: iconSize || 32, objectFit: 'contain' }}
+            draggable={false}
+          />
+        )}
 
         <div
           style={{
