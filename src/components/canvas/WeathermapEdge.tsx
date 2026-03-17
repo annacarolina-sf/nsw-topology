@@ -23,6 +23,7 @@ export type WeathermapEdgeData = {
   trafficHistory: TrafficHistoryPoint[];
   isRed: boolean;
   capacity: number;
+  observation: string; // MODIF
   customMetrics?: any[];
 };
 

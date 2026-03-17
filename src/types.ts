@@ -74,6 +74,7 @@ export interface ConnectionConfig {
   capacity: number;
   interfaceName: string;
   alias: string;
+  observation: string; // MODIF
   lineStyle: string;
   animated: boolean;
   showTraffic: boolean;

@@ -481,6 +481,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             trafficHistory,
             isRed: edgeIsRed,
             capacity: conn.capacity || 1000,
+            observation: conn.observation || '', // MODIF
             customMetrics: evaluatedMetrics,
           },
         };

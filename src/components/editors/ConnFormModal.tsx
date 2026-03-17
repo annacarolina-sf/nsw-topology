@@ -32,6 +32,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
   const [targetId, setTargetId] = useState(conn?.targetId || pendingConn?.targetId || '');
   const [interfaceName, setInterfaceName] = useState(conn?.interfaceName || '');
   const [alias, setAlias] = useState(conn?.alias || '');
+  const [observation, setObservation] = useState(conn?.alias || ''); // MODIF
   const [capacity, setCapacity] = useState(String(conn?.capacity || 1000));
   const [lineStyle, setLineStyle] = useState(conn?.lineStyle || 'solid');
   const [animated, setAnimated] = useState(conn?.animated ?? true);
@@ -114,6 +115,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
       capacity: Number(capacity) || 1000,
       interfaceName,
       alias,
+      observation,
       lineStyle,
       animated,
       showTraffic,
@@ -153,6 +155,11 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
       <Field label="Alias (label on line)">
         <Input value={alias} onChange={(e) => setAlias(e.currentTarget.value)} placeholder="e.g. OLT-SW01" />
       </Field>
+      {/* MODIF: Adiciona campo para registrar uma observação sobre a conexão (procurar por "observation") */}
+      <Field label="Observation">
+        <Input value={observation} onChange={(e) => setObservation(e.currentTarget.value)} placeholder="" />
+      </Field>
+      
 
       <div style={SECTION_HEADER}>📊 Traffic</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
