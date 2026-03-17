@@ -800,7 +800,7 @@ export const CanvasRenderer: React.FC<Props> = ({
       )}
 
       {showNodeModal && (
-        <NodeFormModal // TODO
+        <NodeFormModal
           node={editingNode}
           hostNames={hostNames}
           usedHostNames={usedHostNames}

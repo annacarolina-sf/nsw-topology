@@ -32,7 +32,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   const [name, setName] = useState(node?.name || '');
   const [hostName, setHostName] = useState(node?.hostName || '');
   const [ip, setIp] = useState(node?.ip || '');
-  const [icon, setIcon] = useState(node?.icon || 'server');
+  const [showIcon, setShowIcon] = useState(true); // MODIF
+  const [icon, setIcon] = useState(showIcon ? node?.icon || 'server' : ''); // MODIF
   const [iconSearch, setIconSearch] = useState('');
   const [pingField, setPingField] = useState(node?.pingField || '');
   const [pingOnlineValue, setPingOnlineValue] = useState(String(node?.pingOnlineValue ?? 1));
@@ -186,46 +187,72 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
           </Field>
 
           <div style={SECTION_HEADER}>🖼️ Icon</div>
-          <Field label="Search icon...">
-            <Input
-              value={iconSearch}
-              onChange={(e) => setIconSearch(e.currentTarget.value)}
-              placeholder="Search icon..."
-            />
-          </Field>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(7, 1fr)',
-              gap: 4,
-              maxHeight: 170,
-              overflowY: 'auto' as const,
-              marginBottom: 12,
-            }}
-          >
-            {filteredIcons.map((k) => (
+          {/* MODIF: Permite retirar o ícone do node (procurar por "showIcon") */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                cursor: 'pointer',
+                fontSize: FONT.label,
+                fontWeight: 600,
+                color: showIcon ? COLORS.text : COLORS.textMuted,
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={showIcon}
+                onChange={(e) => setShowIcon(false)}
+                style={{ accentColor: COLORS.accent }}
+              />
+              Show icon
+            </label>
+          </div>
+          {showIcon && (
+            <>
+              <Field label="Search icon...">
+                <Input
+                  value={iconSearch}
+                  onChange={(e) => setIconSearch(e.currentTarget.value)}
+                  placeholder="Search icon..."
+                />
+              </Field>
               <div
-                key={k}
-                onClick={() => setIcon(k)}
                 style={{
-                  padding: 7,
-                  textAlign: 'center' as const,
-                  cursor: 'pointer',
-                  borderRadius: 8,
-                  border: icon === k ? `2px solid ${COLORS.accent}` : `1px solid ${COLORS.border}`,
-                  background: icon === k ? COLORS.surfaceActive : 'transparent',
-                  display: 'flex',
-                  flexDirection: 'column' as const,
-                  alignItems: 'center',
-                  gap: 2,
-                  transition: 'all 0.12s',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(7, 1fr)',
+                  gap: 4,
+                  maxHeight: 170,
+                  overflowY: 'auto' as const,
+                  marginBottom: 12,
                 }}
               >
-                <img src={getIconDataUri(k)} alt={k} style={{ width: 22, height: 22 }} draggable={false} />
-                <span style={{ fontSize: FONT.xs, color: COLORS.textMuted, lineHeight: 1 }}>{k}</span>
+                {filteredIcons.map((k) => (
+                  <div
+                    key={k}
+                    onClick={() => setIcon(k)}
+                    style={{
+                      padding: 7,
+                      textAlign: 'center' as const,
+                      cursor: 'pointer',
+                      borderRadius: 8,
+                      border: icon === k ? `2px solid ${COLORS.accent}` : `1px solid ${COLORS.border}`,
+                      background: icon === k ? COLORS.surfaceActive : 'transparent',
+                      display: 'flex',
+                      flexDirection: 'column' as const,
+                      alignItems: 'center',
+                      gap: 2,
+                      transition: 'all 0.12s',
+                    }}
+                  >
+                    <img src={getIconDataUri(k)} alt={k} style={{ width: 22, height: 22 }} draggable={false} />
+                    <span style={{ fontSize: FONT.xs, color: COLORS.textMuted, lineHeight: 1 }}>{k}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
 
           <div style={SECTION_HEADER}>🔌 Monitoring</div>
           <Field label="Ping Field">
