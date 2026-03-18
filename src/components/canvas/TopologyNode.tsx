@@ -63,6 +63,11 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
   const handleOpacity = hovered ? 0.6 : 0;
 
+  console.log('TESTE****** TopologyNode: icon, iconUri, data')
+  console.log(icon)
+  console.log(iconUri)
+  console.log(data)
+
   return (
     <>
       <NodeResizeControl

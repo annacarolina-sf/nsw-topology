@@ -33,7 +33,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   const [name, setName] = useState(node?.name || '');
   const [hostName, setHostName] = useState(node?.hostName || '');
   const [ip, setIp] = useState(node?.ip || '');
-  const [showIcon, setShowIcon] = useState(true); // MODIF
+  const [showIcon, setShowIcon] = useState(node?.icon == '' ? false  : true); // MODIF
   const [icon, setIcon] = useState(showIcon ? node?.icon || 'server' : ''); // MODIF
   const [iconSearch, setIconSearch] = useState('');
   const [pingField, setPingField] = useState(node?.pingField || '');
@@ -43,8 +43,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   const [iconSize, setIconSize] = useState(String(node?.iconSize || DEFAULT_ICON_SIZE));
   const [iconColor, setIconColor] = useState(node?.iconColor || DEFAULT_ICON_COLOR);
   const [textSize, setTextSize] = useState(String(node?.textSize || DEFAULT_TEXT_SIZE));
-  const [backgroundColor, setBackgroundColor] = useState(node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR); // MODIF
-  const [isBackgroundFixed, setIsBackgroundFixed] = useState(false); // MODIF
+  const [isBackgroundFixed, setIsBackgroundFixed] = useState(node?.backgroundColor == '' ? false : true); // MODIF
+  const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
 
   const [customMetrics, setCustomMetrics] = useState(() => {
     if (node?.customMetrics && node.customMetrics.length > 0) {
@@ -148,6 +148,10 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   };
 
   const save = () => {
+    console.log('SALVANDO****')
+    console.log(icon)
+    console.log(isBackgroundFixed)
+    console.log(backgroundColor)
     onSave({
       id: node?.id || `node-${Date.now()}`,
       name: name || hostName,
@@ -298,35 +302,37 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
         </Field>
 
         {/* MODIF: Permitir escolher uma cor fixa para o node */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-          <label
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              cursor: 'pointer',
-              fontSize: FONT.label,
-              fontWeight: 600,
-              color: isBackgroundFixed ? COLORS.text : COLORS.textMuted,
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={isBackgroundFixed}
-              onChange={(e) => setIsBackgroundFixed(e.target.checked)}
-              style={{ accentColor: COLORS.accent }}
-            />
-            Fix Background Color
-          </label>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                cursor: 'pointer',
+                fontSize: FONT.label,
+                fontWeight: 600,
+                color: isBackgroundFixed ? COLORS.text : COLORS.textMuted,
+              }}
+              >
+              <input
+                type="checkbox"
+                checked={isBackgroundFixed}
+                onChange={(e) => setIsBackgroundFixed(e.target.checked)}
+                style={{ accentColor: COLORS.accent }}
+                />
+              Fix Background Color
+            </label>
+          </div>
+          {isBackgroundFixed && (
+            <Field label="Fix Background Color">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <ColorPicker color={backgroundColor} onChange={(c) => setBackgroundColor(c)} />
+                <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{backgroundColor}</span>
+              </div>
+            </Field>
+          )}
         </div>
-        {isBackgroundFixed && (
-          <Field label="Fix Background Color">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <ColorPicker color={backgroundColor} onChange={(c) => setBackgroundColor(c)} />
-              <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{backgroundColor}</span>
-            </div>
-          </Field>
-        )}
       </div>
 
       {/* MODIF: Permite criar nodes sem um host */}
