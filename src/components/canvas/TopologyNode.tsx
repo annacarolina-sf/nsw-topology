@@ -41,6 +41,7 @@ export type TopologyNodeData = {
   width: number;
   height: number;
   backgroundColor: string; // MODIF
+  isEditable: boolean; // MODIF
 };
 
 type TopologyNodeType = Node<TopologyNodeData, 'topology'>;
@@ -57,16 +58,11 @@ const handleStyle: React.CSSProperties = {
 };
 
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
-  const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize, backgroundColor } = data; // MODIF
+  const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize, backgroundColor, isEditable } = data; // MODIF
   const [hovered, setHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
   const handleOpacity = hovered ? 0.6 : 0;
-
-  console.log('TESTE****** TopologyNode: icon, iconUri, data')
-  console.log(icon)
-  console.log(iconUri)
-  console.log(data)
 
   return (
     <>
@@ -75,6 +71,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
         minWidth={80}
         minHeight={60}
         style={{ background: 'transparent', border: 'none', width: 14, height: 14, cursor: 'se-resize' }}
+        shouldResize={() => isEditable}
       >
         <svg width="10" height="10" viewBox="0 0 10 10" style={{ display: 'block' }}>
           <path
@@ -161,7 +158,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
         </div>
       </div>
 
-      {hovered && (
+      {isEditable && hovered && (
         <div
           style={{
             position: 'absolute',

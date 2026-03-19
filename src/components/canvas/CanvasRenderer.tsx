@@ -405,6 +405,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             iconSize: node.iconSize || DEFAULT_ICON_SIZE,
             width: node.width || DEFAULT_NODE_WIDTH,
             height: node.height || DEFAULT_NODE_HEIGHT,
+            isEditable: appearance.showSidebar || true,
           },
         };
       }),
@@ -657,8 +658,8 @@ export const CanvasRenderer: React.FC<Props> = ({
         onNodesChange={handleNodesChange}
         onEdgesChange={handleEdgesChange}
         onConnect={handleConnect}
-        onNodeContextMenu={handleNodeContextMenu}
-        onEdgeContextMenu={handleEdgeContextMenu}
+        onNodeContextMenu={appearance.showSidebar ? handleNodeContextMenu : undefined}
+        onEdgeContextMenu={appearance.showSidebar ? handleEdgeContextMenu : undefined}
         onPaneClick={handlePaneClick}
         connectionLineComponent={FloatingConnectionLine}
         connectionMode={ConnectionMode.Loose}
@@ -674,6 +675,8 @@ export const CanvasRenderer: React.FC<Props> = ({
         style={{ background: bgColor }}
         snapToGrid={appearance.showGrid}
         snapGrid={[appearance.gridSize, appearance.gridSize]}
+        nodesDraggable={appearance.showSidebar}
+        nodesConnectable={appearance.showSidebar}
       >
         <Background
           variant={BackgroundVariant.Lines}
