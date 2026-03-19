@@ -405,7 +405,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             iconSize: node.iconSize || DEFAULT_ICON_SIZE,
             width: node.width || DEFAULT_NODE_WIDTH,
             height: node.height || DEFAULT_NODE_HEIGHT,
-            isEditable: appearance.showSidebar || true,
+            isEditable: appearance.showSidebar,
           },
         };
       }),
