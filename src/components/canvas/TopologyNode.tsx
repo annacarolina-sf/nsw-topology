@@ -63,6 +63,24 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
   const handleOpacity = isEditable && hovered ? 0.6 : 0;
+  const positions = ['25%', '50%', '75%'];
+
+  const renderHandles = (side: Position, axis: 'x' | 'y') =>
+    positions.map((pos, index) => (
+      <Handle
+        key={`${side}-${index}`}
+        type="source"
+        position={side}
+        id={`${side}-${index + 1}`}
+        style={{
+          ...handleStyle,
+          [axis === 'x' ? 'left' : 'top']: pos,
+          opacity: handleOpacity,
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      />
+    ));
 
   return (
     <>
@@ -90,7 +108,10 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
       </NodeResizeControl>
 
       {/* MODIF: Adiciona mais pontos de conexão e só deixa visível quando passa o mouse */}
-      <Handle type="source" position={Position.Top} id="top-1" style={{ ...handleStyle, left: '25%', opacity: handleOpacity }} />
+      {/* <Handle type="source" position={Position.Top} id="top-1" 
+        style={{ ...handleStyle, left: '25%', opacity: handleOpacity }} 
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)} />
       <Handle type="source" position={Position.Top} id="top-2" style={{ ...handleStyle, left: '50%', opacity: handleOpacity }} />
       <Handle type="source" position={Position.Top} id="top-3" style={{ ...handleStyle, left: '75%', opacity: handleOpacity }} />
 
@@ -104,7 +125,12 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
 
       <Handle type="source" position={Position.Right} id="right-1" style={{ ...handleStyle, top: '25%', opacity: handleOpacity }} />
       <Handle type="source" position={Position.Right} id="right-2" style={{ ...handleStyle, top: '50%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Right} id="right-3" style={{ ...handleStyle, top: '75%', opacity: handleOpacity }} />
+      <Handle type="source" position={Position.Right} id="right-3" style={{ ...handleStyle, top: '75%', opacity: handleOpacity }} /> */}
+
+      {renderHandles(Position.Top, 'x')}
+      {renderHandles(Position.Bottom, 'x')}
+      {renderHandles(Position.Left, 'y')}
+      {renderHandles(Position.Right, 'y')}
 
       <div
         ref={nodeRef}
