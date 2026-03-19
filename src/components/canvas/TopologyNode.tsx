@@ -62,7 +62,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const [hovered, setHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
-  const handleOpacity = hovered ? 0.6 : 0;
+  const handleOpacity = isEditable && hovered ? 0.6 : 0;
 
   return (
     <>
@@ -158,7 +158,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
         </div>
       </div>
 
-      {isEditable && hovered && (
+      {hovered && (
         <div
           style={{
             position: 'absolute',
