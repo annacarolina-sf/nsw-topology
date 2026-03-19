@@ -62,7 +62,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const [hovered, setHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
-  const handleOpacity = hovered ? 0.6 : 0;
+  const handleOpacity = isEditable && hovered ? 0.6 : 0;
   const positions = ['25%', '50%', '75%'];
 
   const renderHandles = (side: Position, axis: 'x' | 'y') =>
@@ -76,6 +76,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           ...handleStyle,
           [axis === 'x' ? 'left' : 'top']: pos,
           opacity: handleOpacity,
+          pointerEvents: isEditable ? 'auto' : 'none',
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -109,14 +110,10 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
       )}
 
       {/* MODIF: Adiciona mais pontos de conexão e só deixa visível quando passa o mouse */}
-      {isEditable && (
-        <>
-          {renderHandles(Position.Top, 'x')}
-          {renderHandles(Position.Bottom, 'x')}
-          {renderHandles(Position.Left, 'y')}
-          {renderHandles(Position.Right, 'y')}
-        </>
-      )}
+      {renderHandles(Position.Top, 'x')}
+      {renderHandles(Position.Bottom, 'x')}
+      {renderHandles(Position.Left, 'y')}
+      {renderHandles(Position.Right, 'y')}
 
       <div
         ref={nodeRef}
