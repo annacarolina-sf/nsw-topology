@@ -39,7 +39,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
 
   const title = options.general?.title || '';
   const titleSize = options.general?.titleSize || 18;
-  const sidebarWidth = appearance.showSidebar ? 48 : 0;
+  const sidebarWidth = appearance.allowEditing ? 48 : 0;
 
   const updateOptions = useCallback(
     (patch: Partial<TopologyOptions>) => {
@@ -145,7 +145,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
         </div>
       )}
       <div style={{ position: 'relative', height: canvasHeight }}>
-        {appearance.showSidebar && (
+        {appearance.allowEditing && (
           <TopologySidebar
             onAddNode={() => setAddNodeTrigger((prev) => prev + 1)}
             onCenterMap={handleCenterMap}

@@ -91,7 +91,7 @@ export interface AppearanceConfig {
   gridSize: number;
   gridColor: string;
   showDonateCard: boolean;
-  showSidebar: boolean;
+  allowEditing: boolean;
 }
 
 export interface ColorsConfig {

@@ -104,12 +104,12 @@ export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
         defaultValue: DEFAULT_APPEARANCE.showDonateCard,
         category: ['Appearance'],
       })
-      // MODIF: Permite esconder a sidebar do painel (procurar por "showSidebar" para ver todas as modificações)
+      // MODIF: Permite esconder a sidebar do painel e impedir qualquer tipo de edição (procurar por "allowEditing" para ver todas as modificações)
       .addBooleanSwitch({
-        path: 'appearance.showSidebar',
-        name: 'Show Sidebar',
-        description: 'Show or hide the sidebar in the topology view.',
-        defaultValue: DEFAULT_APPEARANCE.showSidebar,
+        path: 'appearance.allowEditing',
+        name: 'Allow editing',
+        description: 'Allow or restrict editing in the panel.',
+        defaultValue: DEFAULT_APPEARANCE.allowEditing,
         category: ['Appearance'],
       });
 

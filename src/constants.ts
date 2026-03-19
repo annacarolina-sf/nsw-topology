@@ -18,7 +18,7 @@ export const DEFAULT_APPEARANCE: AppearanceConfig = {
   gridSize: 20,
   gridColor: '#1e2130',
   showDonateCard: true,
-  showSidebar: true,
+  allowEditing: true,
 };
 
 export const DEFAULT_COLORS: ColorsConfig = {
