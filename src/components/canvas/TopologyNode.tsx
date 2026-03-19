@@ -62,7 +62,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const [hovered, setHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
-  const handleOpacity = isEditable && hovered ? 0.6 : 0;
+  const handleOpacity = hovered ? 0.6 : 0;
   const positions = ['25%', '50%', '75%'];
 
   const renderHandles = (side: Position, axis: 'x' | 'y') =>
@@ -84,53 +84,39 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
 
   return (
     <>
-      <NodeResizeControl
-        position="bottom-right"
-        minWidth={80}
-        minHeight={60}
-        style={{ background: 'transparent', border: 'none', width: 14, height: 14, cursor: 'se-resize' }}
-        shouldResize={() => isEditable}
-      >
-        <svg width="10" height="10" viewBox="0 0 10 10" style={{ display: 'block' }}>
-          <path
-            d="M9 1v8H1"
-            fill="none"
-            stroke={selected ? COLORS.textWhite : 'rgba(255,255,255,0.4)'}
-            strokeWidth="1.5"
-          />
-          <path
-            d="M9 5v4H5"
-            fill="none"
-            stroke={selected ? COLORS.textWhite : 'rgba(255,255,255,0.4)'}
-            strokeWidth="1.5"
-          />
-        </svg>
-      </NodeResizeControl>
+      {isEditable && (
+        <NodeResizeControl
+          position="bottom-right"
+          minWidth={80}
+          minHeight={60}
+          style={{ background: 'transparent', border: 'none', width: 14, height: 14, cursor: 'se-resize' }}
+        >
+          <svg width="10" height="10" viewBox="0 0 10 10" style={{ display: 'block' }}>
+            <path
+              d="M9 1v8H1"
+              fill="none"
+              stroke={selected ? COLORS.textWhite : 'rgba(255,255,255,0.4)'}
+              strokeWidth="1.5"
+            />
+            <path
+              d="M9 5v4H5"
+              fill="none"
+              stroke={selected ? COLORS.textWhite : 'rgba(255,255,255,0.4)'}
+              strokeWidth="1.5"
+            />
+          </svg>
+        </NodeResizeControl>
+      )}
 
       {/* MODIF: Adiciona mais pontos de conexão e só deixa visível quando passa o mouse */}
-      {/* <Handle type="source" position={Position.Top} id="top-1" 
-        style={{ ...handleStyle, left: '25%', opacity: handleOpacity }} 
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)} />
-      <Handle type="source" position={Position.Top} id="top-2" style={{ ...handleStyle, left: '50%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Top} id="top-3" style={{ ...handleStyle, left: '75%', opacity: handleOpacity }} />
-
-      <Handle type="source" position={Position.Bottom} id="bottom-1" style={{ ...handleStyle, left: '25%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Bottom} id="bottom-2" style={{ ...handleStyle, left: '50%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Bottom} id="bottom-3" style={{ ...handleStyle, left: '75%', opacity: handleOpacity }} />
-
-      <Handle type="source" position={Position.Left} id="left-1" style={{ ...handleStyle, top: '25%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Left} id="left-2" style={{ ...handleStyle, top: '50%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Left} id="left-3" style={{ ...handleStyle, top: '75%', opacity: handleOpacity }} />
-
-      <Handle type="source" position={Position.Right} id="right-1" style={{ ...handleStyle, top: '25%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Right} id="right-2" style={{ ...handleStyle, top: '50%', opacity: handleOpacity }} />
-      <Handle type="source" position={Position.Right} id="right-3" style={{ ...handleStyle, top: '75%', opacity: handleOpacity }} /> */}
-
-      {renderHandles(Position.Top, 'x')}
-      {renderHandles(Position.Bottom, 'x')}
-      {renderHandles(Position.Left, 'y')}
-      {renderHandles(Position.Right, 'y')}
+      {isEditable && (
+        <>
+          {renderHandles(Position.Top, 'x')}
+          {renderHandles(Position.Bottom, 'x')}
+          {renderHandles(Position.Left, 'y')}
+          {renderHandles(Position.Right, 'y')}
+        </>
+      )}
 
       <div
         ref={nodeRef}
