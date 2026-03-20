@@ -54,6 +54,7 @@ export interface NodeConfig {
   bgColor: string;
   iconColor: string;
   backgroundColor: string;
+  isBackgroundFixed: boolean;
   textColor: string;
   textSize: number;
   iconSize: number;

@@ -41,6 +41,7 @@ export type TopologyNodeData = {
   width: number;
   height: number;
   backgroundColor: string; // MODIF
+  isBackgroundFixed: boolean; // MODIF
   isEditable: boolean; // MODIF
 };
 
@@ -58,7 +59,7 @@ const handleStyle: React.CSSProperties = {
 };
 
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
-  const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize, backgroundColor, isEditable } = data; // MODIF
+  const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
   const [hovered, setHovered] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
@@ -66,9 +67,10 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const positions = ['25%', '50%', '75%'];
 
   console.log('RENDERIZANDO O NODE (edit) ***********')
+  console.log(isBackgroundFixed)
   console.log(statusColor)
   console.log(backgroundColor)
-  console.log(backgroundColor || statusColor)
+  console.log(isBackgroundFixed ? backgroundColor : statusColor)
   console.log(icon)
 
   const renderHandles = (side: Position, axis: 'x' | 'y') =>
@@ -130,7 +132,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           height: '100%',
           minWidth: 80,
           minHeight: 60,
-          background: backgroundColor || statusColor,
+          background: isBackgroundFixed ? backgroundColor : statusColor,
           borderRadius: 10,
           border: '2px solid rgba(255,255,255,0.2)',
           display: 'flex',
@@ -189,7 +191,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
             <div style={tooltipTitle}>{label}</div>
             <div style={tooltipDivider} />
             <p>Teste</p>
-            {!backgroundColor && ( // MODIF
+            {!isBackgroundFixed && ( // MODIF
               <div style={tooltipRow}>
                 <div style={statusDot(data.statusColor)} />
                 <span style={tooltipLabel}>Status:</span>

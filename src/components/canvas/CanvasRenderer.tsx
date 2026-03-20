@@ -402,6 +402,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             iconColor: node.iconColor || DEFAULT_ICON_COLOR,
             textColor: node.textColor || DEFAULT_TEXT_COLOR,
             backgroundColor: node.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR,
+            isBackgroundFixed: node.isBackgroundFixed,
             textSize: node.textSize || DEFAULT_TEXT_SIZE,
             iconSize: node.iconSize || DEFAULT_ICON_SIZE,
             width: node.width || DEFAULT_NODE_WIDTH,
