@@ -47,21 +47,22 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
   const nodeOpts = nodes.map((n) => ({ value: n.id, label: n.name }));
   const isFromDrag = !!pendingConn;
 
-  const interfaceOpts = useMemo(() => {
-    const src = nodes.find((n) => n.id === sourceId);
-    if (!src) {
-      return [];
-    }
-    const fields = hostFieldMap[src.hostName] || hostFieldMap[src.name] || [];
-    const basesObj: Record<string, boolean> = {};
-    for (const f of fields) {
-      if (f.toLowerCase().indexOf('interface') >= 0 || f.indexOf(':') >= 0) {
-        basesObj[extractInterfaceBaseName(f)] = true;
-      }
-    }
-    const bases = Object.keys(basesObj);
-    return [{ value: '', label: 'Select...' }, ...bases.map((b) => ({ value: b, label: b }))];
-  }, [sourceId, nodes, hostFieldMap]);
+  // MODIF: Não será usado por enquanto
+  // const interfaceOpts = useMemo(() => {
+  //   const src = nodes.find((n) => n.id === sourceId);
+  //   if (!src) {
+  //     return [];
+  //   }
+  //   const fields = hostFieldMap[src.hostName] || hostFieldMap[src.name] || [];
+  //   const basesObj: Record<string, boolean> = {};
+  //   for (const f of fields) {
+  //     if (f.toLowerCase().indexOf('interface') >= 0 || f.indexOf(':') >= 0) {
+  //       basesObj[extractInterfaceBaseName(f)] = true;
+  //     }
+  //   }
+  //   const bases = Object.keys(basesObj);
+  //   return [{ value: '', label: 'Select...' }, ...bases.map((b) => ({ value: b, label: b }))];
+  // }, [sourceId, nodes, hostFieldMap]);
 
   const allFields = useMemo(() => {
     const src = nodes.find((n) => n.id === sourceId);
