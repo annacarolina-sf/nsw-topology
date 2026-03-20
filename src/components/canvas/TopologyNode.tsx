@@ -66,7 +66,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const handleOpacity = isEditable && hovered ? 0.6 : 0;
   const positions = ['25%', '50%', '75%'];
 
-  console.log('RENDERIZANDO O NODE (edit) ***********')
+  console.log('RENDERIZANDO O NODE (atualizado) ***********')
   console.log(isBackgroundFixed)
   console.log(statusColor)
   console.log(backgroundColor)
@@ -159,7 +159,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
 
         <div
           style={{
-            fontSize: textSize || FONT.label,
+            fontSize: textSize || (icon ? FONT.label : 16),
             fontWeight: 600,
             color: data.textColor || COLORS.textWhite,
             textAlign: 'center',
@@ -190,7 +190,6 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           <div style={tooltipBox}>
             <div style={tooltipTitle}>{label}</div>
             <div style={tooltipDivider} />
-            <p>Teste</p>
             {!isBackgroundFixed && ( // MODIF
               <div style={tooltipRow}>
                 <div style={statusDot(data.statusColor)} />
