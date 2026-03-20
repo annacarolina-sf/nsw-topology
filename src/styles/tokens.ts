@@ -79,7 +79,7 @@ export const tooltipBox = {
   color: COLORS.textSecondary,
   backdropFilter: BLUR,
   boxShadow: SHADOW.tooltip,
-  minWidth: 200,
+  minWidth: 400, // MODIF
 };
 
 export const tooltipTitle = {
