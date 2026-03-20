@@ -149,15 +149,40 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
 
   const save = () => {
     console.log('SALVANDO****')
-    console.log(icon)
+    console.log(showIcon)
     console.log(isBackgroundFixed)
-    console.log(backgroundColor)
+    console.log('------------------')
+    console.log({
+      id: node?.id || `node-${Date.now()}`,
+      name: name || hostName,
+      hostName,
+      ip,
+      icon: showIcon ? icon : '',
+      positionX: node?.positionX || 200,
+      positionY: node?.positionY || 200,
+      width: node?.width || DEFAULT_NODE_WIDTH,
+      height: node?.height || DEFAULT_NODE_HEIGHT,
+      pingField,
+      pingOnlineValue: Number(pingOnlineValue) || 1,
+      uptimeField,
+      bgColor: DEFAULT_NODE_BG,
+      iconColor,
+      textColor,
+      backgroundColor: isBackgroundFixed ? backgroundColor : '',
+      textSize: Number(textSize) || DEFAULT_TEXT_SIZE,
+      iconSize: Number(iconSize) || DEFAULT_ICON_SIZE,
+      cpuMetric: { field: '', enabled: false, alertThreshold: 80, alertColor: COLORS.warning },
+      memoryMetric: { field: '', enabled: false, alertThreshold: 80, alertColor: COLORS.warning },
+      lossMetric: { field: '', enabled: false, alertThreshold: 5, alertColor: COLORS.warning },
+      responseTimeMetric: { field: '', enabled: false, alertThreshold: 100, alertColor: COLORS.warning },
+      customMetrics,
+    })
     onSave({
       id: node?.id || `node-${Date.now()}`,
       name: name || hostName,
       hostName,
       ip,
-      icon,
+      icon: showIcon ? icon : '',
       positionX: node?.positionX || 200,
       positionY: node?.positionY || 200,
       width: node?.width || DEFAULT_NODE_WIDTH,

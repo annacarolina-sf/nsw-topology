@@ -65,6 +65,12 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const handleOpacity = isEditable && hovered ? 0.6 : 0;
   const positions = ['25%', '50%', '75%'];
 
+  console.log('RENDERIZANDO O NODE (edit) ***********')
+  console.log(statusColor)
+  console.log(backgroundColor)
+  console.log(backgroundColor || statusColor)
+  console.log(icon)
+
   const renderHandles = (side: Position, axis: 'x' | 'y') =>
     positions.map((pos, index) => (
       <Handle
