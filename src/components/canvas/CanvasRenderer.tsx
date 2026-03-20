@@ -76,6 +76,7 @@ interface Props {
   onAddConnection: (conn: ConnectionConfig) => void;
   onUpdateConnection: (conn: ConnectionConfig) => void;
   onDeleteConnection: (id: string) => void;
+  onCenterMap: () => void; // MODIF
 }
 
 export const CanvasRenderer: React.FC<Props> = ({
@@ -105,6 +106,7 @@ export const CanvasRenderer: React.FC<Props> = ({
   onAddConnection,
   onUpdateConnection,
   onDeleteConnection,
+  onCenterMap, // MODIF
 }) => {
   const resolvedColors = useMemo(
     () => ({
@@ -793,6 +795,26 @@ export const CanvasRenderer: React.FC<Props> = ({
           <Panel position="top-center">
             <SearchBar query={searchQuery} onChange={setSearchQuery} />
           </Panel>
+        )}
+        {/*  MODIF: botão flutuante para centralizat mapa (procurar por  onCenterMap) */}
+        {!appearance.allowEditing && (
+          <button
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              zIndex: 10,
+              padding: '8px 12px',
+              borderRadius: 8,
+              border: 'none',
+              background: '#333',
+              color: '#fff',
+              cursor: 'pointer',
+            }}
+            onClick={() => onCenterMap}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+          </button>
         )}
       </ReactFlow>
 

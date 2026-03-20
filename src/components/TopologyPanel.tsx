@@ -185,6 +185,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
             onAddConnection={handleAddConnection}
             onUpdateConnection={handleUpdateConnection}
             onDeleteConnection={handleDeleteConnection}
+            onCenterMap={handleCenterMap} // MODIF
           />
         </div>
       </div>
