@@ -376,6 +376,12 @@ export const WeathermapEdge = memo(
                 </span>
               </div>
               <div style={tooltipDivider} />
+              {data?.observation && (
+                <div style={tooltipRow}>
+                  <span style={tooltipLabel}>{data?.observation}</span>
+                </div>
+              )}
+              <div style={tooltipDivider} />
               <div style={tooltipRow}>
                 <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>↓ Download:</span>
                 <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>{data?.downloadValue || '—'}</span>
