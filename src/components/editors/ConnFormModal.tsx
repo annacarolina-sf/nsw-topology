@@ -150,7 +150,8 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
 
       <div style={SECTION_HEADER}>🔌 Interface</div>
       <Field label="Interface Name">
-        <Select options={interfaceOpts} value={interfaceName} onChange={(v) => handleInterfaceSelect(v.value || '')} />
+        {/* MODIF: options={interfaceOpts} */}
+        <Select options={allFields} value={interfaceName} onChange={(v) => handleInterfaceSelect(v.value || '')} /> 
       </Field>
       <Field label="Alias (label on line)">
         <Input value={alias} onChange={(e) => setAlias(e.currentTarget.value)} placeholder="e.g. OLT-SW01" />

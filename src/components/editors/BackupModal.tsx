@@ -109,6 +109,7 @@ const convertV1Backup = (v1: V1Backup): { nodes: NodeConfig[]; connections: Conn
       iconColor: DEFAULT_ICON_COLOR,
       textColor: DEFAULT_TEXT_COLOR,
       backgroundColor: d.backgroundColor,
+      isBackgroundFixed: d.isBackgroundFixed,
       textSize: DEFAULT_TEXT_SIZE,
       iconSize: DEFAULT_ICON_SIZE,
       cpuMetric: { ...DEFAULT_METRIC },
