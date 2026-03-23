@@ -2,6 +2,7 @@ import React, { memo, useState } from 'react';
 import { getValueFormat, formattedValueToString } from '@grafana/data';
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge } from '@xyflow/react';
 import { COLORS, FONT, tooltipBox, tooltipDivider, tooltipLabel, tooltipRow, statusDot } from '../../styles/tokens';
+import ReactMarkdown from 'react-markdown';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 
@@ -376,9 +377,25 @@ export const WeathermapEdge = memo(
                 </span>
               </div>
               <div style={tooltipDivider} />
-              {data?.observation && (
+              {/* MODIF: adição de observações customizadas */}
+              {/* {data?.observation && (
                 <div style={tooltipRow}>
                   <span style={tooltipLabel}>{data?.observation}</span>
+                </div>
+              )} */}
+              {data?.observation && (
+                <div style={tooltipRow}>
+                  <div style={tooltipLabel}>
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => (
+                          <p style={{ margin: 0 }}>{children}</p>
+                        ),
+                      }}
+                    >
+                      {data.observation}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               )}
               <div style={tooltipDivider} />

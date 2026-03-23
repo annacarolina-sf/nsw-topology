@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Modal, Button, Field, Input, Select, UnitPicker } from '@grafana/ui';
+import { Modal, Button, Field, Input, Select, UnitPicker, TextArea } from '@grafana/ui';
 import { NodeConfig, ConnectionConfig, ZabbixHost } from '../../types';
 import { CAPACITY_OPTIONS, LINE_STYLE_OPTIONS } from '../../constants';
 import { COLORS, FONT, SECTION_HEADER } from '../../styles/tokens';
@@ -159,7 +159,12 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
       </Field>
       {/* MODIF: Adiciona campo para registrar uma observação sobre a conexão (procurar por "observation") */}
       <Field label="Observation">
-        <Input value={observation} onChange={(e) => setObservation(e.currentTarget.value)} placeholder="" />
+        <TextArea
+          value={observation}
+          onChange={(e) => setObservation(e.currentTarget.value)}
+          rows={5}
+          placeholder="Write observations... (Markdown supported)"
+        />
       </Field>
       
 
