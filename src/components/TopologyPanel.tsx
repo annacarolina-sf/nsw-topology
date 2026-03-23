@@ -104,6 +104,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
   );
 
   const handleCenterMap = useCallback(() => {
+    console.log('Centralizando!!')
     reactFlow.fitView({ padding: 0.2, duration: 300 });
   }, [reactFlow]);
 
