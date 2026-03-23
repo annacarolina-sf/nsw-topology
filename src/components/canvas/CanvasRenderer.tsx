@@ -804,12 +804,28 @@ export const CanvasRenderer: React.FC<Props> = ({
               top: 10,
               left: 10,
               zIndex: 10,
+
+              width: 36,
+              height: 36,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+
               padding: '8px 12px',
               borderRadius: 8,
               border: 'none',
               background: '#333',
               color: '#fff',
               cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#5997E7'
+              e.currentTarget.style.color = '#131D37'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#fff'
+              e.currentTarget.style.color = '#333'
             }}
             onClick={onCenterMap}
           >
