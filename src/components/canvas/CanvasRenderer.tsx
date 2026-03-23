@@ -654,20 +654,6 @@ export const CanvasRenderer: React.FC<Props> = ({
         .react-flow__node.selected .react-flow__resize-control { opacity: 1; }
         .react-flow__controls { display: none !important; }
       `}</style>
-      {/* MODIF: Aviso no modo de edição */}
-      <p
-        style={{
-          // background: '#fff3cd',
-          // border: '1px solid #ffeeba',
-          // borderRadius: '6px',
-          // marginBottom: '8px',
-          color: '#856404',
-          padding: '8px 12px',
-          fontWeight: 500,
-        }}
-      >
-        ⚠️ Modo de edição ativado.
-      </p>
       <ReactFlow
         nodes={rfNodes}
         edges={rfEdges}
@@ -810,7 +796,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             <SearchBar query={searchQuery} onChange={setSearchQuery} />
           </Panel>
         )}
-        {/*  MODIF: botão flutuante para centralizat mapa (procurar por  onCenterMap) */}
+        {/*  MODIF: botão flutuante para centralizar mapa em modo de visualização (procurar por onCenterMap) */}
         {!appearance.allowEditing && (
           <button
             style={{
@@ -829,6 +815,26 @@ export const CanvasRenderer: React.FC<Props> = ({
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
           </button>
+        )}
+        {/* MODIF: Aviso no modo de edição */}
+        {appearance.allowEditing && (
+          <p
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 10,
+              zIndex: 10,
+              background: '#fff3cd',
+              border: '1px solid #ffeeba',
+              borderRadius: '6px',
+              marginBottom: '8px',
+              color: '#856404',
+              padding: '8px 12px',
+              fontWeight: 500,
+            }}
+          >
+            ⚠️ Modo de edição ativado.
+          </p>
         )}
       </ReactFlow>
 
