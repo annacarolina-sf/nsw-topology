@@ -346,7 +346,7 @@ export const WeathermapEdge = memo(
                 transform: `translate(-50%, -100%) translate(${labelX}px, ${labelY - 24}px)`,
                 pointerEvents: 'auto',
                 zIndex: 100,
-                minWidth: 220,
+                minWidth: 400, // MODIF
                 whiteSpace: 'nowrap',
               }}
             >

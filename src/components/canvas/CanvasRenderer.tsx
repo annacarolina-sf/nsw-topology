@@ -404,7 +404,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             iconColor: node.iconColor || DEFAULT_ICON_COLOR,
             textColor: node.textColor || DEFAULT_TEXT_COLOR,
             backgroundColor: node.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR,
-            isBackgroundFixed: node.isBackgroundFixed,
+            isBackgroundFixed: node.isBackgroundFixed || false,
             textSize: node.textSize || DEFAULT_TEXT_SIZE,
             iconSize: node.iconSize || DEFAULT_ICON_SIZE,
             width: node.width || DEFAULT_NODE_WIDTH,
@@ -654,6 +654,20 @@ export const CanvasRenderer: React.FC<Props> = ({
         .react-flow__node.selected .react-flow__resize-control { opacity: 1; }
         .react-flow__controls { display: none !important; }
       `}</style>
+      {/* MODIF: Aviso no modo de edição */}
+      <p
+        style={{
+          // background: '#fff3cd',
+          // border: '1px solid #ffeeba',
+          // borderRadius: '6px',
+          // marginBottom: '8px',
+          color: '#856404',
+          padding: '8px 12px',
+          fontWeight: 500,
+        }}
+      >
+        ⚠️ Modo de edição ativado.
+      </p>
       <ReactFlow
         nodes={rfNodes}
         edges={rfEdges}
