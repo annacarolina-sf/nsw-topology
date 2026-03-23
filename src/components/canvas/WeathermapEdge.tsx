@@ -380,7 +380,17 @@ export const WeathermapEdge = memo(
               {/* MODIF: adição de observações customizadas */}
               {/* {data?.observation && (
                 <div style={tooltipRow}>
-                  <span style={tooltipLabel}>{data?.observation}</span>
+                  <div style={tooltipLabel}>
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => (
+                          <p style={{ margin: 0 }}>{children}</p>
+                        ),
+                      }}
+                    >
+                      {data.observation}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               )} */}
               {data?.observation && (
@@ -390,6 +400,11 @@ export const WeathermapEdge = memo(
                       components={{
                         p: ({ children }) => (
                           <p style={{ margin: 0 }}>{children}</p>
+                        ),
+                        strong: ({ children }) => (
+                          <strong style={{ fontWeight: 700 }}>
+                            {children}
+                          </strong>
                         ),
                       }}
                     >

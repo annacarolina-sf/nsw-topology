@@ -104,7 +104,7 @@ export const tooltipRow = {
 
 export const tooltipLabel = {
   color: COLORS.textMuted,
-  fontWeight: 500,
+  // fontWeight: 500,
   fontSize: FONT.sm + 1,
 };
 
