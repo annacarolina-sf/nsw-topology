@@ -43,8 +43,17 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   const [iconSize, setIconSize] = useState(String(node?.iconSize || DEFAULT_ICON_SIZE));
   const [iconColor, setIconColor] = useState(node?.iconColor || DEFAULT_ICON_COLOR);
   const [textSize, setTextSize] = useState(String(node?.textSize || DEFAULT_TEXT_SIZE));
-  const [isBackgroundFixed, setIsBackgroundFixed] = useState(node?.backgroundColor == '' ? false : true); // MODIF
+  const [isBackgroundFixed, setIsBackgroundFixed] = useState(!!node?.backgroundColor); // MODIF
   const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
+  
+  // TODO: TESTE
+  console.log('TESTANDO - ABRINDO MODAL DE CRIAR NODE')
+  console.log('Background color original: ')
+  console.log(node?.backgroundColor)
+  console.log('Como estou fazendo:')
+  console.log(!!node?.backgroundColor)
+  console.log('Como dá pra fazer:')
+  console.log(node?.backgroundColor ? true : false)
 
   const [customMetrics, setCustomMetrics] = useState(() => {
     if (node?.customMetrics && node.customMetrics.length > 0) {
@@ -148,36 +157,6 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   };
 
   const save = () => {
-    console.log('SALVANDO****')
-    console.log(showIcon)
-    console.log(isBackgroundFixed)
-    console.log('------------------')
-    console.log({
-      id: node?.id || `node-${Date.now()}`,
-      name: name || hostName,
-      hostName,
-      ip,
-      icon: showIcon ? icon : '',
-      positionX: node?.positionX || 200,
-      positionY: node?.positionY || 200,
-      width: node?.width || DEFAULT_NODE_WIDTH,
-      height: node?.height || DEFAULT_NODE_HEIGHT,
-      pingField,
-      pingOnlineValue: Number(pingOnlineValue) || 1,
-      uptimeField,
-      bgColor: DEFAULT_NODE_BG,
-      iconColor,
-      textColor,
-      backgroundColor: backgroundColor,
-      isBackgroundFixed: isBackgroundFixed,
-      textSize: Number(textSize) || DEFAULT_TEXT_SIZE,
-      iconSize: Number(iconSize) || DEFAULT_ICON_SIZE,
-      cpuMetric: { field: '', enabled: false, alertThreshold: 80, alertColor: COLORS.warning },
-      memoryMetric: { field: '', enabled: false, alertThreshold: 80, alertColor: COLORS.warning },
-      lossMetric: { field: '', enabled: false, alertThreshold: 5, alertColor: COLORS.warning },
-      responseTimeMetric: { field: '', enabled: false, alertThreshold: 100, alertColor: COLORS.warning },
-      customMetrics,
-    })
     onSave({
       id: node?.id || `node-${Date.now()}`,
       name: name || hostName,
@@ -352,7 +331,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
             </label>
           </div>
           {isBackgroundFixed && (
-            <Field label="Fix Background Color">
+            <Field label="Fixed Background Color">
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <ColorPicker color={backgroundColor} onChange={(c) => setBackgroundColor(c)} />
                 <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{backgroundColor}</span>
