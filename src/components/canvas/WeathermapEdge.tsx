@@ -464,10 +464,10 @@ export const WeathermapEdge = memo(
                       marginTop: 2,
                       width: '100%',
                       overflow: 'hidden',
-                      minHeight: 400, // MODIF: alterando a altura mínima do gráfico
                     }}
                   >
-                    <Sparkline data={data.trafficHistory} height={80} capacity={data.capacity || 1000} />
+                    {/* MODIF: alterando a altura do gráfico (valor original = 80) */}
+                    <Sparkline data={data.trafficHistory} height={200} capacity={data.capacity || 1000} /> 
                   </div>
                   <div style={{ display: 'flex', gap: 12, marginTop: 4, fontSize: FONT.sm }}>
                     <span style={{ color: COLORS.trafficDownload }}>— Download</span>
