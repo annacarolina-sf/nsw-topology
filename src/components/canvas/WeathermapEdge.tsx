@@ -347,7 +347,7 @@ export const WeathermapEdge = memo(
                 transform: `translate(-50%, -100%) translate(${labelX}px, ${labelY - 24}px)`,
                 pointerEvents: 'auto',
                 zIndex: 100,
-                minWidth: 400, // MODIF
+                minWidth: 400, // MODIF: aumentando a largura do tooltip para aumentar o gráfico
                 whiteSpace: 'nowrap',
               }}
             >
@@ -378,21 +378,6 @@ export const WeathermapEdge = memo(
               </div>
               <div style={tooltipDivider} />
               {/* MODIF: adição de observações customizadas */}
-              {/* {data?.observation && (
-                <div style={tooltipRow}>
-                  <div style={tooltipLabel}>
-                    <ReactMarkdown
-                      components={{
-                        p: ({ children }) => (
-                          <p style={{ margin: 0 }}>{children}</p>
-                        ),
-                      }}
-                    >
-                      {data.observation}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              )} */}
               {data?.observation && (
                 <div style={tooltipRow}>
                   <div style={tooltipLabel}>
@@ -479,6 +464,7 @@ export const WeathermapEdge = memo(
                       marginTop: 2,
                       width: '100%',
                       overflow: 'hidden',
+                      minHeight: 400, // MODIF: alterando a altura mínima do gráfico
                     }}
                   >
                     <Sparkline data={data.trafficHistory} height={80} capacity={data.capacity || 1000} />
