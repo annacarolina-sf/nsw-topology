@@ -209,6 +209,10 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
     onChange(updated);
   };
 
+  const removeMetric = (index: number) => {
+    onChange(metrics.filter((_, i) => i !== index));
+  };
+
   // MODIF: THRESHOLDS
   const sortThresholds = (thresholds: ThresholdsData[] = []) => {
     return [...thresholds].sort((a, b) => {
@@ -246,8 +250,43 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
     onChange(updatedMetrics);
   };
 
-  const removeMetric = (index: number) => {
-    onChange(metrics.filter((_, i) => i !== index));
+  const addThreshold = (metricIndex: number) => {
+    const updatedMetrics = [...metrics];
+
+    const thresholds = [
+      ...(updatedMetrics[metricIndex].thresholds ?? []),
+      {
+        operator: '>',
+        value: 0,
+        color: COLORS.warning,
+      },
+    ];
+
+    updatedMetrics[metricIndex] = {
+      ...updatedMetrics[metricIndex],
+      thresholds: sortThresholds(thresholds),
+    };
+
+    onChange(updatedMetrics);
+  };
+
+  const removeThreshold = (
+    metricIndex: number,
+    thresholdIndex: number
+  ) => {
+    const updatedMetrics = [...metrics];
+
+    const thresholds =
+      updatedMetrics[metricIndex].thresholds?.filter(
+        (_, i) => i !== thresholdIndex
+      ) ?? [];
+
+    updatedMetrics[metricIndex] = {
+      ...updatedMetrics[metricIndex],
+      thresholds,
+    };
+
+    onChange(updatedMetrics);
   };
 
   return (
@@ -363,8 +402,24 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                 </Field>
               </div> */}
               {/* // MODIF: THRESHOLDS - Alterando os thresholds das métricas */}
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    cursor: 'pointer',
+                    fontSize: FONT.label,
+                    fontWeight: 600,
+                    color: metric.enabled ? COLORS.text : COLORS.textMuted,
+                  }}
+                >Thresholds</label>
+                <IconButton name="plus-circle" variant="secondary" onClick={() => addThreshold(idx)} tooltip="Add" />
+              </div>
+
               {(metric.thresholds ?? []).map((threshold, threasholdsIdx) => (
-                <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr', gap: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 80px 20px', gap: 8 }}>
                   <Field label="Above (>) or below (<)">
                     <Select
                       options={COMPARISON_OPTIONS}
@@ -385,6 +440,8 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                       <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{threshold.color}</span>
                     </div>
                   </Field>
+                  {/* TODO: função de remover */}
+                  <IconButton name="trash-alt" variant="destructive" onClick={() => removeThreshold(idx, threasholdsIdx)} tooltip="Remove" />
                 </div>
               ))}
             </div>
