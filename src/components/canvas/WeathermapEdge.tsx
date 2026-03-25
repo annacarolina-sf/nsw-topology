@@ -3,6 +3,7 @@ import { getValueFormat, formattedValueToString } from '@grafana/data';
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge } from '@xyflow/react';
 import { COLORS, FONT, tooltipBox, tooltipDivider, tooltipLabel, tooltipRow, statusDot } from '../../styles/tokens';
 import ReactMarkdown from 'react-markdown';
+import { getThresholdColor } from '../../data/parser'
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 
@@ -313,7 +314,7 @@ export const WeathermapEdge = memo(
                     <div
                       key={idx}
                       style={{
-                        color: m.computedValue > m.alertThreshold ? m.alertColor || COLORS.danger : COLORS.textWhite,
+                        color: getThresholdColor(m.computedValue, m.thresholds) || COLORS.textWhite, // MODIF: THRESHOLDS
                         fontSize: FONT.sm,
                         fontWeight: 500,
                         display: 'flex',
@@ -421,8 +422,8 @@ export const WeathermapEdge = memo(
                           </span>
                           <span
                             style={{
-                              color:
-                                m.computedValue > m.alertThreshold ? m.alertColor || COLORS.danger : COLORS.textWhite,
+                              color: getThresholdColor(m.computedValue, m.thresholds) || COLORS.textWhite, // MODIF: THRESHOLDS
+                                // m.computedValue > m.alertThreshold ? m.alertColor || COLORS.danger : COLORS.textWhite,
                               fontWeight: 600,
                             }}
                           >

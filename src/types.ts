@@ -23,10 +23,18 @@ export interface CustomMetric {
   aggregation: string;
   unit: string;
   enabled: boolean;
-  alertThreshold: number;
-  alertColor: string;
   decimals: number;
   isDefault?: boolean;
+  alertThreshold?: number; // TODO: EXCLUIR
+  alertColor?: string; // TODO: EXCLUIR
+  thresholds?: ThresholdsData[]; // MODIF
+}
+
+// MODIF: possibilitando inserir mais de um alerta
+export interface ThresholdsData {
+  operator: string;
+  value: number;
+  color: string;
 }
 
 // legacy metric config (kept for old dashboard compat)

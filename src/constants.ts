@@ -158,6 +158,12 @@ export const REDUCER_OPTIONS = [
   { value: 'lastNotNull', label: 'Last' },
 ];
 
+// MODIF
+export const COMPARISON_OPTIONS = [
+  { value: '>', label: 'Above (>)' },
+  { value: '<', label: 'Below (<)' },
+];
+
 export const ICON_EMOJI_OPTIONS = [
   { value: '🚀', label: '🚀 Speed' },
   { value: '🌡', label: '🌡 Temperature' },

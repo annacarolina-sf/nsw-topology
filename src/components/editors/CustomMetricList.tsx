@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Button, Field, Input, Select, ColorPicker, IconButton, UnitPicker } from '@grafana/ui';
-import { CustomMetric } from '../../types';
+import { CustomMetric, ThresholdsData } from '../../types';
 import { COLORS, FONT } from '../../styles/tokens';
-import { REDUCER_OPTIONS, ICON_EMOJI_OPTIONS } from '../../constants';
+import { REDUCER_OPTIONS, COMPARISON_OPTIONS, ICON_EMOJI_OPTIONS } from '../../constants';
 
 // check if it looks like a regex (starts with /)
 function isRegexValue(v: string): boolean {
@@ -196,9 +196,9 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
         aggregation: 'lastNotNull',
         unit: 'none',
         enabled: true,
-        alertThreshold: 80,
-        alertColor: COLORS.warning,
         decimals: 1,
+        // alertThreshold: 80,
+        // alertColor: COLORS.warning,
       },
     ]);
   };
@@ -207,6 +207,43 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
     const updated = [...metrics];
     updated[index] = { ...updated[index], ...partial };
     onChange(updated);
+  };
+
+  // MODIF: THRESHOLDS
+  const sortThresholds = (thresholds: ThresholdsData[] = []) => {
+    return [...thresholds].sort((a, b) => {
+      // Primeiro: '<' vem antes de '>'
+      if (a.operator !== b.operator) {
+        return a.operator === '<' ? -1 : 1;
+      }
+
+      // Depois: ordenação por valor
+      if (a.operator === '<') {
+        return b.value - a.value; // maior -> menor
+      }
+
+      return a.value - b.value; // menor -> maior
+    });
+  };
+
+  const updateThreshold = (
+    metricIndex: number,
+    thresholdIndex: number,
+    partial: Partial<ThresholdsData>
+  ) => {
+    const updatedMetrics = [...metrics];
+    const thresholds = [
+      ...(updatedMetrics[metricIndex].thresholds ?? [])
+    ];
+    thresholds[thresholdIndex] = {
+      ...thresholds[thresholdIndex],
+      ...partial,
+    };
+    updatedMetrics[metricIndex] = {
+      ...updatedMetrics[metricIndex],
+      thresholds: sortThresholds(thresholds),
+    };
+    onChange(updatedMetrics);
   };
 
   const removeMetric = (index: number) => {
@@ -310,7 +347,7 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
               </div>
 
               {/* Row 4: Alerts */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 <Field label="Alert when above (>)">
                   <Input
                     type="number"
@@ -324,7 +361,32 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                     <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{metric.alertColor}</span>
                   </div>
                 </Field>
-              </div>
+              </div> */}
+              {/* // MODIF: THRESHOLDS - Alterando os thresholds das métricas */}
+              {(metric.thresholds ?? []).map((threshold, threasholdsIdx) => (
+                <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr', gap: 8 }}>
+                  <Field label="Above (>) or below (<)">
+                    <Select
+                      options={COMPARISON_OPTIONS}
+                      value={threshold.operator}
+                      onChange={(v) => updateThreshold(idx, threasholdsIdx, { operator: v.value || '>' })}
+                    />
+                  </Field>
+                  <Field label="Threashold">
+                    <Input
+                      type="number"
+                      value={threshold.value}
+                      onChange={(e) => updateThreshold(idx, threasholdsIdx, { value: Number(e.currentTarget.value) })}
+                    />
+                  </Field>
+                  <Field label="Alert Color">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <ColorPicker color={threshold.color} onChange={(c) => updateThreshold(idx, threasholdsIdx, { color: c })} />
+                      <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{threshold.color}</span>
+                    </div>
+                  </Field>
+                </div>
+              ))}
             </div>
           )}
         </div>

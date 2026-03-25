@@ -1,5 +1,5 @@
 import { DataFrame, FieldType } from '@grafana/data';
-import { ZabbixHost, ParsedMetrics, CustomMetric } from '../types';
+import { ZabbixHost, ParsedMetrics, CustomMetric, ThresholdsData } from '../types';
 
 // parse grafana data frames into a host/metric map for the canvas
 export const parseDataFrames = (seriesList: DataFrame[]): ParsedMetrics => {
@@ -205,4 +205,33 @@ export const evaluateCustomMetric = (
   }
 
   return reduceFieldValues(validValues, metric.aggregation);
+};
+
+const sortThresholds = (thresholds: ThresholdsData[] = []) =>
+  [...thresholds].sort((a, b) => {
+    if (a.operator !== b.operator) {
+      return a.operator === '<' ? -1 : 1;
+    }
+
+    return a.operator === '<'
+      ? b.value - a.value
+      : a.value - b.value;
+  });
+
+export const getThresholdColor = (
+  value: number,
+  thresholds: ThresholdsData[] = []
+): string | null => {
+  const sorted = sortThresholds(thresholds);
+
+  for (const t of sorted) {
+    if (
+      (t.operator === '<' && value < t.value) ||
+      (t.operator === '>' && value > t.value)
+    ) {
+      return t.color;
+    }
+  }
+
+  return null;
 };
