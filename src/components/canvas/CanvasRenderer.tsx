@@ -339,7 +339,7 @@ export const CanvasRenderer: React.FC<Props> = ({
   );
 
   const getEdgeTrafficState = useCallback(
-    (conn: ConnectionConfig, srcNode?: NodeConfig, tgtNode?: NodeConfig) => {
+    (conn: ConnectionConfig, srcNode?: NodeConfig, tgtNode?: NodeConfig, customColorMetric?: any) => {
       const srcStatus = srcNode ? getNodeStatus(srcNode) : 'offline';
       const tgtStatus = tgtNode ? getNodeStatus(tgtNode) : 'offline';
 
@@ -365,6 +365,12 @@ export const CanvasRenderer: React.FC<Props> = ({
             width = getUtilizationThickness(pct, 2);
           }
         }
+      }
+      
+      // MODIF
+      if(customColorMetric && color == '#4b5563') {
+        const customColor = getThresholdColor(customColorMetric.computedValue, customColorMetric.threasholds);
+        if(customColor) color = customColor;
       }
 
       return { color, width, dlVal, ulVal, srcStatus, tgtStatus };
@@ -450,20 +456,6 @@ export const CanvasRenderer: React.FC<Props> = ({
       connections.map((conn) => {
         const srcNode = nodeConfigs.find((n) => n.id === conn.sourceId);
         const tgtNode = nodeConfigs.find((n) => n.id === conn.targetId);
-        const {
-          color: edgeColor,
-          width: edgeWidth,
-          dlVal,
-          ulVal,
-          srcStatus,
-          tgtStatus,
-        } = getEdgeTrafficState(conn, srcNode, tgtNode);
-
-        const dlDisplay = dlVal > 0 ? formatTrafficValue(dlVal) : '';
-        const ulDisplay = ulVal > 0 ? formatTrafficValue(ulVal) : '';
-
-        const edgeIsRed = edgeColor === resolvedColors.offline || edgeColor === COLORS.red;
-        const trafficHistory = getTrafficHistory(dataSeries, srcNode, conn);
 
         const evaluatedMetrics = [];
         if (conn.customMetrics) {
@@ -479,6 +471,22 @@ export const CanvasRenderer: React.FC<Props> = ({
             }
           }
         }
+        const customColorMetric = evaluatedMetrics.find((m) => m.useAsLineColor); // MODIF
+
+        const {
+          color: edgeColor,
+          width: edgeWidth,
+          dlVal,
+          ulVal,
+          srcStatus,
+          tgtStatus,
+        } = getEdgeTrafficState(conn, srcNode, tgtNode, customColorMetric);
+
+        const dlDisplay = dlVal > 0 ? formatTrafficValue(dlVal) : '';
+        const ulDisplay = ulVal > 0 ? formatTrafficValue(ulVal) : '';
+
+        const edgeIsRed = edgeColor === resolvedColors.offline || edgeColor === COLORS.red;
+        const trafficHistory = getTrafficHistory(dataSeries, srcNode, conn);
 
         return {
           id: conn.id,
