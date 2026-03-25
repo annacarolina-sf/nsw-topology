@@ -207,17 +207,19 @@ export const evaluateCustomMetric = (
   return reduceFieldValues(validValues, metric.aggregation);
 };
 
-const sortThresholds = (thresholds: ThresholdsData[] = []) =>
+// MODIF
+export const sortThresholds = (thresholds: ThresholdsData[] = []) =>
   [...thresholds].sort((a, b) => {
     if (a.operator !== b.operator) {
       return a.operator === '<' ? -1 : 1;
     }
 
     return a.operator === '<'
-      ? b.value - a.value
-      : a.value - b.value;
+      ? a.value - b.value
+      : b.value - a.value;
   });
 
+// MODIF
 export const getThresholdColor = (
   value: number,
   thresholds: ThresholdsData[] = []

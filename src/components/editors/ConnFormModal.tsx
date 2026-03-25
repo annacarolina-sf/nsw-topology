@@ -4,6 +4,7 @@ import { NodeConfig, ConnectionConfig, ZabbixHost } from '../../types';
 import { CAPACITY_OPTIONS, LINE_STYLE_OPTIONS } from '../../constants';
 import { COLORS, FONT, SECTION_HEADER } from '../../styles/tokens';
 import { CustomMetricList } from './CustomMetricList';
+import { sortThresholds } from 'data/parser';
 
 function extractInterfaceBaseName(fieldName: string): string {
   const m = fieldName.match(/^(Interface\s+[^:]+?)(?:\(\))?\s*:/i);
@@ -123,7 +124,11 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
       downloadField,
       uploadField,
       unit,
-      customMetrics,
+      // MODIF: ordenando de acordo com a prioridade de alerta
+      customMetrics: customMetrics?.map((metric) => ({
+        ...metric,
+        thresholds: sortThresholds(metric.thresholds),
+      })),
     });
   };
 
@@ -152,7 +157,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
       <div style={SECTION_HEADER}>🔌 Interface</div>
       <Field label="Interface Name">
         {/* MODIF: options={interfaceOpts} */}
-        <Select options={allFields} value={interfaceName} onChange={(v) => handleInterfaceSelect(v.value || '')} /> 
+        <Select options={allFields} value={interfaceName} onChange={(v) => handleInterfaceSelect(v.value || '')} />
       </Field>
       <Field label="Alias (label on line)">
         <Input value={alias} onChange={(e) => setAlias(e.currentTarget.value)} placeholder="e.g. OLT-SW01" />
@@ -166,7 +171,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
           placeholder="Write observations... (Markdown supported)"
         />
       </Field>
-      
+
 
       <div style={SECTION_HEADER}>📊 Traffic</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
