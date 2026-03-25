@@ -287,6 +287,12 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
     onChange(updatedMetrics);
   };
 
+  const isUseAsLineColorDisabled = (metric: CustomMetric) => {
+    const hasActiveColorMetric = metrics?.some((m) => m.useAsLineColor);
+    const isDisabled = hasActiveColorMetric && !metric?.useAsLineColor;
+    return isDisabled;
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {metrics.map((metric, idx) => (
@@ -424,6 +430,28 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                   <IconButton name="trash-alt" variant="destructive" onClick={() => removeThreshold(idx, threasholdsIdx)} tooltip="Remove" />
                 </div>
               ))}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    cursor: isUseAsLineColorDisabled(metric) ? 'not-allowed' : 'pointer',
+                    fontSize: FONT.label,
+                    fontWeight: 600,
+                    color: isUseAsLineColorDisabled(metric) ? COLORS.textMuted : COLORS.text,
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    disabled={isUseAsLineColorDisabled(metric)}
+                    checked={metric?.useAsLineColor ?? false}
+                    onChange={(e) => updateMetric(idx, { useAsLineColor: e.target.checked })}
+                    style={{ accentColor: COLORS.accent }}
+                  />
+                  Use this metric as the line color source
+                </label>
+              </div>
             </div>
           )}
         </div>

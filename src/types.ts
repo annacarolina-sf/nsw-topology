@@ -28,6 +28,7 @@ export interface CustomMetric {
   alertThreshold?: number; // TODO: EXCLUIR
   alertColor?: string; // TODO: EXCLUIR
   thresholds?: ThresholdsData[]; // MODIF
+  useAsLineColor?: boolean; // MODIF
 }
 
 // MODIF: possibilitando inserir mais de um alerta
