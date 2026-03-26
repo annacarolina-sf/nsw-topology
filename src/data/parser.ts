@@ -225,28 +225,13 @@ export const getThresholdColor = (
   thresholds: ThresholdsData[] = []
 ): string | null => {
   const sorted = sortThresholds(thresholds);
-  console.log('NA FUNÇÃO getThresholdColor')
-  console.log('value')
-  console.log(value)
-  console.log('thresholds')
-  console.log(thresholds)
-  console.log('sorted')
-  console.log(sorted)
-
   for (const t of sorted) {
-    console.log('item:')
-    console.log(t)
-    console.log('Teste (value > t.value): ')
-    console.log(value > t.value)
     if (
       (t.operator === '<' && value < t.value) ||
       (t.operator === '>' && value > t.value)
     ) {
-      console.log('RETORNANDO A COR')
       return t.color;
     }
   }
-
-  console.log('é, não vai voltar nada')
   return null;
 };

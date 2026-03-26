@@ -367,20 +367,7 @@ export const CanvasRenderer: React.FC<Props> = ({
         }
       }
 
-      console.log('DENTRO DA FUNÇÃO DE PEGAR A COR DA LINHA')
-      console.log('color:')
-      console.log(color)
-      console.log('customColor:')
-      console.log(customColor)
-      
-      // MODIF
-      if(customColor && color == '#4b5563') {
-        color = customColor;
-        console.log('ENTROU!!')
-        console.log('color:')
-        console.log(color)
-      }
-
+      if(customColor && color == '#4b5563') color = customColor; // MODIF
       return { color, width, dlVal, ulVal, srcStatus, tgtStatus };
     },
     [getNodeStatus, hosts, resolvedColors]

@@ -218,20 +218,32 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
     metricIndex: number,
     thresholdIndex: number,
     val: string) => {
-    if (val === '') {
-      updateThreshold(metricIndex, thresholdIndex, { value: 0 });
-      return;
-    }
+
+    console.log('Na função updateThresholdValue:')
+    console.log('val')
+    console.log(val)
+
+
+    // if (val === '') {
+    //   updateThreshold(metricIndex, thresholdIndex, { value: 0 });
+    //   return;
+    // }
     // permitir estados intermediários
     if (val === '-' || val === '.' || val === '-.' || val === ',') {
+      console.log('Entrou nos estados intermediários')
       return;
     }
-    const normalized = val.replace(',', '.');
+    console.log('continuou...')
+    // const normalized = val.replace(',', '.');
 
-    const num = Number(normalized);
+    const num = Number(val);
+    console.log('num')
+    console.log(num)
     if (!isNaN(num)) {
+      console.log('Atualizando')
       updateThreshold(metricIndex, thresholdIndex, { value: num });
     }
+    console.log('fim')
   }
 
   const updateThreshold = (
