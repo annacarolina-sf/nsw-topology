@@ -224,17 +224,14 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
     console.log(val)
 
 
-    // if (val === '') {
-    //   updateThreshold(metricIndex, thresholdIndex, { value: 0 });
-    //   return;
-    // }
+    if (val === '') return;
+    
     // permitir estados intermediários
-    if (val === '-' || val === '.' || val === '-.' || val === ',') {
+    if (val === '-' || val.includes('.')) {
       console.log('Entrou nos estados intermediários')
       return;
     }
     console.log('continuou...')
-    // const normalized = val.replace(',', '.');
 
     const num = Number(val);
     console.log('num')
