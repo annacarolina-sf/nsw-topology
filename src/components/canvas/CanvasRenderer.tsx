@@ -339,7 +339,7 @@ export const CanvasRenderer: React.FC<Props> = ({
   );
 
   const getEdgeTrafficState = useCallback(
-    (conn: ConnectionConfig, srcNode?: NodeConfig, tgtNode?: NodeConfig, customColorMetric?: any) => {
+    (conn: ConnectionConfig, srcNode?: NodeConfig, tgtNode?: NodeConfig, customColor?: string | null) => {
       const srcStatus = srcNode ? getNodeStatus(srcNode) : 'offline';
       const tgtStatus = tgtNode ? getNodeStatus(tgtNode) : 'offline';
 
@@ -366,11 +366,19 @@ export const CanvasRenderer: React.FC<Props> = ({
           }
         }
       }
+
+      console.log('DENTRO DA FUNÇÃO DE PEGAR A COR DA LINHA')
+      console.log('color:')
+      console.log(color)
+      console.log('customColor:')
+      console.log(customColor)
       
       // MODIF
-      if(customColorMetric && color == '#4b5563') {
-        const customColor = getThresholdColor(customColorMetric.computedValue, customColorMetric.threasholds);
-        if(customColor) color = customColor;
+      if(customColor && color == '#4b5563') {
+        color = customColor;
+        console.log('ENTROU!!')
+        console.log('color:')
+        console.log(color)
       }
 
       return { color, width, dlVal, ulVal, srcStatus, tgtStatus };
@@ -471,7 +479,12 @@ export const CanvasRenderer: React.FC<Props> = ({
             }
           }
         }
-        const customColorMetric = evaluatedMetrics.find((m) => m.useAsLineColor); // MODIF
+        // MODIF: Utilizando uma métrica como cor da linha
+        let customColor;
+        const customColorMetric = evaluatedMetrics.find((m) => m.useAsLineColor); 
+        if(customColorMetric) {
+          customColor = getThresholdColor(customColorMetric.computedValue, customColorMetric.thresholds);
+        }
 
         const {
           color: edgeColor,
@@ -480,7 +493,7 @@ export const CanvasRenderer: React.FC<Props> = ({
           ulVal,
           srcStatus,
           tgtStatus,
-        } = getEdgeTrafficState(conn, srcNode, tgtNode, customColorMetric);
+        } = getEdgeTrafficState(conn, srcNode, tgtNode, customColor);
 
         const dlDisplay = dlVal > 0 ? formatTrafficValue(dlVal) : '';
         const ulDisplay = ulVal > 0 ? formatTrafficValue(ulVal) : '';

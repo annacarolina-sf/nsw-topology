@@ -216,13 +216,19 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
   // MODIF: THRESHOLDS
   const updateThresholdValue = (
     metricIndex: number,
-    thresholdIndex: number, 
+    thresholdIndex: number,
     val: string) => {
     if (val === '') {
       updateThreshold(metricIndex, thresholdIndex, { value: 0 });
       return;
     }
-    const num = Number(val);
+    // permitir estados intermediários
+    if (val === '-' || val === '.' || val === '-.' || val === ',') {
+      return;
+    }
+    const normalized = val.replace(',', '.');
+
+    const num = Number(normalized);
     if (!isNaN(num)) {
       updateThreshold(metricIndex, thresholdIndex, { value: num });
     }
@@ -416,7 +422,8 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                   </Field>
                   <Field label="Value">
                     <Input
-                      type="number"
+                      type="text"
+                      inputMode="decimal"
                       value={threshold.value}
                       onChange={(e) => updateThresholdValue(idx, threasholdsIdx, e.currentTarget.value)}
                     />
@@ -430,28 +437,30 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                   <IconButton name="trash-alt" variant="destructive" onClick={() => removeThreshold(idx, threasholdsIdx)} tooltip="Remove" />
                 </div>
               ))}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <label
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    cursor: isUseAsLineColorDisabled(metric) ? 'not-allowed' : 'pointer',
-                    fontSize: FONT.label,
-                    fontWeight: 600,
-                    color: isUseAsLineColorDisabled(metric) ? COLORS.textMuted : COLORS.text,
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    disabled={isUseAsLineColorDisabled(metric)}
-                    checked={metric?.useAsLineColor ?? false}
-                    onChange={(e) => updateMetric(idx, { useAsLineColor: e.target.checked })}
-                    style={{ accentColor: COLORS.accent }}
-                  />
-                  Use this metric as the line color source
-                </label>
-              </div>
+              {(metric.thresholds ?? []).length > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                  <label
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      cursor: isUseAsLineColorDisabled(metric) ? 'not-allowed' : 'pointer',
+                      fontSize: FONT.label,
+                      fontWeight: 600,
+                      color: isUseAsLineColorDisabled(metric) ? COLORS.textMuted : COLORS.text,
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      disabled={isUseAsLineColorDisabled(metric)}
+                      checked={metric?.useAsLineColor ?? false}
+                      onChange={(e) => updateMetric(idx, { useAsLineColor: e.target.checked })}
+                      style={{ accentColor: COLORS.accent }}
+                    />
+                    Use this metric as the line color source
+                  </label>
+                </div>
+              )}
             </div>
           )}
         </div>
