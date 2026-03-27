@@ -61,11 +61,13 @@ const handleStyle: React.CSSProperties = {
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
   const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
   const [hovered, setHovered] = useState(false);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
   const handleOpacity = isEditable && hovered ? 0.6 : 0;
   const positions = ['25%', '50%', '75%'];
 
+  // MODIF
   const renderHandles = (side: Position, axis: 'x' | 'y') =>
     positions.map((pos, index) => (
       <Handle
@@ -79,10 +81,24 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           opacity: handleOpacity,
           pointerEvents: isEditable ? 'auto' : 'none',
         }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       />
     ));
+
+  // MODIF: Permitindo que o mouse entre no tooltip
+  const handleMouseEnter = () => {
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+    }
+    setHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    hideTimeoutRef.current = setTimeout(() => {
+      setHovered(false);
+    }, 200); // delay em ms
+  };
 
   return (
     <>
@@ -118,8 +134,8 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
 
       <div
         ref={nodeRef}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         style={{
           width: '100%',
           height: '100%',
@@ -170,6 +186,8 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
 
       {hovered && (
         <div
+          onMouseEnter={handleMouseEnter} // MODIF
+          onMouseLeave={handleMouseLeave} // MODIF
           style={{
             position: 'absolute',
             left: '50%',
@@ -177,7 +195,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
             transform: 'translateX(-50%)',
             marginBottom: 8,
             zIndex: 9999,
-            pointerEvents: 'none',
+            pointerEvents: 'auto', // MODIF
           }}
         >
           <div style={tooltipBox}>
