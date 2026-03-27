@@ -31,6 +31,7 @@ export type TopologyNodeData = {
   statusColor: string;
   status: string;
   uptimeValue: string;
+  hyperlink: string;
   connections: ConnectionDisplay[];
   metrics: MetricDisplay[];
   bgColor: string;
@@ -59,7 +60,7 @@ const handleStyle: React.CSSProperties = {
 };
 
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
-  const { label, icon, statusColor, status, uptimeValue, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
+  const { label, icon, statusColor, status, uptimeValue, hyperlink, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
   const [hovered, setHovered] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const nodeRef = useRef<HTMLDivElement>(null);
@@ -231,6 +232,16 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
                     </span>
                   </div>
                 ))}
+              </>
+            )}
+            {hyperlink != '' && (
+              <>
+                <div style={tooltipDivider} />
+                <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlink:</div>
+                <div style={{...tooltipRow, cursor: 'pointer'}} onClick={() => window.open(hyperlink, '_blank')}>
+                  <span style={{ width: 8 }}>🔗</span>
+                  <span style={{ color: COLORS.textSecondary, fontWeight: 700 }}>hyperlink</span>
+                </div>
               </>
             )}
             {connections.length > 0 && (

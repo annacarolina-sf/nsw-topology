@@ -418,6 +418,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             statusColor,
             status,
             uptimeValue: getUptimeValue(node),
+            hyperlink: node.hyperlink || '',
             connections: getNodeConnections(node.id),
             metrics: getNodeMetrics(node),
             bgColor: node.bgColor || DEFAULT_NODE_BG,
