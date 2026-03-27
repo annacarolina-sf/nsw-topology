@@ -39,6 +39,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   const [pingField, setPingField] = useState(node?.pingField || '');
   const [pingOnlineValue, setPingOnlineValue] = useState(String(node?.pingOnlineValue ?? 1));
   const [uptimeField, setUptimeField] = useState(node?.uptimeField || '');
+  const [hyperlink, setHyperlink] = useState(node?.hyperlink || '');  // MODIF
   const [textColor, setTextColor] = useState(node?.textColor || DEFAULT_TEXT_COLOR);
   const [iconSize, setIconSize] = useState(String(node?.iconSize || DEFAULT_ICON_SIZE));
   const [iconColor, setIconColor] = useState(node?.iconColor || DEFAULT_ICON_COLOR);
@@ -170,6 +171,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
       pingField,
       pingOnlineValue: Number(pingOnlineValue) || 1,
       uptimeField,
+      hyperlink,
       bgColor: DEFAULT_NODE_BG,
       iconColor,
       textColor,
@@ -285,6 +287,12 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
 
       <div style={SECTION_HEADER}>📊 Custom Metrics</div>
       <CustomMetricList metrics={customMetrics} onChange={setCustomMetrics} availableFields={fieldOpts} />
+
+      {/* MODIF: Adicionando campo para hyperlink */}
+      <div style={SECTION_HEADER}>🔗 Links</div>
+      <Field label="Hyperlink">
+        <Input value={hyperlink} onChange={(e) => setHyperlink(e.currentTarget.value)} />
+      </Field>
 
       <div style={SECTION_HEADER}>🎨 Node Style</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>

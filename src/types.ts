@@ -60,6 +60,7 @@ export interface NodeConfig {
   pingField: string;
   pingOnlineValue: number;
   uptimeField: string;
+  hyperlink: string;
   bgColor: string;
   iconColor: string;
   backgroundColor: string;
