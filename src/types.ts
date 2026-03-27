@@ -61,6 +61,7 @@ export interface NodeConfig {
   pingOnlineValue: number;
   uptimeField: string;
   hyperlink: string;
+  hyperlinkLabel: string;
   bgColor: string;
   iconColor: string;
   backgroundColor: string;

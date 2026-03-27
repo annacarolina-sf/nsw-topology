@@ -105,6 +105,8 @@ const convertV1Backup = (v1: V1Backup): { nodes: NodeConfig[]; connections: Conn
       pingField: '',
       pingOnlineValue: 1,
       uptimeField: '',
+      hyperlink: d.hyperlink || '',
+      hyperlinkLabel: d.hyperlinkLabel || '',
       bgColor: DEFAULT_NODE_BG,
       iconColor: DEFAULT_ICON_COLOR,
       textColor: DEFAULT_TEXT_COLOR,

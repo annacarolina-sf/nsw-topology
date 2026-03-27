@@ -33,28 +33,20 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
   const [name, setName] = useState(node?.name || '');
   const [hostName, setHostName] = useState(node?.hostName || '');
   const [ip, setIp] = useState(node?.ip || '');
-  const [showIcon, setShowIcon] = useState(node?.icon == '' ? false  : true); // MODIF
+  const [showIcon, setShowIcon] = useState(node?.icon == '' ? false : true); // MODIF
   const [icon, setIcon] = useState(showIcon ? node?.icon || 'server' : ''); // MODIF
   const [iconSearch, setIconSearch] = useState('');
   const [pingField, setPingField] = useState(node?.pingField || '');
   const [pingOnlineValue, setPingOnlineValue] = useState(String(node?.pingOnlineValue ?? 1));
   const [uptimeField, setUptimeField] = useState(node?.uptimeField || '');
   const [hyperlink, setHyperlink] = useState(node?.hyperlink || '');  // MODIF
+  const [hyperlinkLabel, setHyperlinkLabel] = useState(node?.hyperlinkLabel || '');  // MODIF
   const [textColor, setTextColor] = useState(node?.textColor || DEFAULT_TEXT_COLOR);
   const [iconSize, setIconSize] = useState(String(node?.iconSize || DEFAULT_ICON_SIZE));
   const [iconColor, setIconColor] = useState(node?.iconColor || DEFAULT_ICON_COLOR);
   const [textSize, setTextSize] = useState(String(node?.textSize || DEFAULT_TEXT_SIZE));
   const [isBackgroundFixed, setIsBackgroundFixed] = useState(!!node?.backgroundColor); // MODIF
   const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
-  
-  // TODO: TESTE
-  console.log('TESTANDO - ABRINDO MODAL DE CRIAR NODE')
-  console.log('Background color original: ')
-  console.log(node?.backgroundColor)
-  console.log('Como estou fazendo:')
-  console.log(!!node?.backgroundColor)
-  console.log('Como dá pra fazer:')
-  console.log(node?.backgroundColor ? true : false)
 
   const [customMetrics, setCustomMetrics] = useState(() => {
     if (node?.customMetrics && node.customMetrics.length > 0) {
@@ -172,6 +164,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
       pingOnlineValue: Number(pingOnlineValue) || 1,
       uptimeField,
       hyperlink,
+      hyperlinkLabel,
       bgColor: DEFAULT_NODE_BG,
       iconColor,
       textColor,
@@ -290,9 +283,14 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
 
       {/* MODIF: Adicionando campo para hyperlink */}
       <div style={SECTION_HEADER}>🔗 Links</div>
-      <Field label="Hyperlink">
-        <Input value={hyperlink} onChange={(e) => setHyperlink(e.currentTarget.value)} />
-      </Field>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <Field label="Hyperlink">
+          <Input value={hyperlink} onChange={(e) => setHyperlink(e.currentTarget.value)} />
+        </Field>
+        <Field label="Label">
+          <Input value={hyperlinkLabel} onChange={(e) => setHyperlinkLabel(e.currentTarget.value)} />
+        </Field>
+      </div>
 
       <div style={SECTION_HEADER}>🎨 Node Style</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -328,13 +326,13 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
                 fontWeight: 600,
                 color: isBackgroundFixed ? COLORS.text : COLORS.textMuted,
               }}
-              >
+            >
               <input
                 type="checkbox"
                 checked={isBackgroundFixed}
                 onChange={(e) => setIsBackgroundFixed(e.target.checked)}
                 style={{ accentColor: COLORS.accent }}
-                />
+              />
               Fix Background Color
             </label>
           </div>
