@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import { getValueFormat, formattedValueToString } from '@grafana/data';
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge } from '@xyflow/react';
 import { COLORS, FONT, tooltipBox, tooltipDivider, tooltipLabel, tooltipRow, statusDot } from '../../styles/tokens';
@@ -214,6 +214,7 @@ export const WeathermapEdge = memo(
     const animated = data?.animated ?? false;
     const showTraffic = data?.showTraffic ?? false;
     const isRed = data?.isRed ?? false;
+    const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF
 
     const [edgePath, labelX, labelY] = getBezierPath({
       sourceX,
@@ -234,6 +235,20 @@ export const WeathermapEdge = memo(
     const shouldAnimate = animated && !isRed;
     const isDashAnimated = shouldAnimate && (lineStyle === 'dashed' || lineStyle === 'dotted');
 
+    // MODIF: Permitindo que o mouse entre no tooltip
+    const handleMouseEnter = () => {
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+      setHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+      hideTimeoutRef.current = setTimeout(() => {
+        setHovered(false);
+      }, 200); // delay em ms
+    };
+
     return (
       <>
         <path
@@ -241,8 +256,8 @@ export const WeathermapEdge = memo(
           fill="none"
           stroke="transparent"
           strokeWidth={Math.max(edgeWidth + 14, 20)}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
+          onMouseEnter={handleMouseEnter} // MODIF
+          onMouseLeave={handleMouseLeave} // MODIF
           style={{ cursor: 'pointer', pointerEvents: 'stroke' }}
         />
 
@@ -274,8 +289,8 @@ export const WeathermapEdge = memo(
         {(label || (showTraffic && (data?.downloadValue || data?.uploadValue))) && (
           <EdgeLabelRenderer>
             <div
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
+              onMouseEnter={handleMouseEnter} // MODIF
+              onMouseLeave={handleMouseLeave} // MODIF
               style={{
                 position: 'absolute',
                 transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
@@ -340,8 +355,8 @@ export const WeathermapEdge = memo(
         {hovered && (
           <EdgeLabelRenderer>
             <div
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
+              onMouseEnter={handleMouseEnter} // MODIF
+              onMouseLeave={handleMouseLeave} // MODIF
               style={{
                 ...tooltipBox,
                 position: 'absolute',

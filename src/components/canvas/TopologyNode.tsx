@@ -63,7 +63,7 @@ const handleStyle: React.CSSProperties = {
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
   const { label, icon, statusColor, status, uptimeValue, hyperlink, hyperlinkLabel, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
   const [hovered, setHovered] = useState(false);
-  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
   const handleOpacity = isEditable && hovered ? 0.6 : 0;
@@ -136,8 +136,8 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
 
       <div
         ref={nodeRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={handleMouseEnter} // MODIF
+        onMouseLeave={handleMouseLeave} // MODIF
         style={{
           width: '100%',
           height: '100%',
