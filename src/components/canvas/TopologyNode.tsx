@@ -240,8 +240,8 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
                 <div style={tooltipDivider} />
                 <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlink:</div>
                 <div style={{...tooltipRow, cursor: 'pointer'}} onClick={() => window.open(hyperlink, '_blank')}>
-                  <span style={{ width: 8 }}>🔗</span>
-                  <span style={{ color: COLORS.textSecondary, fontWeight: 700 }}>{hyperlinkLabel}</span>
+                  <span style={{ width: 6 }}>🔗</span>
+                  <span style={{ color: COLORS.textSecondary, marginRight: 2 }}>{hyperlinkLabel}</span>
                 </div>
               </>
             )}
