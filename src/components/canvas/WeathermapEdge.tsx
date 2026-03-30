@@ -5,7 +5,7 @@ import { COLORS, FONT, tooltipBox, tooltipDivider, tooltipLabel, tooltipRow, sta
 import ReactMarkdown from 'react-markdown';
 import { getThresholdColor } from '../../data/parser'
 import { Button } from '@grafana/ui';
-import { config  } from '@grafana/runtime'; // MODIF
+import { config } from '@grafana/runtime'; // MODIF
 import { ALLOWED_USERS } from '../../constants';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
@@ -254,7 +254,6 @@ export const WeathermapEdge = memo(
 
     // MODIF
     const isUserAllowed = () => {
-      console.log('Testando permissão do usuário...')
       const user = config.bootData.user;
       console.log(user.login);
       console.log(user.email);
@@ -264,7 +263,7 @@ export const WeathermapEdge = memo(
     // MODIF
     const createTicket = () => {
       console.log('Criar ticket... (atualizado)')
-      if(!isUserAllowed()) return;
+      if (!isUserAllowed()) return;
       // TODO: criar ticket
     }
 
@@ -501,7 +500,7 @@ export const WeathermapEdge = memo(
                     }}
                   >
                     {/* MODIF: alterando a altura do gráfico (valor original = 80) */}
-                    <Sparkline data={data.trafficHistory} height={200} capacity={data.capacity || 1000} /> 
+                    <Sparkline data={data.trafficHistory} height={200} capacity={data.capacity || 1000} />
                   </div>
                   <div style={{ display: 'flex', gap: 12, marginTop: 4, fontSize: FONT.sm }}>
                     <span style={{ color: COLORS.trafficDownload }}>— Download</span>
@@ -512,12 +511,16 @@ export const WeathermapEdge = memo(
               )}
 
               {/* MODIF: Adicionando a opção de criar ticket */}
-              <div style={tooltipDivider} />
-              <div style={tooltipRow}>
-                <Button variant="secondary" icon="external-link-alt" size="xs" onClick={createTicket}>
-                  Create Ticket
-                </Button>
-              </div>
+              {isUserAllowed() && (
+                <>
+                  <div style={tooltipDivider} />
+                  <div style={{ ...tooltipRow, maxHeight: 15 }}>
+                    <Button variant="secondary" icon="external-link-alt" size="xs" onClick={createTicket}>
+                      Create Ticket
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           </EdgeLabelRenderer>
         )}
