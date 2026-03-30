@@ -70,6 +70,8 @@ export const SECTION_HEADER = {
   gap: 8,
 };
 
+// MODIF: Aumentando o tamanho de alguns elementos do tooltip para ser proporcional ao tamanho de um modal
+
 export const tooltipBox = {
   background: COLORS.surface,
   border: `1px solid ${COLORS.surfaceHover}`,
@@ -99,18 +101,17 @@ export const tooltipRow = {
   display: 'flex' as const,
   gap: 6,
   alignItems: 'center' as const,
-  padding: '1px 0',
+  padding: '2px 0',
 };
 
 export const tooltipLabel = {
   color: COLORS.textMuted,
-  // fontWeight: 500,
-  fontSize: FONT.sm + 1,
+  fontSize: FONT.lg, 
 };
 
 export const statusDot = (color: string) => ({
-  width: 8,
-  height: 8,
+  width: 10,
+  height: 10,
   borderRadius: '50%',
   background: color,
   boxShadow: `0 0 5px ${color}`,

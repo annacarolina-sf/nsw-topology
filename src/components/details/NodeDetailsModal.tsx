@@ -1,7 +1,7 @@
 import React from 'react';
-import { Modal, Button } from '@grafana/ui';
+import { Modal } from '@grafana/ui';
 import { TopologyNodeData } from 'components/canvas/TopologyNode';
-import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow, tooltipTitle } from 'styles/tokens';
+import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
 
 interface Props {
   nodeData: TopologyNodeData;
@@ -11,8 +11,7 @@ interface Props {
 // MODIF: Componente criado para substituir o tooltip com os detalhes presentes no TopologyNode
 export const NodeDetailsModal: React.FC<Props> = ({ nodeData, onClose }) => {
   return (
-    <Modal title={`title`} isOpen={true} onDismiss={onClose}>
-      <div style={tooltipTitle}>{nodeData.label}</div>
+    <Modal title={nodeData.label} isOpen={true} onDismiss={onClose}>
       <div style={tooltipDivider} />
       {!nodeData.isBackgroundFixed && ( 
         <div style={tooltipRow}>
@@ -51,8 +50,8 @@ export const NodeDetailsModal: React.FC<Props> = ({ nodeData, onClose }) => {
           <div style={tooltipDivider} />
           <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlink:</div>
           <div style={{ ...tooltipRow, cursor: 'pointer' }} onClick={() => window.open(nodeData.hyperlink, '_blank')}>
-            <span style={{ width: 6 }}>🔗</span>
-            <span style={{ color: COLORS.textSecondary, marginRight: 2 }}>{nodeData.hyperlinkLabel}</span>
+            <span style={{ maxWidth: 4, marginRight: 4 }}>🔗</span>
+            <span style={{ color: COLORS.textSecondary }}>{nodeData.hyperlinkLabel}</span>
           </div>
         </>
       )}
@@ -68,11 +67,6 @@ export const NodeDetailsModal: React.FC<Props> = ({ nodeData, onClose }) => {
           ))}
         </>
       )}
-      <Modal.ButtonRow>
-        <Button variant="secondary" onClick={onClose}>
-          Close
-        </Button>
-      </Modal.ButtonRow>
     </Modal>
   )
 }

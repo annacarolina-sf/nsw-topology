@@ -194,7 +194,9 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
       {showNodeDetailModal && (
         <NodeDetailsModal
           nodeData={data}
-          onClose={() => setShowNodeDetailModal(false)}
+          onClose={() => {
+            setShowNodeDetailModal(false);
+          }}
         />
       )}
 
