@@ -4,6 +4,9 @@ import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge }
 import { COLORS, FONT, tooltipBox, tooltipDivider, tooltipLabel, tooltipRow, statusDot } from '../../styles/tokens';
 import ReactMarkdown from 'react-markdown';
 import { getThresholdColor } from '../../data/parser'
+import { Button } from '@grafana/ui';
+import { config  } from '@grafana/runtime'; // MODIF
+import { ALLOWED_USERS } from '../../constants';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 
@@ -242,12 +245,27 @@ export const WeathermapEdge = memo(
       }
       setHovered(true);
     };
-
+    // MODIF
     const handleMouseLeave = () => {
       hideTimeoutRef.current = setTimeout(() => {
         setHovered(false);
       }, 200); // delay em ms
     };
+
+    // MODIF
+    const isUserAllowed = () => {
+      const user = config.bootData.user;
+      console.log(user.login);
+      console.log(user.email);
+      return user.email in ALLOWED_USERS
+    }
+
+    // MODIF
+    const createTicket = () => {
+      console.log('Criar ticket...')
+      if(!isUserAllowed) return;
+      // TODO: criar ticket
+    }
 
     return (
       <>
@@ -363,7 +381,7 @@ export const WeathermapEdge = memo(
                 transform: `translate(-50%, -100%) translate(${labelX}px, ${labelY - 24}px)`,
                 pointerEvents: 'auto',
                 zIndex: 100,
-                minWidth: 400, // MODIF: aumentando a largura do tooltip para aumentar o gráfico
+                minWidth: (data?.trafficHistory?.length || 0) > 1 ? 400 : 200, // MODIF: aumentando a largura do tooltip para aumentar o gráfico (só quando ele existir)
                 whiteSpace: 'nowrap',
               }}
             >
@@ -438,7 +456,6 @@ export const WeathermapEdge = memo(
                           <span
                             style={{
                               color: getThresholdColor(m.computedValue, m.thresholds) || COLORS.textWhite, // MODIF: THRESHOLDS
-                                // m.computedValue > m.alertThreshold ? m.alertColor || COLORS.danger : COLORS.textWhite,
                               fontWeight: 600,
                             }}
                           >
@@ -492,6 +509,14 @@ export const WeathermapEdge = memo(
                   </div>
                 </>
               )}
+
+              {/* MODIF: Adicionando a opção de criar ticket */}
+              <div style={tooltipDivider} />
+              <div style={tooltipRow}>
+                <Button variant="secondary" icon="plus" onClick={createTicket}>
+                  Create Ticket
+                </Button>
+              </div>
             </div>
           </EdgeLabelRenderer>
         )}

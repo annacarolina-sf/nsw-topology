@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { PanelProps } from '@grafana/data';
-import { config  } from '@grafana/runtime'; // TODO: TESTE
 import { ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import { TopologyOptions, NodeConfig, ConnectionConfig } from '../types';
 import { parseDataFrames } from '../data/parser';
@@ -14,13 +13,6 @@ type Props = PanelProps<TopologyOptions>;
 
 // main panel — state management + layout
 const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsChange }) => {
-  // TODO: TESTE
-  const user = config.bootData.user;
-  console.log('INICIANDO TESTE!! (nome, login e email)')
-  console.log(user.name);
-  console.log(user.login);
-  console.log(user.email);
-
   const appearance = useMemo(() => ({ ...DEFAULT_APPEARANCE, ...options.appearance }), [options.appearance]);
   const colorsConfig = useMemo(() => ({ ...DEFAULT_COLORS, ...options.colors }), [options.colors]);
   const interaction = useMemo(() => ({ ...DEFAULT_INTERACTION, ...options.interaction }), [options.interaction]);
