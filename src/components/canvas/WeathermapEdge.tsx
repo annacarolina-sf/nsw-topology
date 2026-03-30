@@ -254,6 +254,7 @@ export const WeathermapEdge = memo(
 
     // MODIF
     const isUserAllowed = () => {
+      console.log('Testando permissão do usuário...')
       const user = config.bootData.user;
       console.log(user.login);
       console.log(user.email);
@@ -262,8 +263,8 @@ export const WeathermapEdge = memo(
 
     // MODIF
     const createTicket = () => {
-      console.log('Criar ticket...')
-      if(!isUserAllowed) return;
+      console.log('Criar ticket... (atualizado)')
+      if(!isUserAllowed()) return;
       // TODO: criar ticket
     }
 
@@ -513,7 +514,7 @@ export const WeathermapEdge = memo(
               {/* MODIF: Adicionando a opção de criar ticket */}
               <div style={tooltipDivider} />
               <div style={tooltipRow}>
-                <Button variant="secondary" icon="plus" onClick={createTicket}>
+                <Button variant="secondary" icon="external-link-alt" size="xs" onClick={createTicket}>
                   Create Ticket
                 </Button>
               </div>
