@@ -4,13 +4,14 @@ import { getIconDataUriColored } from '../icons';
 import {
   COLORS,
   FONT,
-  tooltipBox,
-  tooltipDivider,
-  tooltipLabel,
-  tooltipRow,
-  tooltipTitle,
-  statusDot,
+  // tooltipBox, // TODO
+  // tooltipDivider,
+  // tooltipLabel,
+  // tooltipRow,
+  // tooltipTitle,
+  // statusDot,
 } from '../../styles/tokens';
+import { NodeDetailsModal } from 'components/details/NodeDetailsModal';
 
 export type MetricDisplay = {
   label: string;
@@ -61,13 +62,16 @@ const handleStyle: React.CSSProperties = {
 };
 
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
-  const { label, icon, statusColor, status, uptimeValue, hyperlink, hyperlinkLabel, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
+  // TODO
+  // const { label, icon, statusColor, status, uptimeValue, hyperlink, hyperlinkLabel, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
+  const { label, icon, statusColor, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
   const [hovered, setHovered] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF
   const nodeRef = useRef<HTMLDivElement>(null);
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
   const handleOpacity = isEditable && hovered ? 0.6 : 0;
   const positions = ['25%', '50%', '75%'];
+  const [showNodeDetailModal, setShowNodeDetailModal] = useState(false);
 
   // MODIF
   const renderHandles = (side: Position, axis: 'x' | 'y') =>
@@ -103,7 +107,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   };
 
   return (
-    <>
+    <div onClick={() => setShowNodeDetailModal(true)}> {/* MODIF: Abrindo o modal de detalhes ao clicar */}
       {isEditable && (
         <NodeResizeControl
           position="bottom-right"
@@ -186,7 +190,15 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
         </div>
       </div>
 
-      {hovered && (
+      {/* MODIF: Substituindo o tooltip com os detalhes por um modal */}
+      {showNodeDetailModal && (
+        <NodeDetailsModal
+          nodeData={data}
+          onClose={() => setShowNodeDetailModal(false)}
+        />
+      )}
+
+      {/* {hovered && (
         <div
           onMouseEnter={handleMouseEnter} // MODIF
           onMouseLeave={handleMouseLeave} // MODIF
@@ -259,8 +271,8 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
             )}
           </div>
         </div>
-      )}
-    </>
+      )} */}
+    </div>
   );
 });
 
