@@ -1,12 +1,14 @@
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { getValueFormat, formattedValueToString } from '@grafana/data';
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge } from '@xyflow/react';
-import { COLORS, FONT, tooltipBox, tooltipDivider, tooltipLabel, tooltipRow, statusDot } from '../../styles/tokens';
-import ReactMarkdown from 'react-markdown';
+// import React, { memo, useRef, useState } from 'react';
+// import { Button } from '@grafana/ui';// TODO
+// import ReactMarkdown from 'react-markdown';// TODO
+// import { COLORS, FONT, tooltipBox, tooltipDivider, tooltipLabel, tooltipRow, statusDot } from '../../styles/tokens'; // TODO
+// import { config } from '@grafana/runtime'; // MODIF// TODO
+// import { ALLOWED_USERS } from '../../constants';// TODO
+import { COLORS, FONT } from '../../styles/tokens';
 import { getThresholdColor } from '../../data/parser'
-import { Button } from '@grafana/ui';
-import { config } from '@grafana/runtime'; // MODIF
-import { ALLOWED_USERS } from '../../constants';
 import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
@@ -34,166 +36,166 @@ export type WeathermapEdgeData = {
 };
 
 export type WeathermapEdgeType = Edge<WeathermapEdgeData, 'weathermap'>;
+// TODO
+// const formatAxisValue = (bps: number): string => {
+//   if (bps >= 1e9) {
+//     return `${(bps / 1e9).toFixed(1)}G`;
+//   }
+//   if (bps >= 1e6) {
+//     return `${(bps / 1e6).toFixed(0)}M`;
+//   }
+//   if (bps >= 1e3) {
+//     return `${(bps / 1e3).toFixed(0)}K`;
+//   }
+//   return `${bps.toFixed(0)}`;
+// };
 
-const formatAxisValue = (bps: number): string => {
-  if (bps >= 1e9) {
-    return `${(bps / 1e9).toFixed(1)}G`;
-  }
-  if (bps >= 1e6) {
-    return `${(bps / 1e6).toFixed(0)}M`;
-  }
-  if (bps >= 1e3) {
-    return `${(bps / 1e3).toFixed(0)}K`;
-  }
-  return `${bps.toFixed(0)}`;
-};
+// const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacity: number }> = ({
+//   data,
+//   height,
+//   capacity,
+// }) => {
+//   if (!data || data.length < 2) {
+//     return (
+//       <div style={{ color: COLORS.textMuted, fontSize: FONT.sm, textAlign: 'center', padding: 4 }}>
+//         Sem dados históricos
+//       </div>
+//     );
+//   }
 
-const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacity: number }> = ({
-  data,
-  height,
-  capacity,
-}) => {
-  if (!data || data.length < 2) {
-    return (
-      <div style={{ color: COLORS.textMuted, fontSize: FONT.sm, textAlign: 'center', padding: 4 }}>
-        Sem dados históricos
-      </div>
-    );
-  }
+//   const capacityBps = capacity * 1e6;
+//   const maxTraffic = Math.max(...data.map((d) => Math.max(d.dl, d.ul)), 1);
+//   const yMax = Math.max(capacityBps, maxTraffic) * 1.1;
 
-  const capacityBps = capacity * 1e6;
-  const maxTraffic = Math.max(...data.map((d) => Math.max(d.dl, d.ul)), 1);
-  const yMax = Math.max(capacityBps, maxTraffic) * 1.1;
+//   const leftMargin = 42;
+//   const chartWidth = 100;
 
-  const leftMargin = 42;
-  const chartWidth = 100;
+//   const gridLines = [0.25, 0.5, 0.75, 1.0].map((pct) => ({
+//     bps: capacityBps * pct,
+//     y: 100 - ((capacityBps * pct) / yMax) * 100,
+//     label: formatAxisValue(capacityBps * pct),
+//   }));
 
-  const gridLines = [0.25, 0.5, 0.75, 1.0].map((pct) => ({
-    bps: capacityBps * pct,
-    y: 100 - ((capacityBps * pct) / yMax) * 100,
-    label: formatAxisValue(capacityBps * pct),
-  }));
+//   const capacityY = 100 - (capacityBps / yMax) * 100;
 
-  const capacityY = 100 - (capacityBps / yMax) * 100;
+//   const dlPoints = data
+//     .map((d, i) => {
+//       const x = (i / (data.length - 1)) * chartWidth;
+//       const y = 100 - (d.dl / yMax) * 100;
+//       return `${x},${y}`;
+//     })
+//     .join(' ');
+//   const ulPoints = data
+//     .map((d, i) => {
+//       const x = (i / (data.length - 1)) * chartWidth;
+//       const y = 100 - (d.ul / yMax) * 100;
+//       return `${x},${y}`;
+//     })
+//     .join(' ');
 
-  const dlPoints = data
-    .map((d, i) => {
-      const x = (i / (data.length - 1)) * chartWidth;
-      const y = 100 - (d.dl / yMax) * 100;
-      return `${x},${y}`;
-    })
-    .join(' ');
-  const ulPoints = data
-    .map((d, i) => {
-      const x = (i / (data.length - 1)) * chartWidth;
-      const y = 100 - (d.ul / yMax) * 100;
-      return `${x},${y}`;
-    })
-    .join(' ');
+//   return (
+//     <div style={{ position: 'relative', width: '100%', height, display: 'flex' }}>
+//       <div
+//         style={{
+//           width: leftMargin,
+//           height: '100%',
+//           position: 'relative',
+//           flexShrink: 0,
+//           borderRight: '1px solid rgba(255,255,255,0.2)',
+//         }}
+//       >
+//         {gridLines.map((g, idx) => (
+//           <div
+//             key={idx}
+//             style={{
+//               position: 'absolute',
+//               right: 3,
+//               top: `${g.y}%`,
+//               transform: 'translateY(-50%)',
+//               fontSize: FONT.xs,
+//               color: COLORS.textMuted,
+//               lineHeight: 1,
+//               whiteSpace: 'nowrap',
+//             }}
+//           >
+//             {g.label}
+//           </div>
+//         ))}
+//         <div
+//           style={{
+//             position: 'absolute',
+//             right: 3,
+//             bottom: 0,
+//             fontSize: FONT.xs,
+//             color: COLORS.textMuted,
+//             lineHeight: 1,
+//           }}
+//         >
+//           0
+//         </div>
+//       </div>
 
-  return (
-    <div style={{ position: 'relative', width: '100%', height, display: 'flex' }}>
-      <div
-        style={{
-          width: leftMargin,
-          height: '100%',
-          position: 'relative',
-          flexShrink: 0,
-          borderRight: '1px solid rgba(255,255,255,0.2)',
-        }}
-      >
-        {gridLines.map((g, idx) => (
-          <div
-            key={idx}
-            style={{
-              position: 'absolute',
-              right: 3,
-              top: `${g.y}%`,
-              transform: 'translateY(-50%)',
-              fontSize: FONT.xs,
-              color: COLORS.textMuted,
-              lineHeight: 1,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {g.label}
-          </div>
-        ))}
-        <div
-          style={{
-            position: 'absolute',
-            right: 3,
-            bottom: 0,
-            fontSize: FONT.xs,
-            color: COLORS.textMuted,
-            lineHeight: 1,
-          }}
-        >
-          0
-        </div>
-      </div>
-
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-        <svg
-          width="100%"
-          height="100%"
-          viewBox={`0 -2 ${chartWidth} 104`}
-          preserveAspectRatio="none"
-          style={{ display: 'block' }}
-        >
-          {gridLines.map((g, idx) => (
-            <line
-              key={idx}
-              x1="0"
-              y1={g.y}
-              x2={chartWidth}
-              y2={g.y}
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="0.5"
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
-          <line
-            x1="0"
-            y1="100"
-            x2={chartWidth}
-            y2="100"
-            stroke="rgba(255,255,255,0.2)"
-            strokeWidth="0.5"
-            vectorEffect="non-scaling-stroke"
-          />
-          <line
-            x1="0"
-            y1={capacityY}
-            x2={chartWidth}
-            y2={capacityY}
-            stroke={COLORS.trafficCapacity}
-            strokeWidth="1"
-            strokeDasharray="4,3"
-            vectorEffect="non-scaling-stroke"
-            opacity={0.6}
-          />
-          <polyline
-            points={dlPoints}
-            fill="none"
-            stroke={COLORS.trafficDownload}
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-            opacity={0.9}
-          />
-          <polyline
-            points={ulPoints}
-            fill="none"
-            stroke={COLORS.trafficUpload}
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-            opacity={0.9}
-          />
-        </svg>
-      </div>
-    </div>
-  );
-};
+//       <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+//         <svg
+//           width="100%"
+//           height="100%"
+//           viewBox={`0 -2 ${chartWidth} 104`}
+//           preserveAspectRatio="none"
+//           style={{ display: 'block' }}
+//         >
+//           {gridLines.map((g, idx) => (
+//             <line
+//               key={idx}
+//               x1="0"
+//               y1={g.y}
+//               x2={chartWidth}
+//               y2={g.y}
+//               stroke="rgba(255,255,255,0.08)"
+//               strokeWidth="0.5"
+//               vectorEffect="non-scaling-stroke"
+//             />
+//           ))}
+//           <line
+//             x1="0"
+//             y1="100"
+//             x2={chartWidth}
+//             y2="100"
+//             stroke="rgba(255,255,255,0.2)"
+//             strokeWidth="0.5"
+//             vectorEffect="non-scaling-stroke"
+//           />
+//           <line
+//             x1="0"
+//             y1={capacityY}
+//             x2={chartWidth}
+//             y2={capacityY}
+//             stroke={COLORS.trafficCapacity}
+//             strokeWidth="1"
+//             strokeDasharray="4,3"
+//             vectorEffect="non-scaling-stroke"
+//             opacity={0.6}
+//           />
+//           <polyline
+//             points={dlPoints}
+//             fill="none"
+//             stroke={COLORS.trafficDownload}
+//             strokeWidth="1.5"
+//             vectorEffect="non-scaling-stroke"
+//             opacity={0.9}
+//           />
+//           <polyline
+//             points={ulPoints}
+//             fill="none"
+//             stroke={COLORS.trafficUpload}
+//             strokeWidth="1.5"
+//             vectorEffect="non-scaling-stroke"
+//             opacity={0.9}
+//           />
+//         </svg>
+//       </div>
+//     </div>
+//   );
+// };
 
 export const WeathermapEdge = memo(
   ({
@@ -209,7 +211,7 @@ export const WeathermapEdge = memo(
     source,
     target,
   }: EdgeProps<WeathermapEdgeType>) => {
-    const [hovered, setHovered] = useState(false);
+    // const [hovered, setHovered] = useState(false);// TODO
 
     const edgeColor = data?.edgeColor || '#4b5563';
     const edgeWidth = (data?.edgeWidth || 2) * 1.5; // MODIF: aumentando a espessura das linhas em 1.5 vezes
@@ -218,7 +220,7 @@ export const WeathermapEdge = memo(
     const animated = data?.animated ?? false;
     const showTraffic = data?.showTraffic ?? false;
     const isRed = data?.isRed ?? false;
-    const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF
+    // const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF// TODO
     const [showDetailModal, setShowDetailModal] = useState(false); // MODIF
 
     const [edgePath, labelX, labelY] = getBezierPath({
@@ -240,44 +242,46 @@ export const WeathermapEdge = memo(
     const shouldAnimate = animated && !isRed;
     const isDashAnimated = shouldAnimate && (lineStyle === 'dashed' || lineStyle === 'dotted');
 
-    // MODIF: Permitindo que o mouse entre no tooltip
-    const handleMouseEnter = () => {
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-      }
-      setHovered(true);
-    };
-    // MODIF
-    const handleMouseLeave = () => {
-      hideTimeoutRef.current = setTimeout(() => {
-        setHovered(false);
-      }, 200); // delay em ms
-    };
+    // TODO
+    // // MODIF: Permitindo que o mouse entre no tooltip
+    // const handleMouseEnter = () => {
+    //   if (hideTimeoutRef.current) {
+    //     clearTimeout(hideTimeoutRef.current);
+    //   }
+    //   setHovered(true);
+    // };
+    // // MODIF
+    // const handleMouseLeave = () => {
+    //   hideTimeoutRef.current = setTimeout(() => {
+    //     setHovered(false);
+    //   }, 200); // delay em ms
+    // };
 
-    // MODIF
-    const isUserAllowed = () => {
-      const user = config.bootData.user;
-      console.log(user.login);
-      console.log(user.email);
-      return user.email in ALLOWED_USERS
-    }
+    // // MODIF
+    // const isUserAllowed = () => {
+    //   const user = config.bootData.user;
+    //   console.log(user.login);
+    //   console.log(user.email);
+    //   return user.email in ALLOWED_USERS
+    // }
 
-    // MODIF
-    const createTicket = () => {
-      console.log('Criar ticket... (atualizado)')
-      if (!isUserAllowed()) return;
-      // TODO: criar ticket
-    }
+    // // MODIF
+    // const createTicket = () => {
+    //   console.log('Criar ticket... (atualizado)')
+    //   if (!isUserAllowed()) return;
+    //   // TODO: criar ticket
+    // }
 
     return (
-      <div onClick={() => setShowDetailModal(true)}> {/* MODIF: Abrindo o modal de detalhes ao clicar */}
+      <>
         <path
           d={edgePath}
           fill="none"
           stroke="transparent"
           strokeWidth={Math.max(edgeWidth + 14, 20)}
-          onMouseEnter={handleMouseEnter} // MODIF
-          onMouseLeave={handleMouseLeave} // MODIF
+          // onMouseEnter={handleMouseEnter} // MODIF// TODO
+          // onMouseLeave={handleMouseLeave} // MODIF// TODO
+          onClick={() => setShowDetailModal(true)} // MODIF: Abrindo o modal de detalhes ao clicar
           style={{ cursor: 'pointer', pointerEvents: 'stroke' }}
         />
 
@@ -309,8 +313,9 @@ export const WeathermapEdge = memo(
         {(label || (showTraffic && (data?.downloadValue || data?.uploadValue))) && (
           <EdgeLabelRenderer>
             <div
-              onMouseEnter={handleMouseEnter} // MODIF
-              onMouseLeave={handleMouseLeave} // MODIF
+              // onMouseEnter={handleMouseEnter} // MODIF// TODO
+              // onMouseLeave={handleMouseLeave} // MODIF// TODO
+              onClick={() => setShowDetailModal(true)} // MODIF
               style={{
                 position: 'absolute',
                 transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
@@ -322,7 +327,7 @@ export const WeathermapEdge = memo(
                 padding: '3px 8px',
                 borderRadius: 5,
                 pointerEvents: 'auto',
-                cursor: 'default',
+                cursor: 'pointer', // MODIF
                 whiteSpace: 'nowrap',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
                 display: 'flex',
@@ -386,7 +391,7 @@ export const WeathermapEdge = memo(
         )}
 
 
-
+        {/* // TODO */}
         {/* {hovered && (
           <EdgeLabelRenderer>
             <div
@@ -539,7 +544,7 @@ export const WeathermapEdge = memo(
           </EdgeLabelRenderer >
         )} 
       */}
-      </div>
+      </>
     );
   }
 );

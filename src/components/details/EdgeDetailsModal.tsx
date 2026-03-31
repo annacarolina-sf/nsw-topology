@@ -19,167 +19,169 @@ interface Props {
 }
 
 const formatAxisValue = (bps: number): string => {
-  if (bps >= 1e9) {
-    return `${(bps / 1e9).toFixed(1)}G`;
-  }
-  if (bps >= 1e6) {
-    return `${(bps / 1e6).toFixed(0)}M`;
-  }
-  if (bps >= 1e3) {
-    return `${(bps / 1e3).toFixed(0)}K`;
-  }
-  return `${bps.toFixed(0)}`;
+    if (bps >= 1e9) {
+        return `${(bps / 1e9).toFixed(1)}G`;
+    }
+    if (bps >= 1e6) {
+        return `${(bps / 1e6).toFixed(0)}M`;
+    }
+    if (bps >= 1e3) {
+        return `${(bps / 1e3).toFixed(0)}K`;
+    }
+    return `${bps.toFixed(0)}`;
 };
 
 const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacity: number }> = ({
-  data,
-  height,
-  capacity,
+    data,
+    height,
+    capacity,
 }) => {
-  if (!data || data.length < 2) {
+    if (!data || data.length < 2) {
+        return (
+            <div style={{ color: COLORS.textMuted, fontSize: FONT.sm, textAlign: 'center', padding: 4 }}>
+                Sem dados históricos
+            </div>
+        );
+    }
+
+    const capacityBps = capacity * 1e6;
+    const maxTraffic = Math.max(...data.map((d) => Math.max(d.dl, d.ul)), 1);
+    const yMax = Math.max(capacityBps, maxTraffic) * 1.1;
+
+    const leftMargin = 42;
+    const chartWidth = 100;
+
+    const gridLines = [0.25, 0.5, 0.75, 1.0].map((pct) => ({
+        bps: capacityBps * pct,
+        y: 100 - ((capacityBps * pct) / yMax) * 100,
+        label: formatAxisValue(capacityBps * pct),
+    }));
+
+    const capacityY = 100 - (capacityBps / yMax) * 100;
+
+    const dlPoints = data
+        .map((d, i) => {
+            const x = (i / (data.length - 1)) * chartWidth;
+            const y = 100 - (d.dl / yMax) * 100;
+            return `${x},${y}`;
+        })
+        .join(' ');
+    const ulPoints = data
+        .map((d, i) => {
+            const x = (i / (data.length - 1)) * chartWidth;
+            const y = 100 - (d.ul / yMax) * 100;
+            return `${x},${y}`;
+        })
+        .join(' ');
+
     return (
-      <div style={{ color: COLORS.textMuted, fontSize: FONT.sm, textAlign: 'center', padding: 4 }}>
-        Sem dados históricos
-      </div>
-    );
-  }
+        <div style={{ position: 'relative', width: '100%', height, display: 'flex' }}>
+            <div
+                style={{
+                    width: leftMargin,
+                    height: '100%',
+                    position: 'relative',
+                    flexShrink: 0,
+                    borderRight: '1px solid rgba(255,255,255,0.2)',
+                }}
+            >
+                {gridLines.map((g, idx) => (
+                    <div
+                        key={idx}
+                        style={{
+                            position: 'absolute',
+                            right: 3,
+                            top: `${g.y}%`,
+                            transform: 'translateY(-50%)',
+                            fontSize: FONT.xs,
+                            color: COLORS.textMuted,
+                            lineHeight: 1,
+                            whiteSpace: 'nowrap',
+                        }}
+                    >
+                        {g.label}
+                    </div>
+                ))}
+                <div
+                    style={{
+                        position: 'absolute',
+                        right: 3,
+                        bottom: 0,
+                        fontSize: FONT.xs,
+                        color: COLORS.textMuted,
+                        lineHeight: 1,
+                    }}
+                >
+                    0
+                </div>
+            </div>
 
-  const capacityBps = capacity * 1e6;
-  const maxTraffic = Math.max(...data.map((d) => Math.max(d.dl, d.ul)), 1);
-  const yMax = Math.max(capacityBps, maxTraffic) * 1.1;
-
-  const leftMargin = 42;
-  const chartWidth = 100;
-
-  const gridLines = [0.25, 0.5, 0.75, 1.0].map((pct) => ({
-    bps: capacityBps * pct,
-    y: 100 - ((capacityBps * pct) / yMax) * 100,
-    label: formatAxisValue(capacityBps * pct),
-  }));
-
-  const capacityY = 100 - (capacityBps / yMax) * 100;
-
-  const dlPoints = data
-    .map((d, i) => {
-      const x = (i / (data.length - 1)) * chartWidth;
-      const y = 100 - (d.dl / yMax) * 100;
-      return `${x},${y}`;
-    })
-    .join(' ');
-  const ulPoints = data
-    .map((d, i) => {
-      const x = (i / (data.length - 1)) * chartWidth;
-      const y = 100 - (d.ul / yMax) * 100;
-      return `${x},${y}`;
-    })
-    .join(' ');
-
-  return (
-    <div style={{ position: 'relative', width: '100%', height, display: 'flex' }}>
-      <div
-        style={{
-          width: leftMargin,
-          height: '100%',
-          position: 'relative',
-          flexShrink: 0,
-          borderRight: '1px solid rgba(255,255,255,0.2)',
-        }}
-      >
-        {gridLines.map((g, idx) => (
-          <div
-            key={idx}
-            style={{
-              position: 'absolute',
-              right: 3,
-              top: `${g.y}%`,
-              transform: 'translateY(-50%)',
-              fontSize: FONT.xs,
-              color: COLORS.textMuted,
-              lineHeight: 1,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {g.label}
-          </div>
-        ))}
-        <div
-          style={{
-            position: 'absolute',
-            right: 3,
-            bottom: 0,
-            fontSize: FONT.xs,
-            color: COLORS.textMuted,
-            lineHeight: 1,
-          }}
-        >
-          0
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+                <svg
+                    width="100%"
+                    height="100%"
+                    viewBox={`0 -2 ${chartWidth} 104`}
+                    preserveAspectRatio="none"
+                    style={{ display: 'block' }}
+                >
+                    {gridLines.map((g, idx) => (
+                        <line
+                            key={idx}
+                            x1="0"
+                            y1={g.y}
+                            x2={chartWidth}
+                            y2={g.y}
+                            stroke="rgba(255,255,255,0.08)"
+                            strokeWidth="0.5"
+                            vectorEffect="non-scaling-stroke"
+                        />
+                    ))}
+                    <line
+                        x1="0"
+                        y1="100"
+                        x2={chartWidth}
+                        y2="100"
+                        stroke="rgba(255,255,255,0.2)"
+                        strokeWidth="0.5"
+                        vectorEffect="non-scaling-stroke"
+                    />
+                    <line
+                        x1="0"
+                        y1={capacityY}
+                        x2={chartWidth}
+                        y2={capacityY}
+                        stroke={COLORS.trafficCapacity}
+                        strokeWidth="1"
+                        strokeDasharray="4,3"
+                        vectorEffect="non-scaling-stroke"
+                        opacity={0.6}
+                    />
+                    <polyline
+                        points={dlPoints}
+                        fill="none"
+                        stroke={COLORS.trafficDownload}
+                        strokeWidth="1.5"
+                        vectorEffect="non-scaling-stroke"
+                        opacity={0.9}
+                    />
+                    <polyline
+                        points={ulPoints}
+                        fill="none"
+                        stroke={COLORS.trafficUpload}
+                        strokeWidth="1.5"
+                        vectorEffect="non-scaling-stroke"
+                        opacity={0.9}
+                    />
+                </svg>
+            </div>
         </div>
-      </div>
-
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-        <svg
-          width="100%"
-          height="100%"
-          viewBox={`0 -2 ${chartWidth} 104`}
-          preserveAspectRatio="none"
-          style={{ display: 'block' }}
-        >
-          {gridLines.map((g, idx) => (
-            <line
-              key={idx}
-              x1="0"
-              y1={g.y}
-              x2={chartWidth}
-              y2={g.y}
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="0.5"
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
-          <line
-            x1="0"
-            y1="100"
-            x2={chartWidth}
-            y2="100"
-            stroke="rgba(255,255,255,0.2)"
-            strokeWidth="0.5"
-            vectorEffect="non-scaling-stroke"
-          />
-          <line
-            x1="0"
-            y1={capacityY}
-            x2={chartWidth}
-            y2={capacityY}
-            stroke={COLORS.trafficCapacity}
-            strokeWidth="1"
-            strokeDasharray="4,3"
-            vectorEffect="non-scaling-stroke"
-            opacity={0.6}
-          />
-          <polyline
-            points={dlPoints}
-            fill="none"
-            stroke={COLORS.trafficDownload}
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-            opacity={0.9}
-          />
-          <polyline
-            points={ulPoints}
-            fill="none"
-            stroke={COLORS.trafficUpload}
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-            opacity={0.9}
-          />
-        </svg>
-      </div>
-    </div>
-  );
+    );
 };
 
 // MODIF: Componente criado para substituir o tooltip com os detalhes presentes no WeathermapEdge
 export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClose }) => {
+    console.log('Carregando modal da conexão')
+
     const isUserAllowed = () => {
         const user = config.bootData.user;
         console.log(user.login);
@@ -217,27 +219,29 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                     {data?.targetStatus === 'online' ? '● Online' : '● Offline'}
                 </span>
             </div>
-            <div style={tooltipDivider} />
             {/* MODIF: adição de observações customizadas */}
             {data?.observation && (
-                <div style={tooltipRow}>
-                    <div style={tooltipLabel}>
-                        <ReactMarkdown
-                            components={{
-                                p: ({ children }) => (
-                                    <p style={{ margin: 0 }}>{children}</p>
-                                ),
-                                strong: ({ children }) => (
-                                    <strong style={{ fontWeight: 700 }}>
-                                        {children}
-                                    </strong>
-                                ),
-                            }}
-                        >
-                            {data.observation}
-                        </ReactMarkdown>
+                <>
+                    <div style={tooltipDivider} />
+                    <div style={tooltipRow}>
+                        <div style={tooltipLabel}>
+                            <ReactMarkdown
+                                components={{
+                                    p: ({ children }) => (
+                                        <p style={{ margin: 0 }}>{children}</p>
+                                    ),
+                                    strong: ({ children }) => (
+                                        <strong style={{ fontWeight: 700 }}>
+                                            {children}
+                                        </strong>
+                                    ),
+                                }}
+                            >
+                                {data.observation}
+                            </ReactMarkdown>
+                        </div>
                     </div>
-                </div>
+                </>
             )}
             <div style={tooltipDivider} />
             <div style={tooltipRow}>
