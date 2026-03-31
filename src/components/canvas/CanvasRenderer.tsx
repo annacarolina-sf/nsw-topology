@@ -202,9 +202,6 @@ export const CanvasRenderer: React.FC<Props> = ({
         for (const m of node.customMetrics) {
           if (m.enabled) {
             const val = evaluateCustomMetric(m, node.hostName, hostFieldMap, hosts);
-            // if (val !== null && val > m.alertThreshold) {
-            //   return resolveGrafanaColor(m.alertColor || '') || resolvedColors.alert;
-            // }
             // MODIF: THRESHOLDS
             if (val !== null && m.thresholds) {
               for (const t of m.thresholds) {
@@ -272,9 +269,9 @@ export const CanvasRenderer: React.FC<Props> = ({
           label,
           value:
             m.field.toLowerCase().includes('time') ||
-            m.field.toLowerCase().includes('tempo') ||
-            m.field.toLowerCase().includes('latency') ||
-            suffix === 'ms'
+              m.field.toLowerCase().includes('tempo') ||
+              m.field.toLowerCase().includes('latency') ||
+              suffix === 'ms'
               ? `${val.toFixed(0)}${suffix}`
               : `${val.toFixed(1)}${suffix}`,
           color: alerting ? resolveGrafanaColor(m.alertColor || '') || resolvedColors.alert : resolvedColors.online,
@@ -293,7 +290,6 @@ export const CanvasRenderer: React.FC<Props> = ({
             const val = evaluateCustomMetric(m, node.hostName, hostFieldMap, hosts);
             if (val !== null) {
               const decimals = m.decimals ?? 1;
-              // const alerting = val > m.alertThreshold;
               // MODIF: THRESHOLDS
               const thresholdColor = getThresholdColor(val, m.thresholds);
               const alerting = thresholdColor !== null;
@@ -308,7 +304,6 @@ export const CanvasRenderer: React.FC<Props> = ({
               result.push({
                 label: m.name,
                 value: formattedVal,
-                // color: alerting ? m.alertColor || resolvedColors.alert : resolvedColors.online,
                 color: thresholdColor || resolvedColors.online, // MODIF: THRESHOLDS
                 alerting,
               });
@@ -367,7 +362,7 @@ export const CanvasRenderer: React.FC<Props> = ({
         }
       }
 
-      if(customColor && color == '#4b5563') color = customColor; // MODIF
+      if (customColor && color == '#4b5563') color = customColor; // MODIF
       return { color, width, dlVal, ulVal, srcStatus, tgtStatus };
     },
     [getNodeStatus, hosts, resolvedColors]
@@ -470,8 +465,8 @@ export const CanvasRenderer: React.FC<Props> = ({
         }
         // MODIF: Utilizando uma métrica como cor da linha
         let customColor;
-        const customColorMetric = evaluatedMetrics.find((m) => m.useAsLineColor); 
-        if(customColorMetric) {
+        const customColorMetric = evaluatedMetrics.find((m) => m.useAsLineColor);
+        if (customColorMetric) {
           customColor = getThresholdColor(customColorMetric.computedValue, customColorMetric.thresholds);
         }
 
@@ -611,6 +606,24 @@ export const CanvasRenderer: React.FC<Props> = ({
     setCtxMenu(null);
   }, [ctxMenu, nodeConfigs, connections]);
 
+  // MODIF: Adicionando a função de duplicar node
+  const handleCtxDuplicate = useCallback(() => {
+    if (!ctxMenu) return;
+    if (ctxMenu.type === 'node') {
+      const original = nodeConfigs.find((x) => x.id === ctxMenu.id);
+      if (original) {
+        const newNode: NodeConfig = {
+          ...original,
+          id: `node-${Date.now()}`,
+          positionX: original.positionX + 40,
+          positionY: original.positionY + 40,
+        };
+        onAddNode(newNode);
+      }
+    }
+    setCtxMenu(null);
+  }, [ctxMenu, nodeConfigs, onAddNode]);
+
   const handleCtxDelete = useCallback(() => {
     if (!ctxMenu) {
       return;
@@ -660,7 +673,7 @@ export const CanvasRenderer: React.FC<Props> = ({
 
   const bgColor = resolveGrafanaColor(appearance.bgColor || '#111217');
   const usedHostNames = useMemo(() => nodeConfigs.map((n) => n.hostName), [nodeConfigs]); // TODO
-  
+
   return (
     <div ref={containerRef} style={{ width, height, position: 'relative' }}>
       <svg style={{ position: 'absolute', width: 0, height: 0 }}>
@@ -849,7 +862,7 @@ export const CanvasRenderer: React.FC<Props> = ({
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#131D37' 
+              e.currentTarget.style.background = '#131D37'
               e.currentTarget.style.color = '#5997E7'
             }}
             onMouseLeave={(e) => {
@@ -858,7 +871,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             }}
             onClick={onCenterMap}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3" /><path d="M12 2v4M12 18v4M2 12h4M18 12h4" /></svg>
           </button>
         )}
         {/* MODIF: Aviso no modo de edição */}
@@ -883,7 +896,15 @@ export const CanvasRenderer: React.FC<Props> = ({
         )}
       </ReactFlow>
 
-      {ctxMenu && <ContextMenu x={ctxMenu.x} y={ctxMenu.y} onEdit={handleCtxEdit} onDelete={handleCtxDelete} />}
+      {ctxMenu &&
+        <ContextMenu
+          x={ctxMenu.x} 
+          y={ctxMenu.y}
+          onEdit={handleCtxEdit}
+          onDelete={handleCtxDelete}
+          onDuplicate={ctxMenu.type === 'node' ? handleCtxDuplicate : undefined} // MODIF
+        />
+      }
 
       {deleteTarget && (
         <DeleteConfirmation
