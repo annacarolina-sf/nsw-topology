@@ -4,12 +4,6 @@ import { getIconDataUriColored } from '../icons';
 import {
   COLORS,
   FONT,
-  // tooltipBox, // TODO
-  // tooltipDivider,
-  // tooltipLabel,
-  // tooltipRow,
-  // tooltipTitle,
-  // statusDot,
 } from '../../styles/tokens';
 import { NodeDetailsModal } from 'components/details/NodeDetailsModal';
 
@@ -62,8 +56,6 @@ const handleStyle: React.CSSProperties = {
 };
 
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
-  // TODO
-  // const { label, icon, statusColor, status, uptimeValue, hyperlink, hyperlinkLabel, connections, metrics, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
   const { label, icon, statusColor, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
   const [hovered, setHovered] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF
@@ -196,10 +188,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
         <NodeDetailsModal
           nodeData={data}
           onClose={() => {
-            console.log('onClose foi chamado')
-            console.log('Antes: ', showNodeDetailModal)
             setShowNodeDetailModal(false);
-            console.log('Depois: ', showNodeDetailModal)
           }}
         />
       )}
