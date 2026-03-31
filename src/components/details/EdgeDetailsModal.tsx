@@ -180,17 +180,13 @@ const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacit
 
 // MODIF: Componente criado para substituir o tooltip com os detalhes presentes no WeathermapEdge
 export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClose }) => {
-    console.log('Carregando modal da conexão')
 
     const isUserAllowed = () => {
         const user = config.bootData.user;
-        console.log(user.login);
-        console.log(user.email);
         return user.email in ALLOWED_USERS
     }
 
     const createTicket = () => {
-        console.log('Criar ticket... (atualizado)')
         if (!isUserAllowed()) return;
         // TODO: criar ticket
     }
