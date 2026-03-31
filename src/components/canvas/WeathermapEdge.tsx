@@ -7,6 +7,7 @@ import { getThresholdColor } from '../../data/parser'
 import { Button } from '@grafana/ui';
 import { config } from '@grafana/runtime'; // MODIF
 import { ALLOWED_USERS } from '../../constants';
+import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 
@@ -32,7 +33,7 @@ export type WeathermapEdgeData = {
   customMetrics?: any[];
 };
 
-type WeathermapEdgeType = Edge<WeathermapEdgeData, 'weathermap'>;
+export type WeathermapEdgeType = Edge<WeathermapEdgeData, 'weathermap'>;
 
 const formatAxisValue = (bps: number): string => {
   if (bps >= 1e9) {
@@ -218,6 +219,7 @@ export const WeathermapEdge = memo(
     const showTraffic = data?.showTraffic ?? false;
     const isRed = data?.isRed ?? false;
     const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF
+    const [showDetailModal, setShowDetailModal] = useState(false); // MODIF
 
     const [edgePath, labelX, labelY] = getBezierPath({
       sourceX,
@@ -268,7 +270,7 @@ export const WeathermapEdge = memo(
     }
 
     return (
-      <>
+      <div onClick={() => setShowDetailModal(true)}> {/* MODIF: Abrindo o modal de detalhes ao clicar */}
         <path
           d={edgePath}
           fill="none"
@@ -370,7 +372,22 @@ export const WeathermapEdge = memo(
           </EdgeLabelRenderer>
         )}
 
-        {hovered && (
+
+        {/* MODIF: Substituindo o tooltip com os detalhes por um modal */}
+        {showDetailModal && (
+          <EdgeDetailsModal
+            data={data}
+            source={source}
+            target={target}
+            onClose={() => {
+              setShowDetailModal(false);
+            }}
+          />
+        )}
+
+
+
+        {/* {hovered && (
           <EdgeLabelRenderer>
             <div
               onMouseEnter={handleMouseEnter} // MODIF
@@ -411,120 +428,118 @@ export const WeathermapEdge = memo(
                 </span>
               </div>
               <div style={tooltipDivider} />
-              {/* MODIF: adição de observações customizadas */}
-              {data?.observation && (
-                <div style={tooltipRow}>
-                  <div style={tooltipLabel}>
-                    <ReactMarkdown
-                      components={{
-                        p: ({ children }) => (
-                          <p style={{ margin: 0 }}>{children}</p>
-                        ),
-                        strong: ({ children }) => (
-                          <strong style={{ fontWeight: 700 }}>
-                            {children}
-                          </strong>
-                        ),
+        {data?.observation && (
+          <div style={tooltipRow}>
+            <div style={tooltipLabel}>
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => (
+                    <p style={{ margin: 0 }}>{children}</p>
+                  ),
+                  strong: ({ children }) => (
+                    <strong style={{ fontWeight: 700 }}>
+                      {children}
+                    </strong>
+                  ),
+                }}
+              >
+                {data.observation}
+              </ReactMarkdown>
+            </div>
+          </div>
+        )}
+        <div style={tooltipDivider} />
+        <div style={tooltipRow}>
+          <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>↓ Download:</span>
+          <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>{data?.downloadValue || '—'}</span>
+        </div>
+        <div style={tooltipRow}>
+          <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>↑ Upload:</span>
+          <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>{data?.uploadValue || '—'}</span>
+        </div>
+
+        {data?.customMetrics && data.customMetrics.length > 0 && (
+          <>
+            <div style={tooltipDivider} />
+            {data.customMetrics.map(
+              (m, idx) =>
+                m.computedValue !== null && (
+                  <div key={idx} style={tooltipRow}>
+                    <span style={{ ...tooltipLabel, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      {m.icon && <span>{m.icon}</span>}
+                      {m.name}:
+                    </span>
+                    <span
+                      style={{
+                        color: getThresholdColor(m.computedValue, m.thresholds) || COLORS.textWhite, // MODIF: THRESHOLDS
+                        fontWeight: 600,
                       }}
                     >
-                      {data.observation}
-                    </ReactMarkdown>
+                      {(() => {
+                        if (m.unit && m.unit !== 'none') {
+                          const fmt = getValueFormat(m.unit);
+                          return formattedValueToString(fmt(m.computedValue, m.decimals ?? 1));
+                        }
+                        return m.computedValue.toFixed(m.decimals ?? 1);
+                      })()}
+                    </span>
                   </div>
-                </div>
-              )}
-              <div style={tooltipDivider} />
-              <div style={tooltipRow}>
-                <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>↓ Download:</span>
-                <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>{data?.downloadValue || '—'}</span>
-              </div>
-              <div style={tooltipRow}>
-                <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>↑ Upload:</span>
-                <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>{data?.uploadValue || '—'}</span>
-              </div>
-
-              {data?.customMetrics && data.customMetrics.length > 0 && (
-                <>
-                  <div style={tooltipDivider} />
-                  {data.customMetrics.map(
-                    (m, idx) =>
-                      m.computedValue !== null && (
-                        <div key={idx} style={tooltipRow}>
-                          <span style={{ ...tooltipLabel, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            {m.icon && <span>{m.icon}</span>}
-                            {m.name}:
-                          </span>
-                          <span
-                            style={{
-                              color: getThresholdColor(m.computedValue, m.thresholds) || COLORS.textWhite, // MODIF: THRESHOLDS
-                              fontWeight: 600,
-                            }}
-                          >
-                            {(() => {
-                              if (m.unit && m.unit !== 'none') {
-                                const fmt = getValueFormat(m.unit);
-                                return formattedValueToString(fmt(m.computedValue, m.decimals ?? 1));
-                              }
-                              return m.computedValue.toFixed(m.decimals ?? 1);
-                            })()}
-                          </span>
-                        </div>
-                      )
-                  )}
-                </>
-              )}
-
-              {data?.trafficHistory && data.trafficHistory.length > 1 && (
-                <>
-                  <div style={tooltipDivider} />
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      fontSize: FONT.sm,
-                      color: COLORS.textMuted,
-                      marginBottom: 2,
-                    }}
-                  >
-                    <div style={statusDot(data.isRed ? COLORS.danger : COLORS.green)} />
-                    Tráfego
-                  </div>
-                  <div
-                    style={{
-                      background: 'rgba(255,255,255,0.03)',
-                      borderRadius: 4,
-                      padding: '4px 0',
-                      marginTop: 2,
-                      width: '100%',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {/* MODIF: alterando a altura do gráfico (valor original = 80) */}
-                    <Sparkline data={data.trafficHistory} height={200} capacity={data.capacity || 1000} />
-                  </div>
-                  <div style={{ display: 'flex', gap: 12, marginTop: 4, fontSize: FONT.sm }}>
-                    <span style={{ color: COLORS.trafficDownload }}>— Download</span>
-                    <span style={{ color: COLORS.trafficUpload }}>— Upload</span>
-                    <span style={{ color: COLORS.trafficCapacity, opacity: 0.6 }}>┈ Capacity</span>
-                  </div>
-                </>
-              )}
-
-              {/* MODIF: Adicionando a opção de criar ticket */}
-              {isUserAllowed() && (
-                <>
-                  <div style={tooltipDivider} />
-                  <div style={{ ...tooltipRow, maxHeight: 15 }}>
-                    <Button variant="secondary" icon="external-link-alt" size="xs" onClick={createTicket}>
-                      Create Ticket
-                    </Button>
-                  </div>
-                </>
-              )}
-            </div>
-          </EdgeLabelRenderer>
+                )
+            )}
+          </>
         )}
-      </>
+
+        {data?.trafficHistory && data.trafficHistory.length > 1 && (
+          <>
+            <div style={tooltipDivider} />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: FONT.sm,
+                color: COLORS.textMuted,
+                marginBottom: 2,
+              }}
+            >
+              <div style={statusDot(data.isRed ? COLORS.danger : COLORS.green)} />
+              Tráfego
+            </div>
+            <div
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                borderRadius: 4,
+                padding: '4px 0',
+                marginTop: 2,
+                width: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              <Sparkline data={data.trafficHistory} height={200} capacity={data.capacity || 1000} />
+            </div>
+            <div style={{ display: 'flex', gap: 12, marginTop: 4, fontSize: FONT.sm }}>
+              <span style={{ color: COLORS.trafficDownload }}>— Download</span>
+              <span style={{ color: COLORS.trafficUpload }}>— Upload</span>
+              <span style={{ color: COLORS.trafficCapacity, opacity: 0.6 }}>┈ Capacity</span>
+            </div>
+          </>
+        )}
+
+        {isUserAllowed() && (
+          <>
+            <div style={tooltipDivider} />
+            <div style={{ ...tooltipRow, maxHeight: 15 }}>
+              <Button variant="secondary" icon="external-link-alt" size="xs" onClick={createTicket}>
+                Create Ticket
+              </Button>
+            </div>
+          </>
+        )}
+      </div >
+          </EdgeLabelRenderer >
+        )} 
+      */}
+      </div>
     );
   }
 );

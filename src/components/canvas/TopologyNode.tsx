@@ -71,7 +71,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   const iconUri = getIconDataUriColored(icon, COLORS.textWhite);
   const handleOpacity = isEditable && hovered ? 0.6 : 0;
   const positions = ['25%', '50%', '75%'];
-  const [showNodeDetailModal, setShowNodeDetailModal] = useState(false);
+  const [showNodeDetailModal, setShowNodeDetailModal] = useState(false); // MODIF
 
   // MODIF
   const renderHandles = (side: Position, axis: 'x' | 'y') =>
@@ -199,81 +199,6 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           }}
         />
       )}
-
-      {/* {hovered && (
-        <div
-          onMouseEnter={handleMouseEnter} // MODIF
-          onMouseLeave={handleMouseLeave} // MODIF
-          style={{
-            position: 'absolute',
-            left: '50%',
-            bottom: '100%',
-            transform: 'translateX(-50%)',
-            marginBottom: 8,
-            zIndex: 9999,
-            pointerEvents: 'auto', // MODIF
-          }}
-        >
-          <div style={tooltipBox}>
-            <div style={tooltipTitle}>{label}</div>
-            <div style={tooltipDivider} />
-            {!isBackgroundFixed && ( // MODIF
-              <div style={tooltipRow}>
-                <div style={statusDot(data.statusColor)} />
-                <span style={tooltipLabel}>Status:</span>
-                <span style={{ color: statusColor, fontWeight: 700 }}>{status === 'online' ? 'Online' : 'Offline'}</span>
-              </div>
-            )}
-            {uptimeValue && (
-              <div style={tooltipRow}>
-                <span style={{ width: 8 }} />
-                <span style={tooltipLabel}>Uptime:</span>
-                <span>{uptimeValue}</span>
-              </div>
-            )}
-            {metrics.length > 0 && (
-              <>
-                <div style={tooltipDivider} />
-                <div style={{ ...tooltipLabel, marginBottom: 2 }}>Metrics:</div>
-                {metrics.map((m, i) => (
-                  <div key={i} style={tooltipRow}>
-                    <div style={statusDot(m.alerting ? m.color : COLORS.green)} />
-                    <span style={tooltipLabel}>{m.label}:</span>
-                    <span
-                      style={{ color: m.alerting ? m.color : COLORS.textSecondary, fontWeight: m.alerting ? 700 : 400 }}
-                    >
-                      {m.value}
-                      {m.alerting && <span style={{ fontSize: FONT.sm, marginLeft: 4, color: m.color }}>⚠</span>}
-                    </span>
-                  </div>
-                ))}
-              </>
-            )}
-            {hyperlink != '' && (
-              <>
-                <div style={tooltipDivider} />
-                <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlink:</div>
-                <div style={{...tooltipRow, cursor: 'pointer'}} onClick={() => window.open(hyperlink, '_blank')}>
-                  <span style={{ width: 6 }}>🔗</span>
-                  <span style={{ color: COLORS.textSecondary, marginRight: 2 }}>{hyperlinkLabel}</span>
-                </div>
-              </>
-            )}
-            {connections.length > 0 && (
-              <>
-                <div style={tooltipDivider} />
-                <div style={{ ...tooltipLabel, marginBottom: 2 }}>Connections:</div>
-                {connections.slice(0, 5).map((c, i) => (
-                  <div key={i} style={{ ...tooltipRow, paddingLeft: 2 }}>
-                    <div style={statusDot(c.color)} />
-                    <span style={{ fontSize: FONT.sm + 1, color: COLORS.textSecondary }}>{c.name}</span>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-        </div>
-      )} */}
     </div>
   );
 });
