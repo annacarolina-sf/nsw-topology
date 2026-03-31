@@ -107,7 +107,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
   };
 
   return (
-    <div onClick={() => setShowNodeDetailModal(true)}> {/* MODIF: Abrindo o modal de detalhes ao clicar */}
+    <>
       {isEditable && (
         <NodeResizeControl
           position="bottom-right"
@@ -140,6 +140,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
 
       <div
         ref={nodeRef}
+        onClick={() => setShowNodeDetailModal(true)} // MODIF: Abrindo o modal de detalhes ao clicar
         onMouseEnter={handleMouseEnter} // MODIF
         onMouseLeave={handleMouseLeave} // MODIF
         style={{
@@ -195,11 +196,14 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
         <NodeDetailsModal
           nodeData={data}
           onClose={() => {
+            console.log('onClose foi chamado')
+            console.log('Antes: ', showNodeDetailModal)
             setShowNodeDetailModal(false);
+            console.log('Depois: ', showNodeDetailModal)
           }}
         />
       )}
-    </div>
+    </>
   );
 });
 

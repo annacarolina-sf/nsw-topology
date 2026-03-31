@@ -39,7 +39,7 @@ export const NodeDetailsModal: React.FC<Props> = ({ nodeData, onClose }) => {
                 style={{ color: m.alerting ? m.color : COLORS.textSecondary, fontWeight: m.alerting ? 700 : 400 }}
               >
                 {m.value}
-                {m.alerting && <span style={{ fontSize: FONT.sm, marginLeft: 4, color: m.color }}>⚠</span>}
+                {m.alerting && <span style={{ marginLeft: 4, color: m.color }}>⚠</span>} {/* MODIF: tirando "fontSize: FONT.sm, " */}
               </span>
             </div>
           ))}
@@ -50,7 +50,7 @@ export const NodeDetailsModal: React.FC<Props> = ({ nodeData, onClose }) => {
           <div style={tooltipDivider} />
           <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlink:</div>
           <div style={{ ...tooltipRow, cursor: 'pointer' }} onClick={() => window.open(nodeData.hyperlink, '_blank')}>
-            <span style={{ maxWidth: 4, marginRight: 4 }}>🔗</span>
+            <span>🔗</span>
             <span style={{ color: COLORS.textSecondary }}>{nodeData.hyperlinkLabel}</span>
           </div>
         </>
@@ -62,7 +62,7 @@ export const NodeDetailsModal: React.FC<Props> = ({ nodeData, onClose }) => {
           {nodeData.connections.slice(0, 5).map((c, i) => (
             <div key={i} style={{ ...tooltipRow, paddingLeft: 2 }}>
               <div style={statusDot(c.color)} />
-              <span style={{ fontSize: FONT.sm + 1, color: COLORS.textSecondary }}>{c.name}</span>
+              <span style={{ color: COLORS.textSecondary }}>{c.name}</span> {/* MODIF: tirando "fontSize: FONT.sm + 1, " */}
             </div>
           ))}
         </>
