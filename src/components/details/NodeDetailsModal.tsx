@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from '@grafana/ui';
 import { TopologyNodeData } from 'components/canvas/TopologyNode';
-import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
+import { COLORS, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens'; // MODIF: tirei "FONT"
 
 interface Props {
   nodeData: TopologyNodeData;
