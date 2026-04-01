@@ -214,4 +214,4 @@ export const autoDetectField = (fields: string[], patterns: string[]): string =>
 };
 
 // MODIF: Usuários com permissão para a criação de tickets
-export const ALLOWED_USERS = ['admin@localhost', 'teste1', 'teste2']; // TODO: inserir os valores reais
+export const ALLOWED_USERS = ['admin@localhost', 'teste1', 'teste2', 'admin']; // TODO: inserir os valores reais

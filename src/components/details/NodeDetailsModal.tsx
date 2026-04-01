@@ -17,7 +17,7 @@ export const NodeDetailsModal: React.FC<Props> = ({ nodeData, onClose }) => {
         <div style={tooltipRow}>
           <div style={statusDot(nodeData.statusColor)} />
           <span style={tooltipLabel}>Status:</span>
-          <span style={{ color: nodeData.statusColor, fontWeight: 700 }}>{status === 'online' ? 'Online' : 'Offline'}</span>
+          <span style={{ color: nodeData.statusColor, fontWeight: 700 }}>{nodeData.status === 'online' ? 'Online' : 'Offline'}</span>
         </div>
       )}
       {nodeData.uptimeValue && (

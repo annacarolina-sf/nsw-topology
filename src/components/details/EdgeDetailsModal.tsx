@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal } from '@grafana/ui';
 import ReactMarkdown from 'react-markdown';
 import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
@@ -180,15 +180,64 @@ const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacit
 
 // MODIF: Componente criado para substituir o tooltip com os detalhes presentes no WeathermapEdge
 export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClose }) => {
+    const [ticketCreated, setTicketCreated] = useState(false);
 
     const isUserAllowed = () => {
         const user = config.bootData.user;
-        return user.email in ALLOWED_USERS
+        console.log('Verificando se o usuário tem permissão para criar ticket')
+        console.log(user.email in ALLOWED_USERS || user.login in ALLOWED_USERS)
+        return user.email in ALLOWED_USERS || user.login in ALLOWED_USERS
     }
 
-    const createTicket = () => {
+    const createTicket = async () => {
         if (!isUserAllowed()) return;
-        // TODO: criar ticket
+        try {
+            const now = new Date();
+            const formattedDate = now.toLocaleString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+            }).replace(",", " -");
+            const subject = `FALHA NO TRECHO: ${data?.sourceName || source} ↔ ${data?.targetName || target} (${formattedDate})`;
+
+            console.log('Criando ticket...')
+            const apiBaseUrl = process.env.REACT_APP_OSTICKET_BASE_URL;
+            const apiKey = process.env.REACT_APP_OSTICKET_API_KEY;
+            console.log('URL: ', apiBaseUrl)
+            console.log('KEY: ', apiKey)
+
+            const response = await fetch(
+                `${apiBaseUrl!}/api/tickets.json`,
+                {
+                    method: "POST",
+                    headers: {
+                        "X-API-Key": apiKey!,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        alert: true,
+                        autorespond: true,
+                        source: "API",
+                        assignId: "t1",
+                        priority: 3,
+                        topicId: 25,
+                        name: "NOC",
+                        email: "noc@grupodigitalnet.com.br",
+                        subject: subject,
+                        message: `data:text/html,${subject}.`,
+                    }),
+                }
+            );
+            const responseData = await response.json();
+            console.log('Ticket criado: ', responseData)
+            setTicketCreated(true);
+        } catch (error) {
+            console.error("Erro ao criar ticket:", error);
+            setTicketCreated(false);
+        }
     }
 
     return (
@@ -322,7 +371,9 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                 <>
                     <div style={tooltipDivider} />
                     <div style={{ ...tooltipRow, maxHeight: 15 }}>
-                        <Button variant="secondary" icon="external-link-alt" size="xs" onClick={createTicket}>
+                        <Button variant="secondary" icon="external-link-alt" size="xs"
+                            onClick={ticketCreated ? undefined : createTicket}
+                            disabled={ticketCreated}>
                             Create Ticket
                         </Button>
                     </div>
