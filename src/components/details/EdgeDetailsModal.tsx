@@ -3,10 +3,11 @@ import { Modal } from '@grafana/ui';
 import ReactMarkdown from 'react-markdown';
 import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
 import { getThresholdColor } from 'data/parser';
-import { formattedValueToString, getValueFormat } from '@grafana/data';
+import { BusEventBase, formattedValueToString, getValueFormat } from '@grafana/data';
 import { config } from '@grafana/runtime';
 import { ALLOWED_USERS } from '../../constants';
 import { Button } from '@grafana/ui';
+import { CreateTicketModal } from 'components/editors/CreateTicketModal';
 
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
@@ -181,6 +182,8 @@ const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacit
 // MODIF: Componente criado para substituir o tooltip com os detalhes presentes no WeathermapEdge
 export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClose }) => {
     const [ticketCreated, setTicketCreated] = useState(false);
+    const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const isUserAllowed = () => {
         const user = config.bootData.user;
@@ -189,54 +192,14 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
         return user.email in ALLOWED_USERS || user.login in ALLOWED_USERS
     }
 
-    const createTicket = async () => {
-        if (!isUserAllowed()) return;
-        try {
-            const now = new Date();
-            const formattedDate = now.toLocaleString("pt-BR", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-            }).replace(",", " -");
-            const subject = `FALHA NO TRECHO: ${data?.sourceName || source} ↔ ${data?.targetName || target} (${formattedDate})`;
-
-            console.log('Criando ticket...')
-            const apiBaseUrl = process.env.REACT_APP_OSTICKET_BASE_URL;
-            const apiKey = process.env.REACT_APP_OSTICKET_API_KEY;
-            console.log('URL: ', apiBaseUrl)
-            console.log('KEY: ', apiKey)
-
-            const response = await fetch(
-                `${apiBaseUrl!}/api/tickets.json`,
-                {
-                    method: "POST",
-                    headers: {
-                        "X-API-Key": apiKey!,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        alert: true,
-                        autorespond: true,
-                        source: "API",
-                        assignId: "t1",
-                        priority: 3,
-                        topicId: 25,
-                        name: "NOC",
-                        email: "noc@grupodigitalnet.com.br",
-                        subject: subject,
-                        message: `data:text/html,${subject}.`,
-                    }),
-                }
-            );
-            const responseData = await response.json();
-            console.log('Ticket criado: ', responseData)
-            setTicketCreated(true);
-        } catch (error) {
-            console.error("Erro ao criar ticket:", error);
-            setTicketCreated(false);
+    const handleTicketCreated = (success: boolean) => {
+        setTicketCreated(success);
+        if (success) setShowCreateTicketModal(false);
+        else {
+            setErrorMessage('Erro ao criar ticket');
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 3000);
         }
     }
 
@@ -372,12 +335,38 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                     <div style={tooltipDivider} />
                     <div style={{ ...tooltipRow, maxHeight: 15 }}>
                         <Button variant="secondary" icon="external-link-alt" fullWidth
-                            onClick={ticketCreated ? undefined : createTicket}
+                            onClick={ticketCreated ? undefined : () => setShowCreateTicketModal(true)}
                             disabled={ticketCreated}>
                             Create Ticket
                         </Button>
                     </div>
                 </>
+            )}
+
+            {/* MODIF: Modal para criar ticket */}
+            {showCreateTicketModal && (
+                <CreateTicketModal
+                    sourceName={data?.sourceName || source}
+                    targetName={data?.targetName || target}
+                    onCancel={() => setShowCreateTicketModal(false)}
+                    onCreated={handleTicketCreated}
+                />
+            )}
+
+            {/* MODIF: Toast em caso de erro (usado na criação do ticket) */}
+            {errorMessage && (
+                <div
+                    style={{
+                        backgroundColor: '#fdecea',
+                        color: '#611a15',
+                        padding: '8px 12px',
+                        borderRadius: 4,
+                        marginTop: 8,
+                        fontSize: 12,
+                    }}
+                >
+                    {errorMessage}
+                </div>
             )}
         </Modal>
     )
