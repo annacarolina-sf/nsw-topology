@@ -371,7 +371,7 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                 <>
                     <div style={tooltipDivider} />
                     <div style={{ ...tooltipRow, maxHeight: 15 }}>
-                        <Button variant="secondary" icon="external-link-alt" size="xs"
+                        <Button variant="secondary" icon="external-link-alt" fullWidth
                             onClick={ticketCreated ? undefined : createTicket}
                             disabled={ticketCreated}>
                             Create Ticket
