@@ -3,9 +3,9 @@ import { Modal } from '@grafana/ui';
 import ReactMarkdown from 'react-markdown';
 import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
 import { getThresholdColor } from 'data/parser';
-import { BusEventBase, formattedValueToString, getValueFormat } from '@grafana/data';
-import { config } from '@grafana/runtime';
-import { ALLOWED_USERS } from '../../constants';
+import { formattedValueToString, getValueFormat } from '@grafana/data';
+// import { config } from '@grafana/runtime';
+// import { ALLOWED_USERS } from '../../constants';
 import { Button } from '@grafana/ui';
 import { CreateTicketModal } from 'components/editors/CreateTicketModal';
 
@@ -186,10 +186,13 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const isUserAllowed = () => {
-        const user = config.bootData.user;
-        console.log('Verificando se o usuário tem permissão para criar ticket')
-        console.log(user.email in ALLOWED_USERS || user.login in ALLOWED_USERS)
-        return user.email in ALLOWED_USERS || user.login in ALLOWED_USERS
+        // const user = config.bootData.user;
+        // console.log('Verificando se o usuário tem permissão para criar ticket')
+        // console.log(user)
+        // console.log(ALLOWED_USERS)
+        // console.log(user.email in ALLOWED_USERS || user.login in ALLOWED_USERS)
+        // return user.email in ALLOWED_USERS || user.login in ALLOWED_USERS
+        return true
     }
 
     const handleTicketCreated = (success: boolean) => {
