@@ -34,51 +34,73 @@ export const CreateTicketModal: React.FC<Props> = ({ sourceName, targetName, onC
     // }
 
     // TODO
-    // const requisicaoTeste = async () => {
-    //     console.log('Rodando a função de teste')
-    //     try {
-    //         const response = await getBackendSrv().get('http://179.109.158.10:1234');
-    //         console.log('Sucesso:')
-    //         console.log(response)
-    //         onCreated(true);
-    //     } catch (error) {
-    //         console.error("Erro ao criar ticket:", error);
-    //         onCreated(false);
-    //     }
-    //     setLoading(false)
-    // }
-
-    const requisicaoTesteTicket = async () => {
-        console.log('Teste de criação de ticket')
-        const apiBaseUrl = 'http://10.200.1.107:8084';
-        const apiKey = '1234'
-
-        const response = getBackendSrv().fetch({
-            url: `${apiBaseUrl!}/api/tickets.json`,
-            method: "POST",
-            headers: {
-                "X-API-Key": apiKey!,
-                "Content-Type": "application/json",
-            },
-            data: JSON.stringify({
-                alert: true,
-                autorespond: true,
-                source: "API",
-                assignId: "t1",
-                priority: 3,
-                topicId: 25,
-                name: "NOC",
-                email: "noc@grupodigitalnet.com.br",
-                subject: subject,
-                message: `data:text/html,${message}.`,
-            }),
-        });
-
-        const jsonData = await lastValueFrom(response);
-        console.log('PASSOU!!')
-        console.log(jsonData)
+    const requisicaoTeste = async () => {
+        console.log('Rodando a função de teste')
+        // try {
+            const response = getBackendSrv().fetch({
+                url: `/api/plugins/gabrielnsw-nswtopology-panel-custom/resources/teste`,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    alert: true,
+                    autorespond: true,
+                    source: "API",
+                    assignId: "t1",
+                    priority: 3,
+                    topicId: 25,
+                    name: "NOC",
+                    email: "noc@grupodigitalnet.com.br",
+                    subject: subject,
+                    message: `data:text/html,${message}.`,
+                }),
+            });
+            // const response = await getBackendSrv().get('http://179.109.158.10:1234');
+            console.log('Sucesso:')
+            console.log(response)
+            
+            const jsonData = await lastValueFrom(response);
+            console.log('PASSOU!!')
+            console.log(jsonData)
+        //     onCreated(true);
+        // } catch (error) {
+        //     console.error("Erro ao criar ticket:", error);
+        //     onCreated(false);
+        // }
         setLoading(false)
     }
+
+    // const requisicaoTesteTicket = async () => {
+    //     console.log('Teste de criação de ticket')
+    //     const apiKey = '1234'
+
+    //     const response = getBackendSrv().fetch({
+    //         url: `/api/plugins/gabrielnsw-nswtopology-panel-custom/resources/osticket/api/tickets.json`,
+    //         method: "POST",
+    //         headers: {
+    //             "X-API-Key": apiKey!,
+    //             "Content-Type": "application/json",
+    //         },
+    //         data: JSON.stringify({
+    //             alert: true,
+    //             autorespond: true,
+    //             source: "API",
+    //             assignId: "t1",
+    //             priority: 3,
+    //             topicId: 25,
+    //             name: "NOC",
+    //             email: "noc@grupodigitalnet.com.br",
+    //             subject: subject,
+    //             message: `data:text/html,${message}.`,
+    //         }),
+    //     });
+
+    //     const jsonData = await lastValueFrom(response);
+    //     console.log('PASSOU!!')
+    //     console.log(jsonData)
+    //     setLoading(false)
+    // }
 
     // const createTicket = async () => {
     //     console.log('Criando ticket...')
@@ -142,7 +164,7 @@ export const CreateTicketModal: React.FC<Props> = ({ sourceName, targetName, onC
                 <Button variant="secondary" onClick={onCancel} disabled={loading}>
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={requisicaoTesteTicket} disabled={loading}> {/* TODO */}
+                <Button variant="primary" onClick={requisicaoTeste} disabled={loading}> {/* TODO */}
                     {loading ? "Creating..." : "Create (atualizado)"}
                 </Button>
             </Modal.ButtonRow>
