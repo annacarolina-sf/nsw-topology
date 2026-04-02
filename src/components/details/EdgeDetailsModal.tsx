@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal } from '@grafana/ui';
 import ReactMarkdown from 'react-markdown';
 import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
 import { getThresholdColor } from 'data/parser';
 import { formattedValueToString, getValueFormat } from '@grafana/data';
-// import { config } from '@grafana/runtime';
-// import { ALLOWED_USERS } from '../../constants';
-import { Button } from '@grafana/ui';
-import { CreateTicketModal } from 'components/editors/CreateTicketModal';
 
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
@@ -181,31 +177,6 @@ const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacit
 
 // MODIF: Componente criado para substituir o tooltip com os detalhes presentes no WeathermapEdge
 export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClose }) => {
-    const [ticketCreated, setTicketCreated] = useState(false);
-    const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-    const isUserAllowed = () => {
-        // const user = config.bootData.user;
-        // console.log('Verificando se o usuário tem permissão para criar ticket')
-        // console.log(user)
-        // console.log(ALLOWED_USERS)
-        // console.log(user.email in ALLOWED_USERS || user.login in ALLOWED_USERS)
-        // return user.email in ALLOWED_USERS || user.login in ALLOWED_USERS
-        return true
-    }
-
-    const handleTicketCreated = (success: boolean) => {
-        setTicketCreated(success);
-        if (success) setShowCreateTicketModal(false);
-        else {
-            setErrorMessage('Erro ao criar ticket');
-            setTimeout(() => {
-                setErrorMessage(null);
-            }, 3000);
-        }
-    }
-
     return (
         <Modal title={`${data?.sourceName || source} ↔ ${data?.targetName || target}`} isOpen={true} onDismiss={onClose}>
             {data?.interfaceName && (
@@ -330,46 +301,6 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                         <span style={{ color: COLORS.trafficCapacity, opacity: 0.6 }}>┈ Capacity</span>
                     </div>
                 </>
-            )}
-
-            {/* MODIF: Adicionando a opção de criar ticket */}
-            {isUserAllowed() && (
-                <>
-                    <div style={tooltipDivider} />
-                    <div style={{ ...tooltipRow, maxHeight: 15 }}>
-                        <Button variant="secondary" icon="external-link-alt" fullWidth
-                            onClick={ticketCreated ? undefined : () => setShowCreateTicketModal(true)}
-                            disabled={ticketCreated}>
-                            Create Ticket
-                        </Button>
-                    </div>
-                </>
-            )}
-
-            {/* MODIF: Modal para criar ticket */}
-            {showCreateTicketModal && (
-                <CreateTicketModal
-                    sourceName={data?.sourceName || source}
-                    targetName={data?.targetName || target}
-                    onCancel={() => setShowCreateTicketModal(false)}
-                    onCreated={handleTicketCreated}
-                />
-            )}
-
-            {/* MODIF: Toast em caso de erro (usado na criação do ticket) */}
-            {errorMessage && (
-                <div
-                    style={{
-                        backgroundColor: '#fdecea',
-                        color: '#611a15',
-                        padding: '8px 12px',
-                        borderRadius: 4,
-                        marginTop: 8,
-                        fontSize: 12,
-                    }}
-                >
-                    {errorMessage}
-                </div>
             )}
         </Modal>
     )

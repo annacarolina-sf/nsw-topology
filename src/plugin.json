@@ -27,15 +27,5 @@
   "dependencies": {
     "grafanaDependency": ">=10.0.0",
     "plugins": []
-  },
-  "routes": [
-    {
-      "path": "osticket",
-      "url": "http://10.200.1.107:8084"
-    },
-    {
-      "path": "teste",
-      "url": "http://179.109.158.10:1234"
-    }
-  ]
+  }
 }
