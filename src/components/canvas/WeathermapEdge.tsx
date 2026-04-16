@@ -148,7 +148,7 @@ export const WeathermapEdge = memo(
               )}
               {data?.customMetrics?.map(
                 (m, idx) =>
-                  m.computedValue !== null && (
+                  m.computedValue !== null && m.showInline && ( // MODIF: podendo escolher se a métrica será mostrada inline
                     <div
                       key={idx}
                       style={{
