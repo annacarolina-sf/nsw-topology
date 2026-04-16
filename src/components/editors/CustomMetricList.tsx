@@ -447,54 +447,52 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                 </div>
               ))}
               {(metric.thresholds ?? []).length > 0 && (
-                <>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    <label
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        cursor: isUseAsLineColorDisabled(metric) ? 'not-allowed' : 'pointer',
-                        fontSize: FONT.label,
-                        fontWeight: 600,
-                        color: isUseAsLineColorDisabled(metric) ? COLORS.textMuted : COLORS.text,
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        disabled={isUseAsLineColorDisabled(metric)}
-                        checked={metric?.useAsLineColor ?? false}
-                        onChange={(e) => updateMetric(idx, { useAsLineColor: e.target.checked })}
-                        style={{ accentColor: COLORS.accent }}
-                      />
-                      Use this metric as the line color source
-                    </label>
-                  </div>
-
-                      {/* MODIF: Podendo escolher se a métrica vai ser mostrada no label ou não */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    <label
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        cursor: 'pointer',
-                        fontSize: FONT.label,
-                        fontWeight: 600,
-                        color: COLORS.text,
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={metric?.showInline ?? false}
-                        onChange={(e) => updateMetric(idx, { showInline: e.target.checked })}
-                        style={{ accentColor: COLORS.accent }}
-                      />
-                      Show this metric inline
-                    </label>
-                  </div>
-                </>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                  <label
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      cursor: isUseAsLineColorDisabled(metric) ? 'not-allowed' : 'pointer',
+                      fontSize: FONT.label,
+                      fontWeight: 600,
+                      color: isUseAsLineColorDisabled(metric) ? COLORS.textMuted : COLORS.text,
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      disabled={isUseAsLineColorDisabled(metric)}
+                      checked={metric?.useAsLineColor ?? false}
+                      onChange={(e) => updateMetric(idx, { useAsLineColor: e.target.checked })}
+                      style={{ accentColor: COLORS.accent }}
+                    />
+                    Use this metric as the line color source
+                  </label>
+                </div>
               )}
+
+              {/* MODIF: Podendo escolher se a métrica vai ser mostrada no label ou não */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    cursor: 'pointer',
+                    fontSize: FONT.label,
+                    fontWeight: 600,
+                    color: COLORS.text,
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={metric?.showInline ?? false}
+                    onChange={(e) => updateMetric(idx, { showInline: e.target.checked })}
+                    style={{ accentColor: COLORS.accent }}
+                  />
+                  Show this metric inline
+                </label>
+              </div>
             </div>
           )}
         </div>
