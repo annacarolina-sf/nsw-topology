@@ -6,11 +6,18 @@ export interface TopologyOptions {
   appearance: AppearanceConfig;
   colors: ColorsConfig;
   interaction: InteractionConfig;
+  thresholds: ThreasholdsConfig; // MODIF
 }
 
 export interface GeneralConfig {
   title: string;
   titleSize: number;
+}
+
+// MODIF
+export interface ThreasholdsConfig {
+  name: string;
+  thresholds: ThresholdsData[];
 }
 
 // custom metric config — supports regex matching, thresholds, grafana units etc

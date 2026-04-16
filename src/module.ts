@@ -119,6 +119,7 @@ export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
         name: 'Thresholds',
         category: ['Thresholds'],
         editor: ThreasholdsEditor,
+        defaultValue: [],
       });
 
     return builder;
