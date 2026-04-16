@@ -7,6 +7,7 @@ import {
   DEFAULT_COLORS,
   DEFAULT_INTERACTION,
 } from './constants';
+import { ThreasholdsEditor } from 'components/editors/ThresholdsEditor';
 
 console.log("CUSTOM TOPOLOGY PLUGIN LOADED 12345");
 
@@ -111,6 +112,13 @@ export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
         description: 'Allow or restrict editing in the panel.',
         defaultValue: DEFAULT_APPEARANCE.allowEditing,
         category: ['Appearance'],
+      })
+      .addCustomEditor({
+        id: 'thresholds',
+        path: 'thresholds',
+        name: 'Thresholds',
+        category: ['Thresholds'],
+        editor: ThreasholdsEditor,
       });
 
     return builder;
