@@ -225,15 +225,19 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                     </div>
                 </>
             )}
-            <div style={tooltipDivider} />
-            <div style={tooltipRow}>
-                <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>↓ Download:</span>
-                <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>{data?.downloadValue || '—'}</span>
-            </div>
-            <div style={tooltipRow}>
-                <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>↑ Upload:</span>
-                <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>{data?.uploadValue || '—'}</span>
-            </div>
+            {(data?.downloadValue || data?.uploadValue) && (
+                <>
+                    <div style={tooltipDivider} />
+                    <div style={tooltipRow}>
+                        <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>↓ Download:</span>
+                        <span style={{ color: COLORS.trafficDownload, fontWeight: 600 }}>{data?.downloadValue || '—'}</span>
+                    </div>
+                    <div style={tooltipRow}>
+                        <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>↑ Upload:</span>
+                        <span style={{ color: COLORS.trafficUpload, fontWeight: 600 }}>{data?.uploadValue || '—'}</span>
+                    </div>
+                </>
+            )}
 
             {data?.customMetrics && data.customMetrics.length > 0 && (
                 <>
