@@ -26,7 +26,7 @@ export const ThreasholdsEditor: React.FC<Props> = ({ value, onChange }) => {
 
     {showDetailModal && (
       <ThresholdsFormModal
-        value={value}
+        value={value ?? []}
         onSave={onSave}
         onCancel={() => setShowDetailModal(false)}
       />

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Modal, Button, Field, Input } from '@grafana/ui';
-import { SECTION_HEADER } from 'styles/tokens';
+import React, { useEffect, useState } from 'react';
+import { Modal, Button, Field, Input, IconButton, ColorPicker, Select } from '@grafana/ui';
+import { COLORS, FONT } from 'styles/tokens';
+import { ThreasholdsConfig, ThresholdsData } from 'types';
+import { COMPARISON_OPTIONS } from 'constants';
 
 interface Props {
-    value?: any;
-    onSave: (value: any) => void;
+    value?: ThreasholdsConfig[];
+    onSave: (value: ThreasholdsConfig[]) => void;
     onCancel: () => void;
 }
 
@@ -13,29 +15,214 @@ export const ThresholdsFormModal: React.FC<Props> = ({
     onSave,
     onCancel,
 }) => {
-    const [thresholds, setThresholds] = useState(value ?? []);
-    console.log('Modal aberto')
-    console.log(value)
-    console.log(thresholds)
+    const [thresholdsGroups, setThresholdsGroups] = useState<ThreasholdsConfig[]>([]);
+
+    useEffect(() => {
+        setThresholdsGroups(value ?? []);
+    }, [value]);
+
+    const addThresholdGroup = () => {
+        const updated = [...thresholdsGroups];
+        const newEmptyGroup: ThreasholdsConfig = {
+            name: '',
+            thresholds: [
+                {
+                    operator: '>',
+                    value: 0,
+                    color: COLORS.warning,
+                }
+            ]
+        }
+        updated.push(newEmptyGroup);
+        setThresholdsGroups(updated);
+    }
+
+    const removeThresholdGroup = (groupIdx: number) => {
+        setThresholdsGroups((prev) =>
+            prev.filter((_, index) => index !== groupIdx)
+        );
+    };
+
+    const handleChangeName = (groupIdx: number, newName: string) => {
+        const updated = [...thresholdsGroups];
+        updated[groupIdx].name = newName;
+        setThresholdsGroups(updated);
+    }
+
+    const addThreshold = (groupIdx: number) => {
+        const newThreshold: ThresholdsData = {
+            operator: '>',
+            value: 0,
+            color: COLORS.warning,
+        };
+
+        setThresholdsGroups((prev) =>
+            prev.map((group, index) =>
+                index !== groupIdx
+                    ? group
+                    : {
+                        ...group,
+                        thresholds: [
+                            ...group.thresholds,
+                            newThreshold,
+                        ],
+                    }
+            )
+        );
+    };
+
+    const removeThreshold = (
+        groupIdx: number,
+        thresholdIdx: number
+    ) => {
+        setThresholdsGroups((prev) =>
+            prev.map((group, index) =>
+                index !== groupIdx
+                    ? group
+                    : {
+                        ...group,
+                        thresholds: group.thresholds.filter(
+                            (_, tIndex) => tIndex !== thresholdIdx
+                        ),
+                    }
+            )
+        );
+    };
+
+    const handleChangeThreshold = <
+        K extends keyof ThresholdsData
+    >(
+        groupIdx: number,
+        thresholdIdx: number,
+        field: K,
+        value: ThresholdsData[K]
+    ) => {
+        setThresholdsGroups((prev) =>
+            prev.map((group, gIndex) =>
+                gIndex !== groupIdx
+                    ? group
+                    : {
+                        ...group,
+                        thresholds: group.thresholds.map(
+                            (threshold, tIndex) =>
+                                tIndex !== thresholdIdx
+                                    ? threshold
+                                    : {
+                                        ...threshold,
+                                        [field]: value,
+                                    }
+                        ),
+                    }
+            )
+        );
+    };
 
     return (
         <Modal title={'Thresholds'} isOpen={true} onDismiss={onCancel}>
-            <div style={SECTION_HEADER}>📌 Endpoints</div>
-            <p>Testando...</p>
+            {(thresholdsGroups ?? []).map((group, groupIdx) => (
+                <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                        <label
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 6,
+                                cursor: 'pointer',
+                                fontSize: FONT.label,
+                                fontWeight: 600,
+                                color: COLORS.text,
+                            }}
+                        >Group {groupIdx}</label>
+                        <IconButton
+                            name="plus-circle"
+                            variant="secondary"
+                            onClick={() => addThreshold(groupIdx)}
+                            tooltip="Add" />
+                        <IconButton
+                            tooltip="Remove"
+                            name="trash-alt"
+                            variant="destructive"
+                            onClick={() => removeThresholdGroup(groupIdx)}
+                        />
+                    </div>
 
-            <Field label="Value">
-                <Input
-                    type="text"
-                    value={'Teste'}
-                    onChange={(e) => setThresholds([])}
-                />
-            </Field>
+                    <Field label="Group name">
+                        <Input
+                            type="text"
+                            value={group.name}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                handleChangeName(groupIdx, e.target.value)
+                            }
+                        />
+                    </Field>
+
+                    {(group.thresholds ?? []).map((threshold, threasholdsIdx) => (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 20px', gap: 8 }}>
+                            <Field label="Operator">
+                                <Select
+                                    options={COMPARISON_OPTIONS}
+                                    value={threshold.operator}
+                                    onChange={(option) =>
+                                        handleChangeThreshold(
+                                            groupIdx,
+                                            threasholdsIdx,
+                                            'operator',
+                                            option.value as string
+                                        )
+                                    }
+                                />
+                            </Field>
+                            <Field label="Value">
+                                <Input
+                                    type="text"
+                                    inputMode="decimal"
+                                    value={threshold.value}
+                                    onChange={(e) =>
+                                        handleChangeThreshold(
+                                            groupIdx,
+                                            threasholdsIdx,
+                                            'value',
+                                            Number(e.currentTarget.value)
+                                        )
+                                    }
+                                />
+                            </Field>
+                            <Field label="Color">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    <ColorPicker
+                                        color={threshold.color}
+                                        onChange={(color) =>
+                                            handleChangeThreshold(
+                                                groupIdx,
+                                                threasholdsIdx,
+                                                'color',
+                                                color
+                                            )
+                                        }
+                                    />
+                                    <span style={{ fontSize: FONT.body, color: COLORS.textMuted }}>{threshold.color}</span>
+                                </div>
+                            </Field>
+                            <IconButton
+                                tooltip="Remove"
+                                name="trash-alt"
+                                variant="destructive"
+                                onClick={() => removeThreshold(groupIdx, threasholdsIdx)}
+                            />
+                        </div>
+                    ))}
+                </>
+            ))}
+
+            <Button variant="secondary" icon="plus" onClick={addThresholdGroup} fullWidth>
+                Add Threshold Group
+            </Button>
 
             <Modal.ButtonRow>
                 <Button variant="secondary" onClick={onCancel}>
                     Cancel
                 </Button>
-                <Button variant="primary" onClick={() => onSave(value)}>
+                <Button variant="primary" onClick={() => onSave(thresholdsGroups)}>
                     Save
                 </Button>
             </Modal.ButtonRow>

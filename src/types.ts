@@ -6,7 +6,7 @@ export interface TopologyOptions {
   appearance: AppearanceConfig;
   colors: ColorsConfig;
   interaction: InteractionConfig;
-  thresholds: ThreasholdsConfig; // MODIF
+  thresholds?: ThreasholdsConfig[]; // MODIF
 }
 
 export interface GeneralConfig {
