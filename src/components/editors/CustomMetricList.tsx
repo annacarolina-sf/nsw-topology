@@ -419,16 +419,11 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, thresholdOptions, o
 
               {/* Row 4: Alerts */}
               {/* // MODIF: THRESHOLDS - Alterando os thresholds das métricas */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
                 <label
                   style={{
-                    // display: 'flex',
-                    // alignItems: 'center',
-                    // gap: 6,
-                    // cursor: 'pointer',
                     fontSize: FONT.label,
                     fontWeight: 600,
-                    // color: metric.enabled ? COLORS.text : COLORS.textMuted,
                     color: COLORS.text,
                   }}
                 >Thresholds</label>
@@ -437,24 +432,34 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, thresholdOptions, o
                     display: 'flex',
                     alignItems: 'center',
                     gap: 6,
-                    cursor: 'pointer',
                     fontSize: FONT.label,
                     color: metric.thresholdName ? COLORS.textMuted : COLORS.text,
                   }}>
+                  <IconButton
+                    name="plus-circle"
+                    variant="secondary"
+                    disabled={metric.thresholdName != undefined}
+                    onClick={() => addThreshold(idx)}
+                    tooltip="Add"
+                  />
                   Create Custom
-                  <IconButton name="plus-circle" variant="secondary" disabled={metric.thresholdName == undefined} onClick={() => addThreshold(idx)} tooltip="Add" />
                 </label>
                 <label
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: 6,
-                    cursor: 'pointer',
                     fontSize: FONT.label,
                     color: (metric.thresholds ?? []).length > 0 ? COLORS.textMuted : COLORS.text,
                   }}>
+                  <IconButton
+                    name="plus-circle"
+                    variant="secondary"
+                    disabled={(metric.thresholds ?? []).length > 0}
+                    onClick={() => updateSelectedThreshold(idx, thresholdOptions[0])}
+                    tooltip="Add"
+                  />
                   Add Default
-                  <IconButton name="plus-circle" variant="secondary" disabled={(metric.thresholds ?? []).length > 0} onClick={() => addThreshold(idx)} tooltip="Add" />
                 </label>
               </div>
 
