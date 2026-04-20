@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Button, Field, Input, Select, ColorPicker, IconButton, UnitPicker } from '@grafana/ui';
-import { CustomMetric, ThresholdsData } from '../../types';
+import { CustomMetric, ThresholdsConfig, ThresholdsData } from '../../types';
 import { COLORS, FONT } from '../../styles/tokens';
 import { REDUCER_OPTIONS, COMPARISON_OPTIONS, ICON_EMOJI_OPTIONS } from '../../constants';
 
@@ -178,12 +178,18 @@ const RegexFieldSelect: React.FC<RegexFieldSelectProps> = ({ value, options, onC
 
 interface Props {
   metrics: CustomMetric[];
+  thresholdOptions: ThresholdsConfig[];
   onChange: (m: CustomMetric[]) => void;
   availableFields: Array<{ value: string; label: string }>;
   showIconPicker?: boolean;
 }
 
-export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, availableFields, showIconPicker = false }) => {
+export const CustomMetricList: React.FC<Props> = ({ metrics, thresholdOptions, onChange, availableFields, showIconPicker = false }) => {
+  const thresholdSelectOptions = thresholdOptions.map((config) => ({
+    label: config.name,
+    value: config,
+  }));
+
   const addMetric = () => {
     onChange([
       ...metrics,
@@ -197,8 +203,8 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
         unit: 'none',
         enabled: true,
         decimals: 1,
-        // alertThreshold: 80,
-        // alertColor: COLORS.warning,
+        // alertThreshold: 80, // TODO: tirar
+        // alertColor: COLORS.warning, // TODO: tirar
       },
     ]);
   };
@@ -218,29 +224,16 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
     metricIndex: number,
     thresholdIndex: number,
     val: string) => {
-
-    console.log('Na função updateThresholdValue:')
-    console.log('val')
-    console.log(val)
-
-
     if (val === '') return;
 
     // permitir estados intermediários
     if (val === '-' || val.includes('.')) {
-      console.log('Entrou nos estados intermediários')
       return;
     }
-    console.log('continuou...')
-
     const num = Number(val);
-    console.log('num')
-    console.log(num)
     if (!isNaN(num)) {
-      console.log('Atualizando')
       updateThreshold(metricIndex, thresholdIndex, { value: num });
     }
-    console.log('fim')
   }
 
   const updateThreshold = (
@@ -299,6 +292,26 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
       thresholds,
     };
 
+    onChange(updatedMetrics);
+  };
+
+  const updateSelectedThreshold = (
+    metricIndex: number,
+    config: ThresholdsConfig,
+  ) => {
+    const updatedMetrics = [...metrics];
+    updatedMetrics[metricIndex] = {
+      ...updatedMetrics[metricIndex],
+      thresholdName: config.name,
+      thresholds: config.thresholds
+    };
+    onChange(updatedMetrics);
+  };
+
+  const removeSelectedThreshold = (metricIndex: number) => {
+    const updatedMetrics = [...metrics];
+    const { thresholds, thresholdName, ...rest } = updatedMetrics[metricIndex];
+    updatedMetrics[metricIndex] = rest;
     onChange(updatedMetrics);
   };
 
@@ -406,7 +419,19 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
 
               {/* Row 4: Alerts */}
               {/* // MODIF: THRESHOLDS - Alterando os thresholds das métricas */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                <label
+                  style={{
+                    // display: 'flex',
+                    // alignItems: 'center',
+                    // gap: 6,
+                    // cursor: 'pointer',
+                    fontSize: FONT.label,
+                    fontWeight: 600,
+                    // color: metric.enabled ? COLORS.text : COLORS.textMuted,
+                    color: COLORS.text,
+                  }}
+                >Thresholds</label>
                 <label
                   style={{
                     display: 'flex',
@@ -414,12 +439,25 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                     gap: 6,
                     cursor: 'pointer',
                     fontSize: FONT.label,
-                    fontWeight: 600,
-                    color: metric.enabled ? COLORS.text : COLORS.textMuted,
-                  }}
-                >Thresholds</label>
-                <IconButton name="plus-circle" variant="secondary" onClick={() => addThreshold(idx)} tooltip="Add" />
+                    color: metric.thresholdName ? COLORS.textMuted : COLORS.text,
+                  }}>
+                  Create Custom
+                  <IconButton name="plus-circle" variant="secondary" disabled={metric.thresholdName == undefined} onClick={() => addThreshold(idx)} tooltip="Add" />
+                </label>
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    cursor: 'pointer',
+                    fontSize: FONT.label,
+                    color: (metric.thresholds ?? []).length > 0 ? COLORS.textMuted : COLORS.text,
+                  }}>
+                  Add Default
+                  <IconButton name="plus-circle" variant="secondary" disabled={(metric.thresholds ?? []).length > 0} onClick={() => addThreshold(idx)} tooltip="Add" />
+                </label>
               </div>
+
               {(metric.thresholds ?? []).map((threshold, threasholdsIdx) => (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 20px', gap: 8 }}>
                   <Field label="Operator">
@@ -446,6 +484,26 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, onChange, available
                   <IconButton name="trash-alt" variant="destructive" onClick={() => removeThreshold(idx, threasholdsIdx)} tooltip="Remove" />
                 </div>
               ))}
+
+              {metric.thresholdName && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 20px', gap: 8 }}>
+                  <Field label="Operator">
+                    <Select
+                      options={thresholdSelectOptions}
+                      value={thresholdSelectOptions.find(
+                        (o) => o.value.name === metric.thresholdName
+                      ) ?? thresholdSelectOptions[0]}
+                      onChange={(v) => {
+                        if (v?.value) {
+                          updateSelectedThreshold(idx, v.value);
+                        }
+                      }}
+                    />
+                  </Field>
+                  <IconButton name="trash-alt" variant="destructive" onClick={() => removeSelectedThreshold(idx)} tooltip="Remove" />
+                </div>
+              )}
+
               {(metric.thresholds ?? []).length > 0 && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                   <label

@@ -17,6 +17,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
   console.log('Thresholds:', options.thresholds);
   
   const appearance = useMemo(() => ({ ...DEFAULT_APPEARANCE, ...options.appearance }), [options.appearance]);
+  const thresholds = options.thresholds ?? [];
   const colorsConfig = useMemo(() => ({ ...DEFAULT_COLORS, ...options.colors }), [options.colors]);
   const interaction = useMemo(() => ({ ...DEFAULT_INTERACTION, ...options.interaction }), [options.interaction]);
   const nodes: NodeConfig[] = useMemo(
@@ -165,6 +166,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
             nodes={nodes}
             connections={connections}
             appearance={appearance}
+            defaultThresholds={thresholds}
             colors={colorsConfig}
             hosts={parsedData.hosts}
             hostNames={parsedData.hostNames}

@@ -18,7 +18,7 @@ import {
   type NodeDimensionChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { NodeConfig, ConnectionConfig, AppearanceConfig, ColorsConfig, MetricConfig, ZabbixHost } from '../../types';
+import { NodeConfig, ConnectionConfig, AppearanceConfig, ColorsConfig, MetricConfig, ZabbixHost, ThresholdsConfig } from '../../types';
 import { getUtilizationPercent, getUtilizationColor, getUtilizationThickness } from '../../engine/weathermap';
 import { formatTrafficValue, evaluateCustomMetric, getThresholdColor } from '../../data/parser';
 import { getTrafficHistory } from '../../data/trafficHistory';
@@ -53,6 +53,7 @@ interface Props {
   nodes: NodeConfig[];
   connections: ConnectionConfig[];
   appearance: AppearanceConfig;
+  thresholdOptions: ThresholdsConfig[];
   colors: ColorsConfig;
   hosts: Record<string, ZabbixHost>;
   hostNames: string[];
@@ -83,6 +84,7 @@ export const CanvasRenderer: React.FC<Props> = ({
   nodes: nodeConfigs,
   connections,
   appearance,
+  thresholdOptions,
   colors,
   hosts,
   hostNames,
@@ -931,6 +933,7 @@ export const CanvasRenderer: React.FC<Props> = ({
       {showConnModal && (
         <ConnFormModal
           conn={editingConn}
+          thresholdOptions={thresholdOptions}
           pendingConn={pendingConn}
           nodes={nodeConfigs}
           hostFieldMap={hostFieldMap}

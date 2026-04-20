@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Modal, Button, Field, Input, Select, UnitPicker, TextArea } from '@grafana/ui';
-import { NodeConfig, ConnectionConfig, ZabbixHost } from '../../types';
+import { NodeConfig, ConnectionConfig, ZabbixHost, ThresholdsConfig } from '../../types';
 import { CAPACITY_OPTIONS, LINE_STYLE_OPTIONS } from '../../constants';
 import { COLORS, FONT, SECTION_HEADER } from '../../styles/tokens';
 import { CustomMetricList } from './CustomMetricList';
@@ -20,6 +20,7 @@ function extractInterfaceBaseName(fieldName: string): string {
 
 interface Props {
   conn: ConnectionConfig | null;
+  thresholdOptions: ThresholdsConfig[];
   pendingConn: { sourceId: string; targetId: string; sourceHandle: string; targetHandle: string } | null;
   nodes: NodeConfig[];
   hostFieldMap: Record<string, string[]>;
@@ -28,7 +29,7 @@ interface Props {
   onCancel: () => void;
 }
 
-export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostFieldMap, hosts, onSave, onCancel }) => {
+export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pendingConn, nodes, hostFieldMap, hosts, onSave, onCancel }) => {
   const [sourceId, setSourceId] = useState(conn?.sourceId || pendingConn?.sourceId || '');
   const [targetId, setTargetId] = useState(conn?.targetId || pendingConn?.targetId || '');
   const [interfaceName, setInterfaceName] = useState(conn?.interfaceName || '');
@@ -216,6 +217,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, pendingConn, nodes, hostF
       <div style={SECTION_HEADER}>📊 Custom Metrics</div>
       <CustomMetricList
         metrics={customMetrics}
+        thresholdOptions={thresholdOptions}
         onChange={setCustomMetrics}
         availableFields={allFields}
         showIconPicker={true}

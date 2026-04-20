@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Field, Input, IconButton, ColorPicker, Select } from '@grafana/ui';
 import { COLORS, FONT } from 'styles/tokens';
-import { ThreasholdsConfig, ThresholdsData } from 'types';
+import { ThresholdsConfig, ThresholdsData } from 'types';
 import { COMPARISON_OPTIONS } from '../../constants';
 
 interface Props {
-    value?: ThreasholdsConfig[];
-    onSave: (value: ThreasholdsConfig[]) => void;
+    value?: ThresholdsConfig[];
+    onSave: (value: ThresholdsConfig[]) => void;
     onCancel: () => void;
 }
 
@@ -15,7 +15,7 @@ export const ThresholdsFormModal: React.FC<Props> = ({
     onSave,
     onCancel,
 }) => {
-    const [thresholdsGroups, setThresholdsGroups] = useState<ThreasholdsConfig[]>([]);
+    const [thresholdsGroups, setThresholdsGroups] = useState<ThresholdsConfig[]>([]);
 
     useEffect(() => {
         setThresholdsGroups(value ?? []);
@@ -23,7 +23,7 @@ export const ThresholdsFormModal: React.FC<Props> = ({
 
     const addThresholdGroup = () => {
         const updated = [...thresholdsGroups];
-        const newEmptyGroup: ThreasholdsConfig = {
+        const newEmptyGroup: ThresholdsConfig = {
             name: '',
             thresholds: [
                 {
@@ -124,7 +124,7 @@ export const ThresholdsFormModal: React.FC<Props> = ({
         );
     };
 
-    const validateGroups = (groups: ThreasholdsConfig[]) => {
+    const validateGroups = (groups: ThresholdsConfig[]) => {
         const names = groups.map((g) => g.name.trim());
 
         const hasEmptyName = names.some((name) => name === '');

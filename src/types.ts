@@ -6,7 +6,7 @@ export interface TopologyOptions {
   appearance: AppearanceConfig;
   colors: ColorsConfig;
   interaction: InteractionConfig;
-  thresholds?: ThreasholdsConfig[]; // MODIF
+  thresholds?: ThresholdsConfig[]; // MODIF
 }
 
 export interface GeneralConfig {
@@ -15,7 +15,7 @@ export interface GeneralConfig {
 }
 
 // MODIF
-export interface ThreasholdsConfig {
+export interface ThresholdsConfig {
   name: string;
   thresholds: ThresholdsData[];
 }
@@ -32,9 +32,10 @@ export interface CustomMetric {
   enabled: boolean;
   decimals: number;
   isDefault?: boolean;
-  alertThreshold?: number; // TODO: EXCLUIR
-  alertColor?: string; // TODO: EXCLUIR
+  // alertThreshold?: number; // TODO: EXCLUIR
+  // alertColor?: string; // TODO: EXCLUIR
   thresholds?: ThresholdsData[]; // MODIF
+  thresholdName?: string; // MODIF
   useAsLineColor?: boolean; // MODIF
   showInline?: boolean; // MODIF
 }

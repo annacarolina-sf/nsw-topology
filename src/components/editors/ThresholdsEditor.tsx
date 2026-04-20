@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@grafana/ui';
 import { ThresholdsFormModal } from './ThresholdsFormModal';
-import { ThreasholdsConfig } from 'types';
+import { ThresholdsConfig } from 'types';
 
 interface Props {
   value?: any;
@@ -15,7 +15,7 @@ export const ThreasholdsEditor: React.FC<Props> = ({ value, onChange }) => {
   console.log('Entrando no editor dos thresholds...')
   console.log(value)
 
-  const onSave = (newThresholds: ThreasholdsConfig[]) => {
+  const onSave = (newThresholds: ThresholdsConfig[]) => {
     console.log('Salvando...')
     onChange(newThresholds)
     setShowDetailModal(false)
