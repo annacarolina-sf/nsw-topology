@@ -432,6 +432,7 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, thresholdOptions, o
                     display: 'flex',
                     alignItems: 'center',
                     gap: 6,
+                    cursor: 'pointer',
                     fontSize: FONT.label,
                     color: metric.thresholdName ? COLORS.textMuted : COLORS.text,
                   }}>
@@ -449,6 +450,7 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, thresholdOptions, o
                     display: 'flex',
                     alignItems: 'center',
                     gap: 6,
+                    cursor: 'pointer',
                     fontSize: FONT.label,
                     color: (metric.thresholds ?? []).length > 0 ? COLORS.textMuted : COLORS.text,
                   }}>
@@ -463,7 +465,7 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, thresholdOptions, o
                 </label>
               </div>
 
-              {(metric.thresholds ?? []).map((threshold, threasholdsIdx) => (
+              {metric.thresholdName == undefined && (metric.thresholds ?? []).map((threshold, threasholdsIdx) => (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 20px', gap: 8 }}>
                   <Field label="Operator">
                     <Select
