@@ -919,6 +919,7 @@ export const CanvasRenderer: React.FC<Props> = ({
       {showNodeModal && (
         <NodeFormModal
           node={editingNode}
+          thresholdOptions={thresholdOptions}
           hostNames={hostNames}
           usedHostNames={usedHostNames}
           hostFieldMap={hostFieldMap}

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Modal, Button, Field, Input, Select, ColorPicker } from '@grafana/ui';
-import { NodeConfig, CustomMetric } from '../../types';
+import { NodeConfig, CustomMetric, ThresholdsConfig } from '../../types';
 import { CustomMetricList } from './CustomMetricList';
 import {
   ICON_SIZE_OPTIONS,
@@ -21,6 +21,7 @@ import { COLORS, FONT, SECTION_HEADER } from '../../styles/tokens';
 
 interface Props {
   node: NodeConfig | null;
+  thresholdOptions: ThresholdsConfig[];
   hostNames: string[];
   usedHostNames: string[];
   hostFieldMap: Record<string, string[]>;
@@ -29,7 +30,7 @@ interface Props {
 }
 
 // node create/edit modal — auto-detects default metrics from host fields
-export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames, hostFieldMap, onSave, onCancel }) => {
+export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNames, usedHostNames, hostFieldMap, onSave, onCancel }) => {
   const [name, setName] = useState(node?.name || '');
   const [hostName, setHostName] = useState(node?.hostName || '');
   const [ip, setIp] = useState(node?.ip || '');
@@ -64,8 +65,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
         aggregation: 'lastNotNull',
         unit: 'percent',
         enabled: node?.cpuMetric?.enabled ?? false,
-        alertThreshold: node?.cpuMetric?.alertThreshold ?? 80,
-        alertColor: node?.cpuMetric?.alertColor || COLORS.warning,
+        // alertThreshold: node?.cpuMetric?.alertThreshold ?? 80,
+        // alertColor: node?.cpuMetric?.alertColor || COLORS.warning,
         decimals: 1,
         isDefault: true,
       },
@@ -77,8 +78,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
         aggregation: 'lastNotNull',
         unit: 'percent',
         enabled: node?.memoryMetric?.enabled ?? false,
-        alertThreshold: node?.memoryMetric?.alertThreshold ?? 85,
-        alertColor: node?.memoryMetric?.alertColor || COLORS.warning,
+        // alertThreshold: node?.memoryMetric?.alertThreshold ?? 85,
+        // alertColor: node?.memoryMetric?.alertColor || COLORS.warning,
         decimals: 1,
         isDefault: true,
       },
@@ -90,8 +91,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
         aggregation: 'lastNotNull',
         unit: 'celsius',
         enabled: false,
-        alertThreshold: 60,
-        alertColor: COLORS.warning,
+        // alertThreshold: 60,
+        // alertColor: COLORS.warning,
         decimals: 1,
         isDefault: true,
       },
@@ -103,8 +104,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
         aggregation: 'lastNotNull',
         unit: 'percent',
         enabled: node?.lossMetric?.enabled ?? false,
-        alertThreshold: node?.lossMetric?.alertThreshold ?? 5,
-        alertColor: node?.lossMetric?.alertColor || COLORS.warning,
+        // alertThreshold: node?.lossMetric?.alertThreshold ?? 5,
+        // alertColor: node?.lossMetric?.alertColor || COLORS.warning,
         decimals: 1,
         isDefault: true,
       },
@@ -116,8 +117,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
         aggregation: 'lastNotNull',
         unit: 'ms',
         enabled: node?.responseTimeMetric?.enabled ?? false,
-        alertThreshold: node?.responseTimeMetric?.alertThreshold ?? 100,
-        alertColor: node?.responseTimeMetric?.alertColor || COLORS.warning,
+        // alertThreshold: node?.responseTimeMetric?.alertThreshold ?? 100,
+        // alertColor: node?.responseTimeMetric?.alertColor || COLORS.warning,
         decimals: 0,
         isDefault: true,
       },
@@ -279,7 +280,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, hostNames, usedHostNames,
       </div>
 
       <div style={SECTION_HEADER}>📊 Custom Metrics</div>
-      <CustomMetricList metrics={customMetrics} onChange={setCustomMetrics} availableFields={fieldOpts} />
+      <CustomMetricList metrics={customMetrics} thresholdOptions={thresholdOptions} onChange={setCustomMetrics} availableFields={fieldOpts} />
 
       {/* MODIF: Adicionando campo para hyperlink */}
       <div style={SECTION_HEADER}>🔗 Links</div>
