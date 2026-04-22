@@ -1,5 +1,6 @@
 import { DataFrame, FieldType } from '@grafana/data';
 import { ZabbixHost, ParsedMetrics, CustomMetric, ThresholdsData } from '../types';
+import { COLORS } from 'styles/tokens';
 
 // parse grafana data frames into a host/metric map for the canvas
 export const parseDataFrames = (seriesList: DataFrame[]): ParsedMetrics => {
@@ -168,7 +169,7 @@ export const evaluateCustomMetric = (
   hostName: string,
   hostFieldMap: Record<string, string[]>,
   hosts: Record<string, ZabbixHost>
-): number | null => {
+): number | string | null => {
   if (!metric.enabled || !metric.field) {
     return null;
   }
@@ -202,15 +203,37 @@ export const evaluateCustomMetric = (
     return null;
   }
 
-  const validValues = matchedFields
-    .map((f) => hosts[hostName]?.items[f])
-    .filter((v): v is number => typeof v === 'number');
+  // const validValues = matchedFields
+  //   .map((f) => hosts[hostName]?.items[f])
+  //   .filter((v): v is number => typeof v === 'number');
+  // if (validValues.length === 0) {
+  //   return null;
+  // }
+  // return reduceFieldValues(validValues, metric.aggregation);
+  
+  // MODIF: permitir a exibição de métricas do tipo texto também
 
-  if (validValues.length === 0) {
+  const values = matchedFields
+    .map((f) => hosts[hostName]?.items[f])
+    .filter((v) => v !== undefined && v !== null);
+
+  if (values.length === 0) {
     return null;
   }
 
-  return reduceFieldValues(validValues, metric.aggregation);
+  const numericValues = values.filter(
+    (v): v is number => typeof v === 'number'
+  );
+
+  if (numericValues.length > 0) {
+    return reduceFieldValues(
+      numericValues,
+      metric.aggregation
+    );
+  }
+
+  // se for texto, retorna o primeiro
+  return values[0];
 };
 
 // MODIF
@@ -227,9 +250,12 @@ export const sortThresholds = (thresholds: ThresholdsData[] = []) =>
 
 // MODIF
 export const getThresholdColor = (
-  value: number,
+  value: number | string,
   thresholds: ThresholdsData[] = []
 ): string | null => {
+  const isNumber = typeof value === 'number';
+  if(!isNumber) return COLORS.text;
+
   const sorted = sortThresholds(thresholds);
   for (const t of sorted) {
     if (

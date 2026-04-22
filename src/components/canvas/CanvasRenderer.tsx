@@ -207,14 +207,17 @@ export const CanvasRenderer: React.FC<Props> = ({
             // MODIF: THRESHOLDS
             if (val !== null && m.thresholds) {
               for (const t of m.thresholds) {
-                if (
-                  (t.operator === '<' && val < t.value) ||
-                  (t.operator === '>' && val > t.value)
-                ) {
-                  return (
-                    resolveGrafanaColor(t.color || '') ||
-                    resolvedColors.alert
-                  );
+                const isNumber = typeof val === 'number';
+                if (isNumber) {
+                  if (
+                    (t.operator === '<' && val < t.value) ||
+                    (t.operator === '>' && val > t.value)
+                  ) {
+                    return (
+                      resolveGrafanaColor(t.color || '') ||
+                      resolvedColors.alert
+                    );
+                  }
                 }
               }
             }
@@ -296,13 +299,19 @@ export const CanvasRenderer: React.FC<Props> = ({
               const thresholdColor = getThresholdColor(val, m.thresholds);
               const alerting = thresholdColor !== null;
 
+              const isNumber = typeof val === 'number';
               let formattedVal: string;
-              if (m.unit && m.unit !== 'none') {
-                const fmt = getValueFormat(m.unit);
-                formattedVal = formattedValueToString(fmt(val, decimals));
+              if (isNumber) {
+                if (m.unit && m.unit !== 'none') {
+                  const fmt = getValueFormat(m.unit);
+                  formattedVal = formattedValueToString(fmt(val, decimals));
+                } else {
+                  formattedVal = val.toFixed(decimals);
+                }
               } else {
-                formattedVal = val.toFixed(decimals);
+                formattedVal = String(val);
               }
+              
               result.push({
                 label: m.name,
                 value: formattedVal,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Field, Input, IconButton, ColorPicker, Select } from '@grafana/ui';
-import { COLORS, FONT } from 'styles/tokens';
+import { COLORS, FONT, tooltipDivider } from 'styles/tokens';
 import { ThresholdsConfig, ThresholdsData } from 'types';
 import { COMPARISON_OPTIONS } from '../../constants';
 
@@ -143,7 +143,7 @@ export const ThresholdsFormModal: React.FC<Props> = ({
     const handleSave = () => {
         const error = validateGroups(thresholdsGroups);
         if (error) {
-            alert(error); // ou setError(error)
+            alert(error);
             return;
         }
         onSave(thresholdsGroups);
@@ -154,6 +154,8 @@ export const ThresholdsFormModal: React.FC<Props> = ({
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                 {(thresholdsGroups ?? []).map((group, groupIdx) => (
                     <>
+                        <div style={tooltipDivider} />
+                        
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, marginTop: 20 }}>
                             <label
                                 style={{

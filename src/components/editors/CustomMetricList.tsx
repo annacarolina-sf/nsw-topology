@@ -494,7 +494,7 @@ export const CustomMetricList: React.FC<Props> = ({ metrics, thresholdOptions, o
 
               {metric.thresholdName && (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 20px', gap: 8 }}>
-                  <Field label="Operator">
+                  <Field label="Group">
                     <Select
                       options={thresholdSelectOptions}
                       value={thresholdSelectOptions.find(
