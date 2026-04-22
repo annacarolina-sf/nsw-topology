@@ -13,9 +13,6 @@ type Props = PanelProps<TopologyOptions>;
 
 // main panel — state management + layout
 const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsChange }) => {
-  console.log('INICIANDO...')
-  console.log('Thresholds:', options.thresholds);
-  
   const appearance = useMemo(() => ({ ...DEFAULT_APPEARANCE, ...options.appearance }), [options.appearance]);
   const thresholds = options.thresholds ?? [];
   const colorsConfig = useMemo(() => ({ ...DEFAULT_COLORS, ...options.colors }), [options.colors]);

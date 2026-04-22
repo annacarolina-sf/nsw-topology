@@ -13,7 +13,13 @@ export const parseDataFrames = (seriesList: DataFrame[]): ParsedMetrics => {
 
   for (const series of seriesList) {
     for (const field of series.fields) {
-      if (field.type !== FieldType.number && (field.type as unknown as string) !== 'number') {
+      // MODIF: permitindo campos de texto também
+      if (
+        field.type !== FieldType.number &&
+        field.type !== FieldType.string &&
+        (field.type as unknown as string) !== 'number' &&
+        (field.type as unknown as string) !== 'string'
+      ) {
         continue;
       }
 

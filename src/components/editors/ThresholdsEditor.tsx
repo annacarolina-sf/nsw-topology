@@ -12,11 +12,7 @@ interface Props {
 export const ThreasholdsEditor: React.FC<Props> = ({ value, onChange }) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
 
-  console.log('Entrando no editor dos thresholds...')
-  console.log(value)
-
   const onSave = (newThresholds: ThresholdsConfig[]) => {
-    console.log('Salvando...')
     onChange(newThresholds)
     setShowDetailModal(false)
   }
