@@ -162,6 +162,9 @@ export const WeathermapEdge = memo(
                     >
                       {m.icon && <span>{m.icon}</span>}
                       {(() => {
+                        const isNumber = typeof m.computedValue === 'number';
+                        if(!isNumber) return m.computedValue;
+                        
                         if (m.unit && m.unit !== 'none') {
                           const fmt = getValueFormat(m.unit);
                           return formattedValueToString(fmt(m.computedValue, m.decimals ?? 1));

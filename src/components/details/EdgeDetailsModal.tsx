@@ -257,6 +257,9 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                                         }}
                                     >
                                         {(() => {
+                                            const isNumber = typeof m.computedValue === 'number';
+                                            if(!isNumber) return m.computedValue;
+                                            
                                             if (m.unit && m.unit !== 'none') {
                                                 const fmt = getValueFormat(m.unit);
                                                 return formattedValueToString(fmt(m.computedValue, m.decimals ?? 1));
