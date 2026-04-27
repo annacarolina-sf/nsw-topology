@@ -311,7 +311,7 @@ export const CanvasRenderer: React.FC<Props> = ({
               } else {
                 formattedVal = String(val);
               }
-              
+
               result.push({
                 label: m.name,
                 value: formattedVal,

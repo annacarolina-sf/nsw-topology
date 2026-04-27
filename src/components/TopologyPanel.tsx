@@ -105,7 +105,7 @@ const InnerPanel: React.FC<Props> = ({ options, data, width, height, onOptionsCh
   );
 
   const handleCenterMap = useCallback(() => {
-    reactFlow.fitView({ padding: 0.2, duration: 300 });
+    reactFlow.fitView({ padding: 0.05, duration: 300 }); // MODIF: diminuindo o padding na centralização (antes: 0.2)
   }, [reactFlow]);
 
   const handleToggleZoom = useCallback(() => setZoomEnabled((prev) => !prev), []);
