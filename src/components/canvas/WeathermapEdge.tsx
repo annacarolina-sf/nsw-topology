@@ -58,9 +58,9 @@ export const WeathermapEdge = memo(
     const [showDetailModal, setShowDetailModal] = useState(false); // MODIF
 
     const translateXMap: Record<string, string> = {
-      left: '0%',
+      right: '0%',
       center: '-50%',
-      right: '-100%',
+      left: '-100%',
     };
 
     const [edgePath, labelX, labelY] = getBezierPath({

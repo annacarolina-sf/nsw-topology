@@ -51,6 +51,9 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
   const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
   const [align, setAlign] = useState(node?.align || DEFAULT_ALIGN); // MODIF
 
+  console.log('TESTE!!')
+  console.log(node?.backgroundColor)
+
   const alignOptions = [
     { label: 'Top', value: 'top' },
     { label: 'Center', value: 'center' },
@@ -356,6 +359,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
           )}
         </div>
 
+          {/* MODIF: Adicionando opções de alinhamento */}
         <div style={{display: 'block', marginBottom: 12, marginTop: 12}}>
           <label
             style={{
