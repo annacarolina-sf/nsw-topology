@@ -57,10 +57,11 @@ export const WeathermapEdge = memo(
     const isRed = data?.isRed ?? false;
     const [showDetailModal, setShowDetailModal] = useState(false); // MODIF
 
+    // MODIF: opções de alinhamento da label
     const translateXMap: Record<string, string> = {
-      right: '0%',
+      right: '60%',
       center: '-50%',
-      left: '-100%',
+      left: '-160%',
     };
 
     const [edgePath, labelX, labelY] = getBezierPath({

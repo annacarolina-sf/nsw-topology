@@ -46,7 +46,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
     (conn?.customMetrics || []).map((m) => ({ ...m, decimals: m.decimals ?? 1 }))
   );
   const [alignLabel, setAlignLabel] = useState(conn?.alignLabel || DEFAULT_ALIGN); // MODIF
-  
+
   const alignOptions = [
     { label: 'Left', value: 'left' },
     { label: 'Center', value: 'center' },
@@ -247,17 +247,21 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
           />
         </Field>
       </div>
-      <div>
+
+      {/* MODIF: Adicionando opções de alinhamento */}
+      <div style={{ display: 'block', marginBottom: 12, marginTop: 12 }}>
         <label
           style={{
             fontSize: FONT.label,
             color: COLORS.text,
+            marginBottom: 8,
           }}
-        >Content alignment</label>
+        >Label alignment</label>
         <RadioButtonGroup
           options={alignOptions}
           value={alignLabel}
           onChange={setAlignLabel}
+          fullWidth={true}
         />
       </div>
 

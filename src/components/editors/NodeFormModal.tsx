@@ -48,7 +48,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
   const [iconColor, setIconColor] = useState(node?.iconColor || DEFAULT_ICON_COLOR);
   const [textSize, setTextSize] = useState(String(node?.textSize || DEFAULT_TEXT_SIZE));
   const [isBackgroundFixed, setIsBackgroundFixed] = useState(!!node?.backgroundColor); // MODIF
-  const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
+  // const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
+  const [backgroundColor, setBackgroundColor] = useState(node?.backgroundColor || ''); // MODIF
   const [align, setAlign] = useState(node?.align || DEFAULT_ALIGN); // MODIF
 
   console.log('TESTE!!')
@@ -343,7 +344,10 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
               <input
                 type="checkbox"
                 checked={isBackgroundFixed}
-                onChange={(e) => setIsBackgroundFixed(e.target.checked)}
+                onChange={(e) => {
+                  setIsBackgroundFixed(e.target.checked);
+                  setBackgroundColor(DEFAULT_FIXED_BACKGROUND_COLOR)
+                }}
                 style={{ accentColor: COLORS.accent }}
               />
               Fix Background Color
@@ -359,8 +363,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
           )}
         </div>
 
-          {/* MODIF: Adicionando opções de alinhamento */}
-        <div style={{display: 'block', marginBottom: 12, marginTop: 12}}>
+        {/* MODIF: Adicionando opções de alinhamento */}
+        <div style={{ display: 'block', marginBottom: 12, marginTop: 12 }}>
           <label
             style={{
               fontSize: FONT.label,
