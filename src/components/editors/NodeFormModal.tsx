@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Modal, Button, Field, Input, Select, ColorPicker } from '@grafana/ui';
+import { Modal, Button, Field, Input, Select, ColorPicker, RadioButtonGroup } from '@grafana/ui';
 import { NodeConfig, CustomMetric, ThresholdsConfig } from '../../types';
 import { CustomMetricList } from './CustomMetricList';
 import {
@@ -48,6 +48,13 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
   const [textSize, setTextSize] = useState(String(node?.textSize || DEFAULT_TEXT_SIZE));
   const [isBackgroundFixed, setIsBackgroundFixed] = useState(!!node?.backgroundColor); // MODIF
   const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
+  const [align, setAlign] = useState('center'); // MODIF
+
+  const alignOptions = [
+    {label: 'Top', value: 'top'},
+    {label: 'Center', value: 'center'},
+    {label: 'Bottom', value: 'bottom'},
+  ]
 
   const [customMetrics, setCustomMetrics] = useState(() => {
     if (node?.customMetrics && node.customMetrics.length > 0) {
@@ -171,6 +178,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
       textColor,
       backgroundColor: backgroundColor,
       isBackgroundFixed: isBackgroundFixed,
+      align: align,
       textSize: Number(textSize) || DEFAULT_TEXT_SIZE,
       iconSize: Number(iconSize) || DEFAULT_ICON_SIZE,
       cpuMetric: { field: '', enabled: false, alertThreshold: 80, alertColor: COLORS.warning },
@@ -346,6 +354,12 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
             </Field>
           )}
         </div>
+
+        <RadioButtonGroup
+          options={alignOptions}
+          value={align}
+          onChange={setAlign}
+        />
       </div>
 
       {/* MODIF: Permite criar nodes sem um host */}

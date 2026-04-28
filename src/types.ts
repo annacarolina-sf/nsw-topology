@@ -73,8 +73,9 @@ export interface NodeConfig {
   hyperlinkLabel: string;
   bgColor: string;
   iconColor: string;
-  backgroundColor: string;
-  isBackgroundFixed: boolean;
+  backgroundColor: string; // MODIF
+  isBackgroundFixed: boolean; // MODIF
+  align: string; // MODIF
   textColor: string;
   textSize: number;
   iconSize: number;
