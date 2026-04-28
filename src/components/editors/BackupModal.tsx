@@ -8,7 +8,7 @@ import {
   DEFAULT_TEXT_SIZE,
   DEFAULT_ICON_SIZE,
   DEFAULT_METRIC,
-  DEFAULT_NODE_ALIGN,
+  DEFAULT_ALIGN,
 } from '../../constants';
 
 interface Props {
@@ -113,7 +113,7 @@ const convertV1Backup = (v1: V1Backup): { nodes: NodeConfig[]; connections: Conn
       textColor: DEFAULT_TEXT_COLOR,
       backgroundColor: d.backgroundColor,
       isBackgroundFixed: d.isBackgroundFixed,
-      align: DEFAULT_NODE_ALIGN,
+      align: DEFAULT_ALIGN,
       textSize: DEFAULT_TEXT_SIZE,
       iconSize: DEFAULT_ICON_SIZE,
       cpuMetric: { ...DEFAULT_METRIC },
@@ -193,6 +193,7 @@ const convertV1Backup = (v1: V1Backup): { nodes: NodeConfig[]; connections: Conn
       interfaceName: d.eInterface || '',
       alias: d.eInterface || '',
       observation: d.observation || '',
+      alignLabel: d.alignLabel || DEFAULT_ALIGN,
       lineStyle,
       animated: false,
       showTraffic: d.eMonitored === true,

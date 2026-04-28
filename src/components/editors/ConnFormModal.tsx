@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Modal, Button, Field, Input, Select, UnitPicker, TextArea } from '@grafana/ui';
+import { Modal, Button, Field, Input, Select, UnitPicker, TextArea, RadioButtonGroup } from '@grafana/ui';
 import { NodeConfig, ConnectionConfig, ZabbixHost, ThresholdsConfig } from '../../types';
-import { CAPACITY_OPTIONS, LINE_STYLE_OPTIONS } from '../../constants';
+import { CAPACITY_OPTIONS, DEFAULT_ALIGN, LINE_STYLE_OPTIONS } from '../../constants';
 import { COLORS, FONT, SECTION_HEADER } from '../../styles/tokens';
 import { CustomMetricList } from './CustomMetricList';
 import { sortThresholds } from 'data/parser';
@@ -45,6 +45,13 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
   const [customMetrics, setCustomMetrics] = useState(
     (conn?.customMetrics || []).map((m) => ({ ...m, decimals: m.decimals ?? 1 }))
   );
+  const [alignLabel, setAlignLabel] = useState(conn?.alignLabel || DEFAULT_ALIGN); // MODIF
+  
+  const alignOptions = [
+    { label: 'Left', value: 'left' },
+    { label: 'Center', value: 'center' },
+    { label: 'Right', value: 'right' },
+  ]
 
   const nodeOpts = nodes.map((n) => ({ value: n.id, label: n.name }));
   const isFromDrag = !!pendingConn;
@@ -119,6 +126,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
       interfaceName,
       alias,
       observation,
+      alignLabel,
       lineStyle,
       animated,
       showTraffic,
@@ -238,6 +246,19 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
             onChange={(v) => setAnimated(v.value === 'true')}
           />
         </Field>
+      </div>
+      <div>
+        <label
+          style={{
+            fontSize: FONT.label,
+            color: COLORS.text,
+          }}
+        >Content alignment</label>
+        <RadioButtonGroup
+          options={alignOptions}
+          value={alignLabel}
+          onChange={setAlignLabel}
+        />
       </div>
 
       <Modal.ButtonRow>

@@ -15,7 +15,7 @@ import {
   DEFAULT_ICON_SIZE,
   METRIC_PATTERNS,
   autoDetectField,
-  DEFAULT_NODE_ALIGN,
+  DEFAULT_ALIGN,
 } from '../../constants';
 import { searchIcons, getIconDataUri } from '../icons';
 import { COLORS, FONT, SECTION_HEADER } from '../../styles/tokens';
@@ -49,7 +49,7 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
   const [textSize, setTextSize] = useState(String(node?.textSize || DEFAULT_TEXT_SIZE));
   const [isBackgroundFixed, setIsBackgroundFixed] = useState(!!node?.backgroundColor); // MODIF
   const [backgroundColor, setBackgroundColor] = useState(isBackgroundFixed ? node?.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR : ''); // MODIF
-  const [align, setAlign] = useState(node?.align || DEFAULT_NODE_ALIGN); // MODIF
+  const [align, setAlign] = useState(node?.align || DEFAULT_ALIGN); // MODIF
 
   const alignOptions = [
     { label: 'Top', value: 'top' },

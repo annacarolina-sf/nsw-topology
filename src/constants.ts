@@ -50,7 +50,7 @@ export const DEFAULT_NODE_BG = '#1a1a2e';
 export const DEFAULT_ICON_COLOR = '#ffffff';
 export const DEFAULT_TEXT_COLOR = '#e0e0f0';
 export const DEFAULT_FIXED_BACKGROUND_COLOR = '#c1c1c1'; // MODIF
-export const DEFAULT_NODE_ALIGN = 'center';
+export const DEFAULT_ALIGN = 'center';
 export const DEFAULT_TEXT_SIZE = 12;
 export const DEFAULT_ICON_SIZE = 32;
 
