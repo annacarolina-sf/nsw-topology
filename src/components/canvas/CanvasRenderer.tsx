@@ -32,6 +32,7 @@ import {
   DEFAULT_TEXT_SIZE,
   DEFAULT_ICON_SIZE,
   resolveGrafanaColor,
+  DEFAULT_ALIGN,
 } from '../../constants';
 import { COLORS, RADIUS, BLUR, FONT } from '../../styles/tokens';
 import { TopologyNode, type TopologyNodeData, type MetricDisplay, type ConnectionDisplay } from './TopologyNode';
@@ -523,6 +524,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             isRed: edgeIsRed,
             capacity: conn.capacity || 1000,
             observation: conn.observation || '', // MODIF
+            alignLabel: conn.alignLabel || DEFAULT_ALIGN,
             customMetrics: evaluatedMetrics,
           },
         };

@@ -4,7 +4,7 @@ import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge }
 import { COLORS, FONT } from '../../styles/tokens';
 import { getThresholdColor } from '../../data/parser'
 import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
-import { DEFAULT_ALIGN } from 'constants';
+import { DEFAULT_ALIGN } from '../../constants';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 

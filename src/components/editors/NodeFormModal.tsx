@@ -354,17 +354,21 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
               </div>
             </Field>
           )}
+        </div>
 
+        <div style={{display: 'block', marginBottom: 12, marginTop: 12}}>
           <label
             style={{
               fontSize: FONT.label,
               color: COLORS.text,
+              marginBottom: 8,
             }}
           >Content alignment</label>
           <RadioButtonGroup
             options={alignOptions}
             value={align}
             onChange={setAlign}
+            fullWidth={true}
           />
         </div>
       </div>
