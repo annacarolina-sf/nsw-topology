@@ -40,6 +40,7 @@ export type TopologyNodeData = {
   backgroundColor: string; // MODIF
   isBackgroundFixed: boolean; // MODIF
   isEditable: boolean; // MODIF
+  align: string; // MODIF
 };
 
 type TopologyNodeType = Node<TopologyNodeData, 'topology'>;
@@ -56,7 +57,7 @@ const handleStyle: React.CSSProperties = {
 };
 
 export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType>) => {
-  const { label, icon, statusColor, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable } = data; // MODIF
+  const { label, icon, statusColor, textSize, iconSize, backgroundColor, isBackgroundFixed, isEditable, align } = data; // MODIF
   const [hovered, setHovered] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null); // MODIF
   const nodeRef = useRef<HTMLDivElement>(null);
@@ -97,6 +98,15 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
       setHovered(false);
     }, 200); // delay em ms
   };
+
+  // MODIF: Adicionando opções de alinhamento
+  const getAlignOptions = (align: string) => {
+    switch(align) {
+      case 'top': return 'flex-start';
+      case 'bottom': return 'flex-end';
+      default: return 'center';
+    }
+  }
 
   return (
     <>
@@ -146,7 +156,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: getAlignOptions(align),
           overflow: 'hidden',
           boxShadow: `0 0 18px ${statusColor}44, 0 4px 12px rgba(0,0,0,0.3)`,
           transition: 'background 0.35s ease, box-shadow 0.35s ease',

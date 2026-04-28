@@ -438,6 +438,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             width: node.width || DEFAULT_NODE_WIDTH,
             height: node.height || DEFAULT_NODE_HEIGHT,
             isEditable: appearance.allowEditing,
+            align: node.align,
           },
         };
       }),
