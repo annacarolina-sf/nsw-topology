@@ -4,6 +4,7 @@ import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge }
 import { COLORS, FONT } from '../../styles/tokens';
 import { getThresholdColor } from '../../data/parser'
 import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
+import { DEFAULT_ALIGN } from 'constants';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 
@@ -26,6 +27,7 @@ export type WeathermapEdgeData = {
   isRed: boolean;
   capacity: number;
   observation: string; // MODIF
+  alignLabel: string; // MODIF
   customMetrics?: any[];
 };
 
@@ -54,6 +56,12 @@ export const WeathermapEdge = memo(
     const showTraffic = data?.showTraffic ?? false;
     const isRed = data?.isRed ?? false;
     const [showDetailModal, setShowDetailModal] = useState(false); // MODIF
+
+    const translateXMap: Record<string, string> = {
+      left: '0%',
+      center: '-50%',
+      right: '-100%',
+    };
 
     const [edgePath, labelX, labelY] = getBezierPath({
       sourceX,
@@ -116,7 +124,7 @@ export const WeathermapEdge = memo(
               onClick={() => setShowDetailModal(true)} // MODIF
               style={{
                 position: 'absolute',
-                transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
+                transform: `translate(${translateXMap[data?.alignLabel ?? DEFAULT_ALIGN]}, -50%) translate(${labelX}px, ${labelY}px)`, // MODIF: Podendo escolher o alinhamento (antes: translate(-50%, -50%))
                 background: 'rgba(15,15,28,0.85)',
                 border: `1px solid ${edgeColor}44`,
                 color: COLORS.textWhite,
@@ -163,8 +171,8 @@ export const WeathermapEdge = memo(
                       {m.icon && <span>{m.icon}</span>}
                       {(() => {
                         const isNumber = typeof m.computedValue === 'number';
-                        if(!isNumber) return m.computedValue;
-                        
+                        if (!isNumber) return m.computedValue;
+
                         if (m.unit && m.unit !== 'none') {
                           const fmt = getValueFormat(m.unit);
                           return formattedValueToString(fmt(m.computedValue, m.decimals ?? 1));
