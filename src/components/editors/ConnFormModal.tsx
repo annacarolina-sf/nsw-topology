@@ -49,7 +49,9 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
 
   const alignOptions = [
     { label: 'Left', value: 'left' },
+    { label: 'Center Left', value: 'centerLeft' },
     { label: 'Center', value: 'center' },
+    { label: 'Center Right', value: 'centerRight' },
     { label: 'Right', value: 'right' },
   ]
 
