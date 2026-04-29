@@ -164,7 +164,7 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
           gap: 4,
           padding: '8px 6px',
           cursor: 'grab',
-          zIndex: backgroundColor === '#00000000' ? -1 : undefined, // MODIF: enviando os nodes com cor transparente para o fundo
+          // zIndex: backgroundColor === '#00000000' ? -1 : undefined, // MODIF: enviando os nodes com cor transparente para o fundo
         }}
       >
         {icon && (

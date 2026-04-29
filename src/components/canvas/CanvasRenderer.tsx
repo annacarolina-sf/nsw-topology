@@ -28,7 +28,6 @@ import {
   DEFAULT_NODE_BG,
   DEFAULT_ICON_COLOR,
   DEFAULT_TEXT_COLOR,
-  DEFAULT_FIXED_BACKGROUND_COLOR,
   DEFAULT_TEXT_SIZE,
   DEFAULT_ICON_SIZE,
   resolveGrafanaColor,
@@ -416,6 +415,7 @@ export const CanvasRenderer: React.FC<Props> = ({
           style: {
             width: node.width || DEFAULT_NODE_WIDTH,
             height: node.height || DEFAULT_NODE_HEIGHT,
+            zIndex: node.backgroundColor === '#00000000' ? -1 : undefined, // MODIF: enviando nodes transparentes para o fundo
             ...(isMatch ? { boxShadow: `0 0 20px 4px rgba(59, 130, 246, 0.6)`, borderRadius: 10 } : {}),
           },
           data: {
@@ -432,7 +432,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             bgColor: node.bgColor || DEFAULT_NODE_BG,
             iconColor: node.iconColor || DEFAULT_ICON_COLOR,
             textColor: node.textColor || DEFAULT_TEXT_COLOR,
-            backgroundColor: node.backgroundColor || DEFAULT_FIXED_BACKGROUND_COLOR,
+            backgroundColor: node.backgroundColor || '',
             isBackgroundFixed: node.isBackgroundFixed || false,
             textSize: node.textSize || DEFAULT_TEXT_SIZE,
             iconSize: node.iconSize || DEFAULT_ICON_SIZE,

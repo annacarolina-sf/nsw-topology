@@ -52,9 +52,6 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
   const [backgroundColor, setBackgroundColor] = useState(node?.backgroundColor || ''); // MODIF
   const [align, setAlign] = useState(node?.align || DEFAULT_ALIGN); // MODIF
 
-  console.log('TESTE!!')
-  console.log(node?.backgroundColor)
-
   const alignOptions = [
     { label: 'Top', value: 'top' },
     { label: 'Center', value: 'center' },
@@ -346,7 +343,8 @@ export const NodeFormModal: React.FC<Props> = ({ node, thresholdOptions, hostNam
                 checked={isBackgroundFixed}
                 onChange={(e) => {
                   setIsBackgroundFixed(e.target.checked);
-                  setBackgroundColor(DEFAULT_FIXED_BACKGROUND_COLOR)
+                  if(e.target.checked) setBackgroundColor(DEFAULT_FIXED_BACKGROUND_COLOR);
+                  else setBackgroundColor('');
                 }}
                 style={{ accentColor: COLORS.accent }}
               />
