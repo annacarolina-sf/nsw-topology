@@ -22,7 +22,7 @@ export const DEFAULT_APPEARANCE: AppearanceConfig = {
 };
 
 export const DEFAULT_COLORS: ColorsConfig = {
-  online: '#4ade80',
+  online: '#73BF69', // MODIF: cor original: "#4ade80"
   offline: '#f24955',
   alert: '#f59e0b',
 };
