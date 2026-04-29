@@ -182,12 +182,13 @@ export const TopologyNode = memo(({ data, selected }: NodeProps<TopologyNodeType
             fontWeight: 600,
             color: data.textColor || COLORS.textWhite,
             textAlign: 'center',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
             maxWidth: '100%',
             lineHeight: 1.2,
             textShadow: '0 1px 3px rgba(0,0,0,0.4)',
+            // MODIF: Quebra de linha em vez de reticências
+            whiteSpace: 'normal',
+            overflowWrap: 'break-word',
+            overflow: 'hidden',
           }}
         >
           {label}

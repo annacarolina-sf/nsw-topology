@@ -60,9 +60,9 @@ export const WeathermapEdge = memo(
     // MODIF: opções de alinhamento da label
     const translateXMap: Record<string, string> = {
       right: '80%',
-      centerRight: '0%',
+      centerRight: '-20%',
       center: '-50%',
-      centerLeft: '-100%',
+      centerLeft: '-80%',
       left: '-180%',
     };
 
