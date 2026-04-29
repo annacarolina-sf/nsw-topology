@@ -59,9 +59,9 @@ export const WeathermapEdge = memo(
 
     // MODIF: opções de alinhamento da label
     const translateXMap: Record<string, string> = {
-      right: '60%',
+      right: '80%',
       center: '-50%',
-      left: '-160%',
+      left: '-180%',
     };
 
     const [edgePath, labelX, labelY] = getBezierPath({
