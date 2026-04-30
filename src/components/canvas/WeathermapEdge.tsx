@@ -27,6 +27,7 @@ export type WeathermapEdgeData = {
   isRed: boolean;
   capacity: number;
   observation: string; // MODIF
+  distance?: number; // MODIF
   alignLabel: string; // MODIF
   customMetrics?: any[];
 };

@@ -225,6 +225,18 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                     </div>
                 </>
             )}
+
+            {/* MODIF: adição da distância */}
+            {data?.distance && (
+                <>
+                    <div style={tooltipDivider} />
+                    <div style={tooltipRow}>
+                        <span style={tooltipLabel}>Distance:</span>
+                        <span style={{ color: COLORS.text, fontWeight: 600 }}>{data?.distance}</span>
+                    </div>
+                </>
+            )}
+
             {(data?.downloadValue || data?.uploadValue) && (
                 <>
                     <div style={tooltipDivider} />

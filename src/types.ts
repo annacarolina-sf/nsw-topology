@@ -97,6 +97,7 @@ export interface ConnectionConfig {
   interfaceName: string;
   alias: string;
   observation: string; // MODIF
+  distance?: number; // MODIF
   alignLabel: string; // MODIF
   lineStyle: string;
   animated: boolean;

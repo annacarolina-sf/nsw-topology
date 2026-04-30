@@ -35,6 +35,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
   const [interfaceName, setInterfaceName] = useState(conn?.interfaceName || '');
   const [alias, setAlias] = useState(conn?.alias || '');
   const [observation, setObservation] = useState(conn?.observation || ''); // MODIF
+  const [distance, setDistance] = useState<number | undefined>(conn?.distance); // MODIF
   const [capacity, setCapacity] = useState(String(conn?.capacity || 1000));
   const [lineStyle, setLineStyle] = useState(conn?.lineStyle || 'solid');
   const [animated, setAnimated] = useState(conn?.animated ?? true);
@@ -117,6 +118,18 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
     }
   };
 
+  const handleDistanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    if (value === '') {
+      setDistance(undefined);
+      return;
+    }
+    const num = Number(value);
+    if (!Number.isNaN(num) && num >= 0) {
+      setDistance(Math.floor(num));
+    }
+  }
+
   const save = () => {
     onSave({
       id: conn?.id || `conn-${Date.now()}`,
@@ -128,6 +141,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
       interfaceName,
       alias,
       observation,
+      distance,
       alignLabel,
       lineStyle,
       animated,
@@ -180,6 +194,16 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
           onChange={(e) => setObservation(e.currentTarget.value)}
           rows={5}
           placeholder="Write observations... (Markdown supported)"
+        />
+      </Field>
+      {/* MODIF: Adiciona campo para registrar a distancia entre os dois pontos conectados (procurar por "distance") */}
+      <Field label="Distance (Km)">
+        <Input
+          type="number"
+          value={distance ?? ''}
+          step={1}
+          onChange={handleDistanceChange}
+          min={0} 
         />
       </Field>
 

@@ -193,6 +193,7 @@ const convertV1Backup = (v1: V1Backup): { nodes: NodeConfig[]; connections: Conn
       interfaceName: d.eInterface || '',
       alias: d.eInterface || '',
       observation: d.observation || '',
+      distance: d.distance,
       alignLabel: d.alignLabel || DEFAULT_ALIGN,
       lineStyle,
       animated: false,

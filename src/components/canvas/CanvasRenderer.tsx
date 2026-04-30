@@ -525,6 +525,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             isRed: edgeIsRed,
             capacity: conn.capacity || 1000,
             observation: conn.observation || '', // MODIF
+            distance: conn.distance, // MODIF
             alignLabel: conn.alignLabel || DEFAULT_ALIGN,
             customMetrics: evaluatedMetrics,
           },
