@@ -42,6 +42,7 @@ import { ContextMenu } from './ContextMenu';
 import { DeleteConfirmation } from '../editors/DeleteConfirmation';
 import { NodeFormModal } from '../editors/NodeFormModal';
 import { ConnFormModal } from '../editors/ConnFormModal';
+import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
 
 type TopologyNodeType = Node<TopologyNodeData>;
 type WeathermapEdgeType = Edge<WeathermapEdgeData>;
@@ -541,6 +542,13 @@ export const CanvasRenderer: React.FC<Props> = ({
     queueMicrotask(() => setRfEdges(initialEdges));
   }, [initialEdges, setRfEdges]);
 
+  // MODIF: rederizar o modal fora do edge para evitar que ele se feche ao atualizar os dados
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
+  const selectedEdge = useMemo(
+    () => rfEdges.find(e => e.id === selectedEdgeId),
+    [rfEdges, selectedEdgeId]
+  );
+
   const handleNodesChange: OnNodesChange<TopologyNodeType> = useCallback(
     (changes) => {
       onNodesChange(changes);
@@ -717,6 +725,7 @@ export const CanvasRenderer: React.FC<Props> = ({
         edgeTypes={edgeTypes}
         onNodesChange={handleNodesChange}
         onEdgesChange={handleEdgesChange}
+        onEdgeClick={(event, edge) => setSelectedEdgeId(edge.id)} // MODIF
         onConnect={handleConnect}
         onNodeContextMenu={appearance.allowEditing ? handleNodeContextMenu : undefined}
         onEdgeContextMenu={appearance.allowEditing ? handleEdgeContextMenu : undefined}
@@ -910,9 +919,19 @@ export const CanvasRenderer: React.FC<Props> = ({
         )}
       </ReactFlow>
 
+      {/* MODIF: Tirando o modal de dentro do edge pra ele não ser recriado em todas atualizações */}
+      {selectedEdgeId && selectedEdge && (
+        <EdgeDetailsModal
+          data={selectedEdge.data}
+          source={selectedEdge.source}
+          target={selectedEdge.target}
+          onClose={() => setSelectedEdgeId(null)}
+        />
+      )}
+
       {ctxMenu &&
         <ContextMenu
-          x={ctxMenu.x} 
+          x={ctxMenu.x}
           y={ctxMenu.y}
           onEdit={handleCtxEdit}
           onDelete={handleCtxDelete}

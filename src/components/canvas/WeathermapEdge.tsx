@@ -1,9 +1,9 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react'; // TODO: useState
 import { getValueFormat, formattedValueToString } from '@grafana/data';
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps, type Edge } from '@xyflow/react';
 import { COLORS, FONT } from '../../styles/tokens';
 import { getThresholdColor } from '../../data/parser'
-import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
+// import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
 import { DEFAULT_ALIGN } from '../../constants';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
@@ -47,7 +47,6 @@ export const WeathermapEdge = memo(
     source,
     target,
   }: EdgeProps<WeathermapEdgeType>) => {
-
     const edgeColor = data?.edgeColor || '#4b5563';
     const edgeWidth = (data?.edgeWidth || 2) * 1.5; // MODIF: aumentando a espessura das linhas em 1.5 vezes
     const lineStyle = data?.lineStyle || 'solid';
@@ -55,7 +54,6 @@ export const WeathermapEdge = memo(
     const animated = data?.animated ?? false;
     const showTraffic = data?.showTraffic ?? false;
     const isRed = data?.isRed ?? false;
-    const [showDetailModal, setShowDetailModal] = useState(false); // MODIF
 
     // MODIF: opções de alinhamento da label
     const translateXMap: Record<string, string> = {
@@ -92,7 +90,6 @@ export const WeathermapEdge = memo(
           fill="none"
           stroke="transparent"
           strokeWidth={Math.max(edgeWidth + 14, 20)}
-          onClick={() => setShowDetailModal(true)} // MODIF: Abrindo o modal de detalhes ao clicar
           style={{ cursor: 'pointer', pointerEvents: 'stroke' }}
         />
 
@@ -124,7 +121,6 @@ export const WeathermapEdge = memo(
         {(label || (showTraffic && (data?.downloadValue || data?.uploadValue))) && (
           <EdgeLabelRenderer>
             <div
-              onClick={() => setShowDetailModal(true)} // MODIF
               style={{
                 position: 'absolute',
                 transform: `translate(${translateXMap[data?.alignLabel ?? DEFAULT_ALIGN]}, -50%) translate(${labelX}px, ${labelY}px)`, // MODIF: Podendo escolher o alinhamento (antes: translate(-50%, -50%))
@@ -188,21 +184,6 @@ export const WeathermapEdge = memo(
             </div>
           </EdgeLabelRenderer>
         )}
-
-
-        {/* MODIF: Substituindo o tooltip com os detalhes por um modal */}
-        {showDetailModal && (
-          <EdgeDetailsModal
-            data={data}
-            source={source}
-            target={target}
-            onClose={() => {
-              setShowDetailModal(false);
-            }}
-          />
-        )}
-
-
       </>
     );
   }
