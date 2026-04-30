@@ -232,7 +232,7 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                     <div style={tooltipDivider} />
                     <div style={tooltipRow}>
                         <span style={tooltipLabel}>Distance:</span>
-                        <span style={{ color: COLORS.text, fontWeight: 600 }}>{data?.distance}</span>
+                        <span style={{ color: COLORS.text, fontWeight: 600 }}>{`${data.distance} km`}</span>
                     </div>
                 </>
             )}
