@@ -92,10 +92,6 @@ export const WeathermapEdge = memo(
       if (!link) return;
       window.open(link, '_blank')
     }
-    console.log('No do edge:')
-    console.log(isRed && data?.hyperlinkWhenDown)
-    console.log(data?.hyperlinkWhenDown)
-    console.log(isRed)
 
     return (
       <>
@@ -205,7 +201,8 @@ export const WeathermapEdge = memo(
             <div
               style={{
                 position: 'absolute',
-                transform: `translate(${translateXMap[data?.alignLabel ?? DEFAULT_ALIGN]}, '80%') translate(${labelX}px, ${labelY}px)`,
+                // transform: `translate(${translateXMap[data?.alignLabel ?? DEFAULT_ALIGN]}, ${label ? '80%' : '50%'}) translate(${labelX}px, ${labelY}px)`,
+                transform: `translate(${translateXMap[DEFAULT_ALIGN]}, -50%) translate(${labelX}px, ${labelY}px)`,
                 background: 'rgba(52, 18, 18, 0.85)',
                 border: `1px solid ${edgeColor}44`,
                 color: COLORS.textWhite,

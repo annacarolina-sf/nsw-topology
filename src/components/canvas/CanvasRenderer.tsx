@@ -512,9 +512,6 @@ export const CanvasRenderer: React.FC<Props> = ({
 
         const edgeIsRed = isRedish(edgeColor);
         const trafficHistory = getTrafficHistory(dataSeries, srcNode, conn);
-        console.log('TESTANDOO')
-        console.log(edgeColor)
-        console.log(edgeIsRed)
 
         return {
           id: conn.id,
