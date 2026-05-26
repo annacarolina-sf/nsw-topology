@@ -29,6 +29,7 @@ export type WeathermapEdgeData = {
   observation: string; // MODIF
   distance?: number; // MODIF
   alignLabel: string; // MODIF
+  hyperlinkWhenDown?: string; // MODIF
   customMetrics?: any[];
 };
 
@@ -83,6 +84,18 @@ export const WeathermapEdge = memo(
 
     const shouldAnimate = animated && !isRed;
     const isDashAnimated = shouldAnimate && (lineStyle === 'dashed' || lineStyle === 'dotted');
+
+    // MODIF: permitindo link externo no caso de conn down
+    const handleHyperlinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      const link = data?.hyperlinkWhenDown;
+      if (!link) return;
+      window.open(link, '_blank')
+    }
+    console.log('No do edge:')
+    console.log(isRed && data?.hyperlinkWhenDown)
+    console.log(data?.hyperlinkWhenDown)
+    console.log(isRed)
 
     return (
       <>
@@ -183,6 +196,35 @@ export const WeathermapEdge = memo(
                   )
               )}
             </div>
+          </EdgeLabelRenderer>
+        )}
+
+        {/* MODIF: Adicionando um link pra outro dashboard quando a conn estiver down */}
+        { isRed && data?.hyperlinkWhenDown && (
+          <EdgeLabelRenderer>
+            <div
+              style={{
+                position: 'absolute',
+                transform: `translate(${translateXMap[data?.alignLabel ?? DEFAULT_ALIGN]}, '80%') translate(${labelX}px, ${labelY}px)`,
+                background: 'rgba(52, 18, 18, 0.85)',
+                border: `1px solid ${edgeColor}44`,
+                color: COLORS.textWhite,
+                fontSize: FONT.sm + 1,
+                fontWeight: 600,
+                padding: '3px 8px',
+                borderRadius: 5,
+                pointerEvents: 'auto',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 1,
+                lineHeight: 1.3,
+              }}
+              onClick={handleHyperlinkClick}
+            >!</div>
           </EdgeLabelRenderer>
         )}
       </>

@@ -119,6 +119,20 @@ export const CanvasRenderer: React.FC<Props> = ({
     }),
     [colors]
   );
+  const isRedish = (hex: string) => {
+    hex = hex.replace('#', '');
+
+    // suporta #fff
+    if (hex.length === 3) {
+      hex = hex.split('').map(c => c + c).join('');
+    }
+
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    return r > 120 && r > g * 1.3 && r > b * 1.3;
+  }
 
   const [ctxMenu, setCtxMenu] = useState<{ type: 'node' | 'edge'; id: string; x: number; y: number } | null>(null);
   const [editingNode, setEditingNode] = useState<NodeConfig | null>(null);
@@ -496,8 +510,11 @@ export const CanvasRenderer: React.FC<Props> = ({
         const dlDisplay = dlVal > 0 ? formatTrafficValue(dlVal) : '';
         const ulDisplay = ulVal > 0 ? formatTrafficValue(ulVal) : '';
 
-        const edgeIsRed = edgeColor === resolvedColors.offline || edgeColor === COLORS.red;
+        const edgeIsRed = isRedish(edgeColor);
         const trafficHistory = getTrafficHistory(dataSeries, srcNode, conn);
+        console.log('TESTANDOO')
+        console.log(edgeColor)
+        console.log(edgeIsRed)
 
         return {
           id: conn.id,
@@ -526,6 +543,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             capacity: conn.capacity || 1000,
             observation: conn.observation || '', // MODIF
             distance: conn.distance, // MODIF
+            hyperlinkWhenDown: conn.hyperlinkWhenDown, // MODIF
             alignLabel: conn.alignLabel || DEFAULT_ALIGN,
             customMetrics: evaluatedMetrics,
           },

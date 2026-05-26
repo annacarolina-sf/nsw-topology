@@ -99,6 +99,7 @@ export interface ConnectionConfig {
   observation: string; // MODIF
   distance?: number; // MODIF
   alignLabel: string; // MODIF
+  hyperlinkWhenDown?: string; // MODIF
   lineStyle: string;
   animated: boolean;
   showTraffic: boolean;

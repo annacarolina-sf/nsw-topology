@@ -194,6 +194,7 @@ const convertV1Backup = (v1: V1Backup): { nodes: NodeConfig[]; connections: Conn
       alias: d.eInterface || '',
       observation: d.observation || '',
       distance: d.distance,
+      hyperlinkWhenDown: d.hyperlinkWhenDown,
       alignLabel: d.alignLabel || DEFAULT_ALIGN,
       lineStyle,
       animated: false,

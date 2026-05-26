@@ -36,6 +36,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
   const [alias, setAlias] = useState(conn?.alias || '');
   const [observation, setObservation] = useState(conn?.observation || ''); // MODIF
   const [distance, setDistance] = useState<number | undefined>(conn?.distance); // MODIF
+  const [hyperlinkWhenDown, setHyperlinkWhenDown] = useState<string | undefined>(conn?.hyperlinkWhenDown); // MODIF
   const [capacity, setCapacity] = useState(String(conn?.capacity || 1000));
   const [lineStyle, setLineStyle] = useState(conn?.lineStyle || 'solid');
   const [animated, setAnimated] = useState(conn?.animated ?? true);
@@ -142,6 +143,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
       alias,
       observation,
       distance,
+      hyperlinkWhenDown,
       alignLabel,
       lineStyle,
       animated,
@@ -203,7 +205,7 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
           value={distance ?? ''}
           step={1}
           onChange={handleDistanceChange}
-          min={0} 
+          min={0}
         />
       </Field>
 
@@ -256,6 +258,12 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
         availableFields={allFields}
         showIconPicker={true}
       />
+
+      {/* MODIF: Hyperlink quando a conexão cair */}
+      <div style={{ marginTop: 24, ...SECTION_HEADER }}>🔗 Links</div>
+      <Field label="Hyperlink when connection is down">
+        <Input value={hyperlinkWhenDown} onChange={(e) => setHyperlinkWhenDown(e.currentTarget.value)} />
+      </Field>
 
       <div style={{ marginTop: 24, ...SECTION_HEADER }}>🎨 Style</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
