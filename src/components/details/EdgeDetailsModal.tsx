@@ -237,6 +237,18 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                 </>
             )}
 
+            {/* MODIF: adição de hyperlink */}
+            {data?.hyperlink != '' && (
+                <>
+                    <div style={tooltipDivider} />
+                    <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlink:</div>
+                    <div style={{ ...tooltipRow, cursor: 'pointer' }} onClick={() => window.open(data.hyperlink, '_blank')}>
+                        <span>🔗</span>
+                        <span style={{ color: COLORS.textSecondary }}>{data.hyperlinkLabel}</span>
+                    </div>
+                </>
+            )}
+
             {(data?.downloadValue || data?.uploadValue) && (
                 <>
                     <div style={tooltipDivider} />
@@ -270,8 +282,8 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                                     >
                                         {(() => {
                                             const isNumber = typeof m.computedValue === 'number';
-                                            if(!isNumber) return m.computedValue;
-                                            
+                                            if (!isNumber) return m.computedValue;
+
                                             if (m.unit && m.unit !== 'none') {
                                                 const fmt = getValueFormat(m.unit);
                                                 return formattedValueToString(fmt(m.computedValue, m.decimals ?? 1));

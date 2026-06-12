@@ -30,6 +30,8 @@ export type WeathermapEdgeData = {
   distance?: number; // MODIF
   alignLabel: string; // MODIF
   hyperlinkWhenDown?: string; // MODIF
+  hyperlink: string; // MODIF
+  hyperlinkLabel: string; // MODIF
   customMetrics?: any[];
 };
 

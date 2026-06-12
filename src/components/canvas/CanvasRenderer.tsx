@@ -541,6 +541,8 @@ export const CanvasRenderer: React.FC<Props> = ({
             observation: conn.observation || '', // MODIF
             distance: conn.distance, // MODIF
             hyperlinkWhenDown: conn.hyperlinkWhenDown, // MODIF
+            hyperlink: conn.hyperlink, // MODIF
+            hyperlinkLabel: conn.hyperlinkLabel, // MODIF
             alignLabel: conn.alignLabel || DEFAULT_ALIGN,
             customMetrics: evaluatedMetrics,
           },

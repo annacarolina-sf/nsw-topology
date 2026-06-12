@@ -100,6 +100,8 @@ export interface ConnectionConfig {
   distance?: number; // MODIF
   alignLabel: string; // MODIF
   hyperlinkWhenDown?: string; // MODIF
+  hyperlink: string; // MODIF
+  hyperlinkLabel: string; // MODIF
   lineStyle: string;
   animated: boolean;
   showTraffic: boolean;
