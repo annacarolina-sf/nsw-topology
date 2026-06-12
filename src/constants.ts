@@ -17,6 +17,7 @@ export const DEFAULT_APPEARANCE: AppearanceConfig = {
   showGrid: true,
   gridSize: 20,
   gridColor: '#1e2130',
+  connThickness: 2,
   showDonateCard: true,
   allowEditing: true,
 };

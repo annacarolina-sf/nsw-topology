@@ -55,6 +55,14 @@ export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
         category: ['Appearance'],
         showIf: (opts) => opts.appearance?.showGrid === true,
       })
+      // MODIF: Permite a escolha de um multiplicador para todas as conexões do mapa
+      .addSliderInput({
+        path: 'appearance.connThickness',
+        name: 'Conn Thickness',
+        defaultValue: DEFAULT_APPEARANCE.connThickness,
+        settings: { min: 1, max: 10, step: 1 },
+        category: ['Appearance'],
+      })
 
       .addColorPicker({
         path: 'colors.online',
@@ -113,6 +121,7 @@ export const plugin = new PanelPlugin<TopologyOptions>(TopologyPanel)
         defaultValue: DEFAULT_APPEARANCE.allowEditing,
         category: ['Appearance'],
       })
+      // MODIF: Permite a configuração de thresholds padrão a serem utilizadas nas conexões
       .addCustomEditor({
         id: 'thresholds',
         path: 'thresholds',

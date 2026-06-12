@@ -117,6 +117,7 @@ export interface AppearanceConfig {
   showGrid: boolean;
   gridSize: number;
   gridColor: string;
+  connThickness: number;
   showDonateCard: boolean;
   allowEditing: boolean;
 }

@@ -52,7 +52,7 @@ export const WeathermapEdge = memo(
     target,
   }: EdgeProps<WeathermapEdgeType>) => {
     const edgeColor = data?.edgeColor || '#4b5563';
-    const edgeWidth = (data?.edgeWidth || 2) * 1.5; // MODIF: aumentando a espessura das linhas em 1.5 vezes
+    const edgeWidth = (data?.edgeWidth || 2);
     const lineStyle = data?.lineStyle || 'solid';
     const label = data?.label || '';
     const animated = data?.animated ?? false;

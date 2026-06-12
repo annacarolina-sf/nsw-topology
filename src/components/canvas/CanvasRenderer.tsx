@@ -523,7 +523,7 @@ export const CanvasRenderer: React.FC<Props> = ({
           data: {
             label: conn.alias || conn.interfaceName || '',
             edgeColor,
-            edgeWidth,
+            edgeWidth: (edgeWidth || 2) * appearance.connThickness,
             lineStyle: conn.lineStyle || 'solid',
             hasTraffic: true,
             animated: edgeIsRed ? false : (conn.animated ?? false),
