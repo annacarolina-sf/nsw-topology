@@ -5,6 +5,7 @@ import { COLORS, FONT } from '../../styles/tokens';
 import { getThresholdColor } from '../../data/parser'
 // import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
 import { DEFAULT_ALIGN } from '../../constants';
+import { ThresholdsConfig } from 'types';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 
@@ -33,6 +34,7 @@ export type WeathermapEdgeData = {
   hyperlink: string; // MODIF
   hyperlinkLabel: string; // MODIF
   customMetrics?: any[];
+  thresholdOptions: ThresholdsConfig[]; // MODIF
 };
 
 export type WeathermapEdgeType = Edge<WeathermapEdgeData, 'weathermap'>;
@@ -58,6 +60,7 @@ export const WeathermapEdge = memo(
     const animated = data?.animated ?? false;
     const showTraffic = data?.showTraffic ?? false;
     const isRed = data?.isRed ?? false;
+    const thresholdOptions = data?.thresholdOptions ?? [];
 
     // MODIF: opções de alinhamento da label
     const translateXMap: Record<string, string> = {
@@ -171,7 +174,7 @@ export const WeathermapEdge = memo(
                     <div
                       key={idx}
                       style={{
-                        color: getThresholdColor(m.computedValue, m.thresholds) || COLORS.textWhite, // MODIF: THRESHOLDS
+                        color: getThresholdColor(m.computedValue, m.thresholdName, thresholdOptions) || COLORS.textWhite, // MODIF: THRESHOLDS
                         fontSize: FONT.sm,
                         fontWeight: 500,
                         display: 'flex',

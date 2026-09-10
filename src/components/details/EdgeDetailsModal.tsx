@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
 import { getThresholdColor } from 'data/parser';
 import { formattedValueToString, getValueFormat } from '@grafana/data';
+import { ThresholdsConfig } from 'types';
 
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
@@ -12,6 +13,7 @@ interface Props {
     data: any;
     source: string;
     target: string;
+    thresholdOptions: ThresholdsConfig[];
     onClose: () => void;
 }
 
@@ -176,7 +178,7 @@ const Sparkline: React.FC<{ data: TrafficHistoryPoint[]; height: number; capacit
 };
 
 // MODIF: Componente criado para substituir o tooltip com os detalhes presentes no WeathermapEdge
-export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClose }) => {
+export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, thresholdOptions, onClose }) => {
     return (
         <Modal title={`${data?.sourceName || source} ↔ ${data?.targetName || target}`} isOpen={true} onDismiss={onClose}>
             {data?.interfaceName && (
@@ -276,7 +278,7 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, onClos
                                     </span>
                                     <span
                                         style={{
-                                            color: getThresholdColor(m.computedValue, m.thresholds) || COLORS.textWhite, // MODIF: THRESHOLDS
+                                            color: getThresholdColor(m.computedValue, m.thresholdName, thresholdOptions) || COLORS.textWhite, // MODIF: THRESHOLDS
                                             fontWeight: 600,
                                         }}
                                     >

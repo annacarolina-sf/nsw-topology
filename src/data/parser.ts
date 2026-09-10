@@ -1,5 +1,5 @@
 import { DataFrame, FieldType } from '@grafana/data';
-import { ZabbixHost, ParsedMetrics, CustomMetric, ThresholdsData } from '../types';
+import { ZabbixHost, ParsedMetrics, CustomMetric, ThresholdsData, ThresholdsConfig } from '../types';
 import { COLORS } from 'styles/tokens';
 
 // parse grafana data frames into a host/metric map for the canvas
@@ -210,7 +210,7 @@ export const evaluateCustomMetric = (
   //   return null;
   // }
   // return reduceFieldValues(validValues, metric.aggregation);
-  
+
   // MODIF: permitir a exibição de métricas do tipo texto também
 
   const values = matchedFields
@@ -251,10 +251,13 @@ export const sortThresholds = (thresholds: ThresholdsData[] = []) =>
 // MODIF
 export const getThresholdColor = (
   value: number | string,
-  thresholds: ThresholdsData[] = []
+  thresholdName: string,
+  thresholdOptions: ThresholdsConfig[],
 ): string | null => {
   const isNumber = typeof value === 'number';
-  if(!isNumber) return COLORS.text;
+  if (!isNumber) return COLORS.text;
+
+  const thresholds: ThresholdsData[] = thresholdOptions.find(c => c.name === thresholdName)?.thresholds ?? [];
 
   const sorted = sortThresholds(thresholds);
   for (const t of sorted) {

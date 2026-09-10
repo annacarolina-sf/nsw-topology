@@ -311,7 +311,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             if (val !== null) {
               const decimals = m.decimals ?? 1;
               // MODIF: THRESHOLDS
-              const thresholdColor = getThresholdColor(val, m.thresholds);
+              const thresholdColor = getThresholdColor(val, m.thresholdName ?? '', thresholdOptions);
               const alerting = thresholdColor !== null;
 
               const isNumber = typeof val === 'number';
@@ -493,9 +493,9 @@ export const CanvasRenderer: React.FC<Props> = ({
         }
         // MODIF: Utilizando uma métrica como cor da linha
         let customColor;
-        const customColorMetric = evaluatedMetrics.find((m) => m.useAsLineColor);
+        const customColorMetric: any = evaluatedMetrics.find((m) => m.useAsLineColor);
         if (customColorMetric) {
-          customColor = getThresholdColor(customColorMetric.computedValue, customColorMetric.thresholds);
+          customColor = getThresholdColor(customColorMetric.computedValue, customColorMetric.thresholdName ?? '', thresholdOptions);
         }
 
         const {
@@ -545,6 +545,7 @@ export const CanvasRenderer: React.FC<Props> = ({
             hyperlinkLabel: conn.hyperlinkLabel, // MODIF
             alignLabel: conn.alignLabel || DEFAULT_ALIGN,
             customMetrics: evaluatedMetrics,
+            thresholdOptions: thresholdOptions, // MODIF
           },
         };
       }),
@@ -943,6 +944,7 @@ export const CanvasRenderer: React.FC<Props> = ({
           data={selectedEdge.data}
           source={selectedEdge.source}
           target={selectedEdge.target}
+          thresholdOptions={thresholdOptions}
           onClose={() => setSelectedEdgeId(null)}
         />
       )}
