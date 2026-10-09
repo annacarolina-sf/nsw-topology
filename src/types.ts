@@ -100,8 +100,9 @@ export interface ConnectionConfig {
   distance?: number; // MODIF
   alignLabel: string; // MODIF
   hyperlinkWhenDown?: string; // MODIF
-  hyperlink: string; // MODIF
-  hyperlinkLabel: string; // MODIF
+  // hyperlink: string; // MODIF
+  // hyperlinkLabel: string; // MODIF
+  hyperlinks?: HyperlinkData[]; // MODIF
   lineStyle: string;
   animated: boolean;
   showTraffic: boolean;
@@ -110,6 +111,12 @@ export interface ConnectionConfig {
   uploadField: string;
   unit?: string;
   customMetrics?: CustomMetric[];
+}
+
+// MODIF: Hyperlink - permitir a inserção de mais de um link
+export interface HyperlinkData {
+  hyperlink: string;
+  hyperlinkLabel: string;
 }
 
 export interface AppearanceConfig {

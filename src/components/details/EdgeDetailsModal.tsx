@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { COLORS, FONT, statusDot, tooltipDivider, tooltipLabel, tooltipRow } from 'styles/tokens';
 import { getThresholdColor } from 'data/parser';
 import { formattedValueToString, getValueFormat } from '@grafana/data';
-import { ThresholdsConfig } from 'types';
+import { HyperlinkData, ThresholdsConfig } from 'types';
 
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
@@ -240,16 +240,28 @@ export const EdgeDetailsModal: React.FC<Props> = ({ data, source, target, thresh
             )}
 
             {/* MODIF: adição de hyperlink */}
-            {data?.hyperlink != '' && (
+            {data?.hyperlinks?.length > 0 && (
                 <>
                     <div style={tooltipDivider} />
-                    <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlink:</div>
+                    <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlinks:</div>
+                </>
+            )}
+            {data?.hyperlinks.map((hyperlinkData: HyperlinkData, idx: number) => (
+                <div style={{ ...tooltipRow, cursor: 'pointer' }} onClick={() => window.open(hyperlinkData.hyperlink, '_blank')}>
+                    <span>🔗</span>
+                    <span style={{ color: COLORS.textSecondary }}>{hyperlinkData.hyperlinkLabel}</span>
+                </div>
+            ))}
+            {/* {data?.hyperlink != '' && (
+                <>
+                    <div style={tooltipDivider} />
+                    <div style={{ ...tooltipLabel, marginBottom: 2 }}>Hyperlinks:</div>
                     <div style={{ ...tooltipRow, cursor: 'pointer' }} onClick={() => window.open(data.hyperlink, '_blank')}>
                         <span>🔗</span>
                         <span style={{ color: COLORS.textSecondary }}>{data.hyperlinkLabel}</span>
                     </div>
                 </>
-            )}
+            )} */}
 
             {(data?.downloadValue || data?.uploadValue) && (
                 <>

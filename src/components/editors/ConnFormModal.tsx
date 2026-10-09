@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Modal, Button, Field, Input, Select, UnitPicker, TextArea, RadioButtonGroup } from '@grafana/ui';
+import { Modal, Button, Field, Input, Select, UnitPicker, TextArea, RadioButtonGroup, IconButton } from '@grafana/ui';
 import { NodeConfig, ConnectionConfig, ZabbixHost, ThresholdsConfig } from '../../types';
 import { CAPACITY_OPTIONS, DEFAULT_ALIGN, LINE_STYLE_OPTIONS } from '../../constants';
 import { COLORS, FONT, SECTION_HEADER } from '../../styles/tokens';
@@ -37,8 +37,9 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
   const [observation, setObservation] = useState(conn?.observation || ''); // MODIF
   const [distance, setDistance] = useState<number | undefined>(conn?.distance); // MODIF
   const [hyperlinkWhenDown, setHyperlinkWhenDown] = useState<string | undefined>(conn?.hyperlinkWhenDown); // MODIF
-  const [hyperlink, setHyperlink] = useState(conn?.hyperlink || '');  // MODIF
-  const [hyperlinkLabel, setHyperlinkLabel] = useState(conn?.hyperlinkLabel || '');  // MODIF
+  // const [hyperlink, setHyperlink] = useState(conn?.hyperlink || '');  // MODIF
+  // const [hyperlinkLabel, setHyperlinkLabel] = useState(conn?.hyperlinkLabel || '');  // MODIF
+  const [hyperlinks, setHyperlinks] = useState(conn?.hyperlinks || []);  // MODIF
   const [capacity, setCapacity] = useState(String(conn?.capacity || 1000));
   const [lineStyle, setLineStyle] = useState(conn?.lineStyle || 'solid');
   const [animated, setAnimated] = useState(conn?.animated ?? true);
@@ -61,6 +62,29 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
 
   const nodeOpts = nodes.map((n) => ({ value: n.id, label: n.name }));
   const isFromDrag = !!pendingConn;
+
+  // MODIF: Hyperlink
+  const addHyperlinkField = () => {
+    setHyperlinks(prev => [
+      ...prev,
+      {
+        hyperlink: '',
+        hyperlinkLabel: '',
+      },
+    ]);
+  }
+
+  const updateHyperlinks = (idx: number, value: string, type: 'link' | 'label') => {
+    const newHyperlinks = [...hyperlinks];
+    if (type == 'link') newHyperlinks[idx].hyperlink = value;
+    else newHyperlinks[idx].hyperlinkLabel = value;
+    setHyperlinks(newHyperlinks);
+  }
+
+  const removeHyperlink = (idx: number) => {
+    setHyperlinks(hyperlinks.filter((_, i) => i !== idx));
+  };
+
 
   // MODIF: Não será usado por enquanto
   // const interfaceOpts = useMemo(() => {
@@ -134,6 +158,10 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
   }
 
   const save = () => {
+    const validHyperlinks = hyperlinks.filter(
+      item => item.hyperlink.trim() !== '' || item.hyperlinkLabel.trim() !== ''
+    );
+
     onSave({
       id: conn?.id || `conn-${Date.now()}`,
       sourceId,
@@ -146,8 +174,9 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
       observation,
       distance,
       hyperlinkWhenDown,
-      hyperlink,
-      hyperlinkLabel,
+      // hyperlink,
+      // hyperlinkLabel,
+      hyperlinks: validHyperlinks,
       alignLabel,
       lineStyle,
       animated,
@@ -263,19 +292,51 @@ export const ConnFormModal: React.FC<Props> = ({ conn, thresholdOptions, pending
         showIconPicker={true}
       />
 
-      {/* MODIF: Hyperlink quando a conexão cair */}
-      <div style={{ marginTop: 24, ...SECTION_HEADER }}>🔗 Links</div>
+      {/* MODIF: Hyperlink quando a conexão cair - Hyperlinks gerais */}
+      <div style={{ marginTop: 24, ...SECTION_HEADER }}>
+        🔗 Links
+
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            cursor: 'pointer',
+            fontSize: FONT.label,
+            color: COLORS.text,
+            marginLeft: 30,
+          }}>
+          <IconButton
+            name="plus-circle"
+            variant="secondary"
+            onClick={() => addHyperlinkField()}
+            tooltip="Add"
+          />
+          Add hyperlink
+        </label>
+      </div>
       <Field label="Hyperlink when connection is down">
         <Input value={hyperlinkWhenDown} onChange={(e) => setHyperlinkWhenDown(e.currentTarget.value)} />
       </Field>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+      {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
         <Field label="Hyperlink">
           <Input value={hyperlink} onChange={(e) => setHyperlink(e.currentTarget.value)} />
         </Field>
         <Field label="Label">
           <Input value={hyperlinkLabel} onChange={(e) => setHyperlinkLabel(e.currentTarget.value)} />
         </Field>
-      </div>
+      </div> */}
+      {hyperlinks.map((hyperlinkData, idx) => (
+        <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 20px', gap: 8 }}>
+          <Field label="Hyperlink">
+            <Input value={hyperlinkData.hyperlink} onChange={(e) => updateHyperlinks(idx, e.currentTarget.value, 'link')} />
+          </Field>
+          <Field label="Label">
+            <Input value={hyperlinkData.hyperlinkLabel} onChange={(e) => updateHyperlinks(idx, e.currentTarget.value, 'label')} />
+          </Field>
+          <IconButton name="trash-alt" variant="destructive" onClick={() => removeHyperlink(idx)} tooltip="Remove" />
+        </div>
+      ))}
 
       <div style={{ marginTop: 24, ...SECTION_HEADER }}>🎨 Style</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>

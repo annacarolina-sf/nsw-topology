@@ -5,7 +5,7 @@ import { COLORS, FONT } from '../../styles/tokens';
 import { getThresholdColor } from '../../data/parser'
 // import { EdgeDetailsModal } from 'components/details/EdgeDetailsModal';
 import { DEFAULT_ALIGN } from '../../constants';
-import { ThresholdsConfig } from 'types';
+import { HyperlinkData, ThresholdsConfig } from 'types';
 
 export type TrafficHistoryPoint = { time: number; dl: number; ul: number };
 
@@ -31,8 +31,9 @@ export type WeathermapEdgeData = {
   distance?: number; // MODIF
   alignLabel: string; // MODIF
   hyperlinkWhenDown?: string; // MODIF
-  hyperlink: string; // MODIF
-  hyperlinkLabel: string; // MODIF
+  // hyperlink: string; // MODIF
+  // hyperlinkLabel: string; // MODIF
+  hyperlinks?: HyperlinkData[]; // MODIF
   customMetrics?: any[];
   thresholdOptions: ThresholdsConfig[]; // MODIF
 };

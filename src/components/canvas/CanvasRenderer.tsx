@@ -477,7 +477,7 @@ export const CanvasRenderer: React.FC<Props> = ({
         const srcNode = nodeConfigs.find((n) => n.id === conn.sourceId);
         const tgtNode = nodeConfigs.find((n) => n.id === conn.targetId);
 
-        const evaluatedMetrics = [];
+        const evaluatedMetrics: any = [];
         if (conn.customMetrics) {
           for (const m of conn.customMetrics) {
             if (m.enabled) {
@@ -493,7 +493,7 @@ export const CanvasRenderer: React.FC<Props> = ({
         }
         // MODIF: Utilizando uma métrica como cor da linha
         let customColor;
-        const customColorMetric: any = evaluatedMetrics.find((m) => m.useAsLineColor);
+        const customColorMetric: any = evaluatedMetrics.find((m: any) => m.useAsLineColor);
         if (customColorMetric) {
           customColor = getThresholdColor(customColorMetric.computedValue, customColorMetric.thresholdName ?? '', thresholdOptions);
         }
@@ -541,8 +541,9 @@ export const CanvasRenderer: React.FC<Props> = ({
             observation: conn.observation || '', // MODIF
             distance: conn.distance, // MODIF
             hyperlinkWhenDown: conn.hyperlinkWhenDown, // MODIF
-            hyperlink: conn.hyperlink, // MODIF
-            hyperlinkLabel: conn.hyperlinkLabel, // MODIF
+            // hyperlink: conn.hyperlink, // MODIF
+            // hyperlinkLabel: conn.hyperlinkLabel, // MODIF
+            hyperlinks: conn.hyperlinks, // MODIF
             alignLabel: conn.alignLabel || DEFAULT_ALIGN,
             customMetrics: evaluatedMetrics,
             thresholdOptions: thresholdOptions, // MODIF
